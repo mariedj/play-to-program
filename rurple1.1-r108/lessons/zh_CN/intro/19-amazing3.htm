@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="zh_CN" xml:lang="zh_CN">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<link rel="stylesheet" href="../rurple.css" type="text/css" />
+
+<title>神奇的解决方案-复习三</title>
+</head>
+<body>
+<h2 class="title">19. 神奇的解决方案-复习三</h2>
+
+<p>你或许已经注意到，在复习二最后的练习里面，程序并没有成功让乐跑环游一周。 当乐跑的周围没有墙的时候，乐跑就陷入了一个无限循环中，并粘在原地。怎样才可以解决这个问题呢？我们要让他在右转后向前走一步 ，那就是说，加一个<tt>move()</tt>，如下所示：</p>
+
+<pre>
+<span class="keyword">def</span> turn_right():
+    repeat(turn_left, 3)
+
+put_beeper()
+move()
+<span class="keyword">while not</span> on_beeper():
+    <span class="keyword">if</span> right_is_clear():
+        turn_right()
+        move()
+    <span class="keyword">elif</span> front_is_clear():
+        move()
+    <span class="keyword">else</span>:
+        turn_left()
+
+turn_off()
+</pre>
+
+<!--================================================-->
+<hr class="line" />
+
+<h3 class="section">现在一起来进入一个更复杂的世界</h3>
+
+<p>现在，我们大家一起来让乐跑进入一个更复杂点的世界，如下显示的世界。再看一下你原本的程序还可以成功让乐跑环游世界一周吗？</p>
+
+<p><img alt="around the world: start" src=
+"../../images/intro/around3start.png" /></p>
+
+<p>正如你猜测的那样，答案是不能吧。 在往下看之前自己尝试着想想这是为什么,看一下可不可以自己找出解决的方法。</p>
+
+<div class="lessons_nav">
+<a href="18-amazing2.htm"><img alt="previous" src=
+"../../images/previous.png" /> 神奇的解决方案-复习二</a> - <a href=
+"../lessons_toc.htm"><img alt="home" src="../../images/home.png" /></a> - <a href=
+"20-amazing4.htm">神奇的解决方案-复习四 <img alt="next" src=
+"../../images/next.png" /></a>
+</div>
+</body>
+</html>
