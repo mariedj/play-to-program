@@ -1,0 +1,173 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="tr" xml:lang="tr">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<link rel="stylesheet" href="../rurple.css" type="text/css" />
+
+<title>Globalleştirme kötü bir şeydir</title>
+</head>
+<body>
+<h2 class="title">31. <span class="pykeyword">Globalleştirme kötü bir şeydir global</span>ization is a bad thing.</h2>
+
+<p>Bir arkadaşınızla birlikte uzun bir program yazdığınızı varsayın. İyi bir 
+programcı olduğunuz için değişken adlarını oluştururken onları açıklayan adlar 
+kullanırsınız. Sonra şunu düşünebilirsiniz: <i>Arkadaşım da benim seçtiğim 
+adları seçerse ve ben değişkenimin aldığı değeri değiştirirsem onun 
+değişkenlerinin değeri de o istemediği halde değişir mi?</i></p>  
+<p>Bu tip problemlerden kaçınmak için Python'da <i>namespaces </i>kullanılır. 
+Böylelikle programın bir bölümdeki bir değişkenin değerinin değiştirilmesi başka 
+bir bölümdeki aynı isimdeki bir değişkenin değerini etkilemez. Bu derste 
+namespaces'leri öğreneceğiz.</p>
+
+<!--==============================-->
+<hr class="line" />
+
+<h3 class="section">Yerel Değişkenler</h3>
+
+<p>Basit bir örnekle başlayalım:</p>
+
+<pre>
+>>> a = 1
+>>> <span class="keyword">def</span> my_function():
+...     a = 3
+...     <span class="keyword">print</span> a
+...    
+
+>>> my_function()
+3
+
+>>> <span class="keyword">print</span> a
+1
+</pre>
+
+<p> <tt>a</tt>'nın değerinin değişmemesi sizin için bir sürpriz oldu mu? Burada 
+ne olduğunu açıklayalım.</p>
+
+<p>Önce "<tt>a</tt>" değişkenini tanımladınız ve ona 1 değerini verdiniz. Sonra, 
+bir fonksiyonun içerisinde "<tt>a</tt>" ya 3 değerini verdiniz. Gerçekte olan 
+şey, fonksiyonun içerisinde "<tt>a</tt>" adında yeni bir değişken tanımlamak ve 
+ona 3 değerini vermektir. Diğer  "<tt>a</tt>" nın değeri bundan etkilenmez.  </p>
+
+<p>Python her fonksiyonun içerisinde otomatik olarak namespace'leri yaratır. 
+Bunlar bu fonksiyonun dışında aynı adla tanımlanmış değişkenlerden 
+bağımsızdırlar. Namespace'i Python'un tüm değişken adlarını takip ettiği bir not 
+defterine benzetebiliriz. Python her bir fonksiyon için ayrı bir not defteri 
+oluşturduğundan aynı değişkenin başka bir fonksiyonda kullanılması bizi artık 
+endişelendirmez. </p>
+
+<p>Fonksiyonun içerisinde tanımlanmış olan değişkenler, fonksiyonun çalışması 
+bittiğinde geçerliliklerini kaybederler, buna <i>alan dışı (out of scope)</i> 
+denir. </p>
+
+<pre>
+>>> <span class="keyword">def</span> simple_function():
+...     local_variable = <span class="string">"I'm here!"</span>
+...     <span class="keyword">print</span> local_variable
+...    
+>>> simple_function()
+I'm here!
+
+>>> <span class="keyword">print</span> local_variable
+Traceback (most recent call last):
+  File "&lt;input>", line 1, in ?
+NameError: name <span class="string">'local_variable'</span> is not defined
+</pre>
+
+<p>Namespace kullanarak bu işi yapabiliyoruz, ancak bir fonksiyonun içerisindeki 
+bir değişkenin değerini değiştirmek isterseniz ne yapmalısınız? Örneğin, bir 
+fonksiyonu kaç kez çağırdığımızı takip etmek isteyelim. Bunu Python komutu olan  <span class="pykeyword">global</span>'i 
+kullanarak yapabiliriz: </p>
+
+<pre>
+>>> number_of_times = 0
+>>> <span class="keyword">def</span> two_year_old_child():
+...     <span class="keyword">global</span> number_of_times
+...     number_of_times += 1
+...     <span class="keyword">print</span> <span class="string">"Why?     %s times"</span> % number_of_times
+...    
+>>> two_year_old_child()
+Why?          1 times <span class="comment"># I know, it should be "1 time", without a final 's'</span>
+
+>>> two_year_old_child()
+Why?          2 times
+
+>>> two_year_old_child()
+Why?          3 times
+
+>>> <span class="keyword">print</span> number_of_times
+3
+</pre>
+
+<p> <span class="pykeyword">global </span>komutunu kullanarak, Python'a 
+değişkenin yeni bir versiyonunu fonksiyonun içinde yeniden yaratmamasını ve daha 
+önceden yaratılmış olan versiyonunu kullanmasını söylüyoruz. </p>
+
+<p> <span class="pykeyword">global</span> tanımlanmış değişkenleri kullanmaktan 
+her zaman kaçının, çünkü bunlar programınızın başka kısımlarında sizin 
+istemediğiniz değişikliklere yol açabilir.   
+Programlamada, <span class="pykeyword">global</span>leştirme istenmeyen ve 
+kaçınılması gereken bir şeydir.</p>
+
+<!--==============================-->
+<hr class="line" />
+
+<h3 class="section">Alan Dışı (Out of scope)</h3>
+
+<p>Larry ve Curly keyifle yürüyordular. Birden Moe onları uzaktan gördü ve 
+onlara doğru koşmaya başladı. Tam onları yakalayacakken alan dışı oldu ve 
+ekrandan kayboldu. Moe'nun arkadaşlarına ulaşmasını istiyorsanız, aşağıdaki  <span class="comment">#</span> 
+sembollerini kaldırmalısınız. </p>
+
+<pre>
+Larry = UsedRobot(colour=<span class="string">'blue'</span>)
+Curly = UsedRobot(1, 3, colour=<span class="string">'green'</span>)
+
+<span class="comment"># Using two keywords you haven't seen yet!</span>
+<span class="keyword">for</span> i <span class="keyword">in</span> range(3):
+    Larry.move()
+    Curly.move()
+
+<span class="keyword">def</span> wait_for_me():
+    <span class="comment">#global Moe</span>
+    Moe = UsedRobot(1, 2, colour=<span class="string">'yellow'</span>)
+    <span class="comment"># Using two same new keywords again!</span>
+    <span class="keyword">for</span> i <span class="keyword">in</span> range(3):
+        Moe.move()
+        Larry.move()
+        Moe.move()
+        Curly.move()
+
+wait_for_me()
+<span class="comment"># first image below; Moe is there.</span>
+Larry.move()
+<span class="comment"># second image below; Moe is gone.</span>
+Curly.move()
+<span class="comment">#Moe.move()</span>
+Larry.move()
+Curly.move()
+<span class="comment">#Moe.move()</span>
+Larry.turn_off()
+</pre>
+
+<p><img alt="Moe there"  src="../../images/inter/scope1.png" /></p>
+
+<p><img alt="Moe gone"  src="../../images/inter/scope2.png" /></p>
+
+<!--==============================-->
+<hr class="line" />
+
+<h3 class="try">Deneyin!</h3>
+
+<p>Bu programı Reeborg'un dünyasında kendi kendinize deneyin ve gerekli 
+değişiklikleri yaparak Moe'nun arkadaşlarına ulaşmasını sağlayın.</p>
+
+<div class="lessons_nav">
+<a href="30-dot.htm"><img alt="previous" src=
+"../../images/previous.png" />Nesneye dayalı programlama:  "nokta" kullanımı</a> - <a href=
+"../lessons_toc.htm"><img alt="home" src="../../images/home.png" /></a> - <a href=
+"32-return.htm">Many returns <img alt="next"
+src="../../images/next.png" /></a>
+</div>
+</body>
+</html>
