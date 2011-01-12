@@ -1,0 +1,113 @@
+\documentclass[twocolumn]{article}
+
+\usepackage{aaai}
+\usepackage{times}
+\usepackage{helvet}
+\usepackage{courier}
+
+\newcommand{\fix}[1]{{\bf #1}}
+
+\setcounter{secnumdepth}{2}
+
+\title{Playing to Program:  An Intelligent Programming Tutor for RUR-PLE}
+\author{Marie desJardins and an Ensemble of Students \\
+University of Maryland, Baltimore County \\ 
+1000 Hilltop Circle \\
+Baltimore MD  21250 \\
+mariedj@cs.umbc.edu
+}
+
+
+\begin{document}
+\maketitle
+
+\begin{abstract}
+Intelligent tutoring systems (ITSs) have proven their effectiveness in
+contributing to student learning.  ITSs are automated programs
+that provide students with a one-on-one tutor, allowing them to work
+at their own pace, so they can spend more time on their weaker areas
+of the subject matter.  RUR--Python Learning Environment (RUR-PLE), a
+virtual environment to help 
+students learn to program in Python, provides an interface for
+students to write their own Python code and then be presented with a
+visualization of that same code [CITE].  
+The RUR-PLE system provides a sequence of learning lessons for
+students to explore.  We have extended RUR-PLE to provide an
+intelligent tutoting system interface that consists of three
+components:  (1) a
+student model that tracks student understanding, (2) a diagnosis module
+that provides tailored feedback to students, and (3) a problem selection
+module that guides the student's learning process.  In this paper, we
+describe the basis RUR-PLE system and our extensions, and present the
+results of a user study in which we evaluated the effectiveness of our
+three ITS modules.
+\end{abstract}
+
+\section{Introduction and Motivation}
+\label{sec:intro}
+
+\fix{ADD introduction and motivation.}
+
+\section{Related Work}
+\label{sec:related-work}
+
+\fix{ADD: A discussion of general work on ITS, programming tutors,
+CS1/iteration education research, etc.}
+
+\section{Background: RUR-PLE}
+\label{sec:background}
+
+\fix{ADD general overview of RUR-PLE and the functionality
+it provides.}
+
+\section{Student Model}
+\label{sec:student-model}
+
+\fix{ADD description of concept map, how we built/tested it 
+(i.e., justification for these concepts and why they're
+connected as they are, and how we instantiate and track it for a
+specific user (presumably using some kind of Bayesian updating).  
+Idea:  validate/finalize it by some testing process on
+a group of students (i.e., is it in fact the case that students in
+general need to understand concept X before they can apply concept Y)
+-- use a problem suite (where each problem includes known concepts)
+to measure these dependencies.} 
+
+
+\section{Diagnosis Module}
+\label{sec:diagnosis}
+
+\fix{ADD:  Discussion of diagnosis module:  our state-based
+approach to comparing student solutions to one or more model
+solutions per problem.  Where do the model solutions come from?
+What does the comparison consist of?  How is the resulting
+``diff'' used to generate suggestions (and update the student model)?}
+
+
+\section{Problem Selection Module}
+\label{sec:prob-selection}
+
+\fix{ADD: How is the student model used to generate and select
+  problems for the student to work on?  What is the motivation for our
+  approach, and how does it work?}
+
+
+\section{Evaluation}
+\label{sec:evaluation}
+
+\fix{ADD:  Methodology:  design of the user study (set up in such a
+  way that we can evaluate each of the modules incrementally or
+  independently).  Baseline:  RUR-PLE alone.  Results and 
+  discussion:  what were the results, and what do they mean?}
+
+
+\section{Conclusions and Future Work}
+\label{conclusions}
+
+\fix{ADD:  What have we contributed?  What are the take-away lessons?
+  What would we work on next?}
+
+\section*{References}
+
+
+\end{document}
