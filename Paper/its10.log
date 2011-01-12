@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.1415926-1.40.10 (TeX Live 2009) (format=pdflatex 2009.11.7)  12 JAN 2011 10:23
+This is pdfTeX, Version 3.1415926-1.40.10 (TeX Live 2009) (format=pdflatex 2009.11.7)  12 JAN 2011 10:24
 entering extended mode
  \write18 enabled.
  file:line:error style messages enabled.
@@ -81,11 +81,30 @@ LaTeX Font Info:    Font shape `OMS/ptm/m/n' in size <9> not available
 (Font)              Font shape `OMS/cmsy/m/n' tried instead on input line 22.
 LaTeX Font Info:    Font shape `OT1/ptm/bx/n' in size <10> not available
 (Font)              Font shape `OT1/ptm/b/n' tried instead on input line 24.
-)
-Runaway argument?
-{ADD: Methodology: design of the user study (set up in such a \par \section \ET
-C.
-! File ended while scanning use of \fix.
-<inserted text> 
-                \par 
-<*> i
+ [1{/usr/local/texlive/2009/texmf-var/fonts/map/pdftex/updmap/pdftex.map}
+
+
+
+] (./its10.aux)
+
+LaTeX Warning: Label(s) may have changed. Rerun to get cross-references right.
+
+ ) 
+Here is how much of TeX's memory you used:
+ 362 strings out of 493848
+ 4664 string characters out of 3149207
+ 55270 words of memory out of 3000000
+ 3693 multiletter control sequences out of 15000+200000
+ 12957 words of font info for 27 fonts, out of 3000000 for 9000
+ 714 hyphenation exceptions out of 8191
+ 23i,10n,19p,138b,242s stack positions out of 5000i,500n,10000p,200000b,50000s
+{/usr/local/texlive/2009/texmf-dist/fonts/enc/dvips/base/8r.enc}</usr/local/t
+exlive/2009/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy9.pfb></usr/local/tex
+live/2009/texmf-dist/fonts/type1/urw/times/utmb8a.pfb></usr/local/texlive/2009/
+texmf-dist/fonts/type1/urw/times/utmr8a.pfb>
+Output written on its10.pdf (1 page, 47034 bytes).
+PDF statistics:
+ 19 PDF objects out of 1000 (max. 8388607)
+ 0 named destinations out of 1000 (max. 500000)
+ 1 words of extra memory for PDF output out of 10000 (max. 10000000)
+
