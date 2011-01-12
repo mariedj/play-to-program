@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.1415926-1.40.11 (TeX Live 2010) (format=pdflatex 2010.7.21)  12 JAN 2011 11:38
+This is pdfTeX, Version 3.1415926-1.40.11 (TeX Live 2010) (format=pdflatex 2010.7.21)  12 JAN 2011 11:54
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -90,16 +90,16 @@ LaTeX Font Info:    Font shape `OT1/ptm/bx/n' in size <10> not available
 Here is how much of TeX's memory you used:
  358 strings out of 493747
  4600 string characters out of 3143546
- 55404 words of memory out of 3000000
+ 56404 words of memory out of 3000000
  3705 multiletter control sequences out of 15000+200000
  12957 words of font info for 27 fonts, out of 3000000 for 9000
  714 hyphenation exceptions out of 8191
- 23i,10n,19p,374b,242s stack positions out of 5000i,500n,10000p,200000b,50000s
+ 23i,10n,19p,654b,242s stack positions out of 5000i,500n,10000p,200000b,50000s
 {/usr/local/texlive/2010/texmf-dist/fonts/enc/dvips/base/8r.en
 c}</usr/local/texlive/2010/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy9.pfb>
 </usr/local/texlive/2010/texmf-dist/fonts/type1/urw/times/utmb8a.pfb></usr/loca
 l/texlive/2010/texmf-dist/fonts/type1/urw/times/utmr8a.pfb>
-Output written on its10.pdf (1 page, 43710 bytes).
+Output written on its10.pdf (1 page, 44079 bytes).
 PDF statistics:
  21 PDF objects out of 1000 (max. 8388607)
  14 compressed objects within 1 object stream
