@@ -53,15 +53,7 @@ three ITS modules.
 \section{Infrastructure}
 \label{sec:student-model}
 
-\fix{ADD description of concept map, how we built/tested it 
-(i.e., justification for these concepts and why they're
-connected as they are, and how we instantiate and track it for a
-specific user (presumably using some kind of Bayesian updating).  
-Idea:  validate/finalize it by some testing process on
-a group of students (i.e., is it in fact the case that students in
-general need to understand concept X before they can apply concept Y)
--- use a problem suite (where each problem includes known concepts)
-to measure these dependencies.} 
+The program infrastructure provides the ability for user generation of programs. Upon first starting the system, a series of forms are used to obtain information about a student's background, including course history and course grades. Once logged in, a tabular interface is presented. The start tab presents a general instruction sheet along with a list and description of basic RUR-PLE functions. On the following tab, a problem is presented to the user with detailed instructions on the behavior expected in the associated problems RUR-PLE World upon successful completion of the problem. Each time a test run or a final submission is performed, the users code is appended to a file along with the test run or submission time. The edited world file is also saved to align the test run with the environment changes to the RUR-PLE World. The final tab provides access to a full Python interpreter.
 
 
 \section{Pre-test and Problem Selection}
