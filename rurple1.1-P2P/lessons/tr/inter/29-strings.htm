@@ -1,0 +1,159 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="tr" xml:lang="tr">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<link rel="stylesheet" href="../rurple.css" type="text/css" />
+
+<title>Adınız nedir?</title>
+</head>
+<body>
+<h2 class="title">29. Adınız nedir?</h2>
+
+<p>Değişkenlere sayıları nasıl atayacağımızı gördük. Değişkenlere stringleri de 
+atayabiliriz, örneğin: </p>
+
+<pre>
+>>> FirstName = "Andre"
+>>> LastName = "Roberge"
+>>> FullName = FirstName + LastName
+>>> <span class="keyword">print</span> FullName
+AndreRoberge
+</pre>
+
+<p>Artı işareti (<tt>+</tt>) kullanarak iki string'i yan yana getirdik ve yeni 
+bir string elde ettik, buna <i>concatenation</i> denir.  Ancak ad ile soyad 
+arasında boşluk yok. Bunu aşağıda olduğu gibi ad ile soyad arasına bir boşluk 
+ekleyerek sağlayabiliriz: </p>
+
+<pre>
+>>> FullName = FirstName + <span class=
+"string">" "</span> + LastName
+>>> <span class="keyword">print</span> FullName
+Andre Roberge
+</pre>
+
+<p>Aynı sonucu elde etmenin bir başka yolu daha önceden sayısal değişkenlerde de 
+kullandığımız %s kullanımıdır. </p>
+
+<pre>
+>>> name = <span class=
+"string">"%s %s"</span> % (FirstName, LastName)
+>>> <span class="keyword">print</span> name
+Andre Roberge
+</pre>
+
+<p>Son olarak, iki string'i karşılaştırıp eşit olup olmadığını test edebiliriz. </p>
+
+<pre>
+>>> <span class="keyword">print</span> name == FullName
+True
+</pre>
+
+<p>Bunu kendiniz deneyin!</p>
+
+<!--==============================-->
+<hr class="line" />
+
+<h3 class="section">Dilimler (Slices)</h3>
+
+<p>Bazı durumlarda bir string'in tek bir karakterini ya da bazı karakterlerini 
+kullanmak isteyebilirsiniz. Bunu yapabilmek için dilimlemeyi öğrenmek 
+gereklidir. </p>
+
+<p>Size hatırlamanız için üç tane kural ve bir ip ucu vereceğim, sonra Python 
+yorumlayıcısı ile deneyebileceğiniz bir seri örnek vereceğim. Bu bölümde üç 
+kuraldan başka bir açıklama vermeyeceğim. Bu nedenle dilimlemeyi iyi 
+anlayabilmeniz için örnekleri çok dikkatli incelemeniz gerekiyor. </p>
+
+<ol>
+<li>Python saymaya 0'dan başlar. </li>
+<li>Python sayarken sizin umduğunuzun aksine son sayıyı dahil etmez. </li>
+<li>Python atlamalar yaparak da sayabilir. </li>
+</ol>
+
+<ul><li>Yazım şekli: <tt>[ilk:son:adım]</tt><br />
+; hepsi seçimliktir, belirtilmek zorunda değildir.</li></ul>
+
+<p>Örnekler:</p>
+
+<pre>
+>>> alphabet = <span class="string">"abcdefghijklmnopqrstuvwxyz"</span>
+>>> digits = <span class="string">'0123456789'</span>
+
+>>> alphabet[0]
+'a'
+
+>>> alphabet[1]
+'b'
+
+>>> alphabet[5]
+'f'
+
+>>> digits[0]
+'0'
+
+>>> digits[7]
+'7'
+
+>>> digits[-1]
+'9'
+
+>>> digits[-2]
+'8'
+
+>>> alphabet[-3]
+'x'
+
+>>> digits[0:3]
+'012'
+
+>>> digits[0:4]
+'0123'
+
+>>> digits[0:5]
+'01234'
+
+>>> digits[2:5]
+'234'
+
+>>> alphabet[2:5]
+'cde'
+
+>>> digits[0:10:2]
+'02468'
+
+>>> digits[0::2]
+'02468'
+
+>>> digits[0::3]
+'0369'
+
+>>> digits[::3]
+'0369'
+
+>>> digits[::-1]
+'9876543210'
+
+>>> digits[::-2]
+'97531'
+
+>>> digits[::-3]
+'9630'
+
+>>> alphabet[:10:2]
+'acegi'
+</pre>
+
+<p>Kendi stringlerinizi oluşturun ve onlar üzerinde yukarıdakilere benzer 
+denemeler yapın! </p>
+
+<div class="lessons_nav">
+<a href="28-variables2.htm"><img alt="previous" src=
+"../../images/previous.png" />Değişkenler ve Fonksiyonlar</a> - <a href=
+"../lessons_toc.htm"><img alt="home" src="../../images/home.png" /></a> - 
+<a href="30-dot.htm">Nesneye dayalı programlama:  "nokta" kullanımı <img alt="next"
+src="../../images/next.png" /></a>
+</div>
+</body>
+</html>

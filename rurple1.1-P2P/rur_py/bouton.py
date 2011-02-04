@@ -1,0 +1,210 @@
+# -*- coding: utf-8
+""" RUR-PLE: Roberge's Used Robot - a Python Learning Environment
+    bouton.py - Defines "menu choices" through buttons
+    Version 0.8.7
+    Author: Andre Roberge    Copyright  2005
+    andre.roberge@gmail.com
+
+    Edited by Robert Deloatch
+"""
+
+import wx
+import images
+from images import getImage
+from translation import _
+import conf  # a few global variables
+
+SPACER = 0
+BITMAP = 1
+BUTTON = 2
+    
+class rurChoiceWindow(wx.ScrolledWindow):
+    def __init__(self, parent, great_grand_parent):
+        settings = conf.getSettings()
+
+        wx.ScrolledWindow.__init__(self, parent, -1)
+
+        self.ggp = great_grand_parent    # rurApp instance!
+        btn_size = (32, 32)
+        self.ggp.BUTTON_HEIGHT = btn_size[0] + 8
+        spacer_large = (settings.SCREEN[9], settings.SCREEN[9])
+
+        tip_list = [_("Submits Answer & proceeds to next question"),
+                          _("Resets World"),
+                          _("Tests the program"),
+                          _("Steps through robot program instructions"), 
+                          _("Pause program"), 
+                          _("Stops program"),
+                          _("Starts session"), 
+                          _("Adjust robot speed")]
+
+        widget_list1 = [
+            [None,      SPACER, None, None, spacer_large, None],
+            [wx.NewId(), BUTTON, self.ggp.Submit,
+                getImage(images.CHECK_MARK), btn_size, tip_list[0]],
+            [wx.NewId(), BUTTON, self.ggp.Reset,
+                getImage(images.RESET_WORLD), btn_size, tip_list[1]],
+            [wx.NewId(), BUTTON, self.ggp.RunProgram,
+                getImage(images.RUN_PROGRAM), btn_size, tip_list[2]],
+            [wx.NewId(), BUTTON, self.ggp.Step,
+                getImage(images.STEP), btn_size, tip_list[3]],
+            [wx.NewId(), BUTTON, self.ggp.Pause,
+                getImage(images.PAUSE), btn_size, tip_list[4]],
+            [wx.NewId(), BUTTON, self.ggp.StopProgram,
+                getImage(images.STOP), btn_size, tip_list[5]],
+            [None, SPACER, None, None, spacer_large, None],
+            [None, SPACER, None, None, spacer_large, None],
+            [wx.NewId(), BUTTON, self.ggp.StartSession,
+                getImage(images.START), btn_size, tip_list[6]]
+            ]
+
+
+        box = wx.BoxSizer(wx.HORIZONTAL)
+
+        self.btn_list = []
+        for id, widget, action, img, size, tip in widget_list1:
+            if widget == BUTTON:
+                name = wx.lib.buttons.GenBitmapButton(self, id, img, size=size)
+                name.SetToolTipString(tip)
+                wx.EVT_BUTTON(self, id, action)
+                box.Add(name, 0, wx.SHAPED)
+                self.btn_list.append(name)  # create lists for later reference
+            elif widget == BITMAP:
+                name = wx.StaticBitmap(self, -1, img, size=size)
+                box.Add(name, 0, wx.SHAPED)
+                self.btn_list.append(name)  # create lists for later reference
+            elif widget == SPACER:
+                box.Add(size, 0, wx.EXPAND)
+
+        min_speed = 0
+        max_speed = 8
+        default_speed = 3
+        self.ggp.slider_speed = wx.Slider(
+            # id, value, min, max, (x, y), (length, height)
+            self, -1, default_speed, min_speed, max_speed,
+            (-1, -1), (100, -1),
+            wx.SL_HORIZONTAL | wx.SL_AUTOTICKS #| wx.SL_LABELS
+            )
+        self.ggp.slider_speed.SetTickFreq(1, 1)
+        self.ggp.slider_speed.SetToolTipString(tip_list[6])
+        box.Add(self.ggp.slider_speed, 0, wx.SHAPED)
+        self.ggp.slider_speed.SetFocus()  # to make it same colour as background
+
+        self.SetSizer(box)
+        self.SetScrollRate(10, 0)
+
+    def SelectLanguage(self):
+        tip_list = [_("Submits Answer & proceeds to next question"),
+                          _("Resets World"),
+                          _("Tests the program"),
+                          _("Steps through robot program instructions"), 
+                          _("Pause program"), 
+                          _("Stops program"),
+                          _("Starts session"),
+                          _("Adjust robot speed")]
+        for i in range(len(tip_list)):
+            self.btn_list[i].SetToolTipString(tip_list[i])
+        self.ggp.slider_speed.SetToolTipString(tip_list[9])
+
+class pythonChoiceWindow(wx.Panel):
+    def __init__(self, parent, editor):
+        wx.Panel.__init__(self, parent, -1)
+
+        btn_size = (32, 32)
+        spacer_small = (4, 4)
+        spacer_large = (25, 25)
+
+        tip_list = [_("Open Python file"), 
+                         _("Save Python file"),
+                         _("Run Python program"),
+                        _("Run program with argument list"),
+                        _("Help"),
+                        _("Go to line number"),
+                        _("Hide or show output window"),
+                        _("Change layout"),
+                         _("Clear text")]
+
+        helpId = wx.NewId()
+        openId = wx.NewId()
+        saveId = wx.NewId()
+        runId = wx.NewId()
+        runWithId = wx.NewId()
+        goToId = wx.NewId()
+        showId = wx.NewId()
+        clearId = wx.NewId()
+        switchId = wx.NewId()
+
+        widget_list = [
+            [None, SPACER, None, None, spacer_small, None],
+            [openId, BUTTON, editor.openFile,
+                getImage(images.OPEN_PYTHON), btn_size, tip_list[0]],
+            [None, SPACER, None, None, spacer_small, None],
+            [saveId, BUTTON, editor.saveFile,
+                getImage(images.SAVE_PYTHON), btn_size, tip_list[1]],
+            [None, SPACER, None, None, spacer_large, None],
+            [runId, BUTTON, editor.run,
+                getImage(images.RUN_PROGRAM), btn_size, tip_list[2]],
+            [None, SPACER, None, None, spacer_small, None],
+            [runWithId, BUTTON, editor.run_with,
+                getImage(images.RUN_WITH), btn_size, tip_list[3]],
+            [None, SPACER, None, None, spacer_large, None],
+            [helpId, BUTTON, editor.help,
+                getImage(images.HELP), btn_size, tip_list[4]],
+            [None, SPACER, None, None, spacer_large, None],
+            [goToId, BUTTON, editor.goToLine,
+                getImage(images.GOTO), btn_size, tip_list[5]],
+            [None, SPACER, None, None, spacer_large, None],
+            [showId, BUTTON, editor.show,
+                getImage(images.SHOW_HIDE), btn_size, tip_list[6]],
+            [None, SPACER, None, None, spacer_large, None],
+            [switchId, BUTTON, editor.switch_layout,
+                getImage(images.LAYOUT), btn_size, tip_list[7]],
+            [None, SPACER, None, None, spacer_large, None],
+            [clearId, BUTTON, editor.clear,
+                getImage(images.CLEAR_TEXT), btn_size, tip_list[8]]
+            ]
+        box = wx.BoxSizer(wx.HORIZONTAL)
+        self.btn_list = []
+        for id, widget, action, img, size, tip in widget_list:
+            if widget == BUTTON:
+                btn = wx.BitmapButton(self, id, img, size=size)
+                #btn = wx.lib.buttons.GenBitmapButton(self, id, img, size=size)
+                #btn = wx.Button(self, id, tip[:7], size=size)
+                btn.SetToolTipString(tip)
+                self.Bind(wx.EVT_BUTTON, action, btn)
+                box.Add(btn, 0, wx.SHAPED)
+                self.btn_list.append(btn)  # create a list for later reference
+            elif widget == BITMAP:
+                name = wx.StaticBitmap(self, -1, img, size=size)
+                box.Add(name, 0, wx.SHAPED)
+                self.btn_list.append(name)  # create lists for later reference
+            elif widget == SPACER:
+                box.Add(size, 0, wx.EXPAND)
+        self.SetSizer(box)
+
+        aTable = wx.AcceleratorTable([(wx.ACCEL_CTRL, ord('O'), openId),
+                                    (wx.ACCEL_CTRL, ord('S'), saveId),
+                                    (wx.ACCEL_CTRL, ord('R'), runId),
+                                    (wx.ACCEL_NORMAL, wx.WXK_F5, runWithId),
+                                    (wx.ACCEL_CTRL, ord('E'), clearId),
+                                    (wx.ACCEL_NORMAL, wx.WXK_F1, helpId),
+                                    (wx.ACCEL_CTRL, ord('H'), showId),
+                                    (wx.ACCEL_CTRL, ord('G'), goToId),
+                                    (wx.ACCEL_CTRL, ord('L'), switchId)])
+        editor.SetAcceleratorTable(aTable)      
+  
+
+    def SelectLanguage(self):
+        # recreate the list, using the new language
+        tip_list = [_("Open Python file"), 
+                         _("Save Python file"),
+                         _("Run Python program"),
+                        _("Run program with argument list"),
+                        _("Help"),
+                        _("Go to line number"),
+                        _("Hide or show output window"),
+                        _("Change layout"),
+                         _("Clear text")]
+        for i in range(len(tip_list)):
+            self.btn_list[i].SetToolTipString(tip_list[i])
+

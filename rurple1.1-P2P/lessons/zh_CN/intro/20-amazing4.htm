@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="zh_CN" xml:lang="zh_CN">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<link rel="stylesheet" href="../rurple.css" type="text/css" />
+
+<title>神奇的解决方案-复习四</title>
+</head>
+<body>
+<h2 class="title">20. 神奇的解决方案-复习四</h2>
+
+<p>在复习四的最后的部分，你可能已经发现程序失败的原因了吧？原因是当乐跑放下报警器以后，我们太匆忙就让他前进了。其实在他前进前，我们应当首先要他检查一下是否有墙阻碍他前进。如果你想不出解决方法，可以一起来参考下面的程序。</p>
+
+<pre>
+<span class="keyword">def</span> turn_right():
+    repeat(turn_left, 3)
+
+put_beeper()
+<span class="comment"># 这里开始我做了一些修改（假如前面没有墙壁，左转）</span>
+<span class="keyword">if not</span> front_is_clear():
+    turn_left()
+<span class="comment"># 修改完毕</span>
+move()
+<span class="keyword">while not</span> on_beeper():
+    <span class="keyword">if</span> right_is_clear():
+        turn_right()
+        move()
+    <span class="keyword">elif</span> front_is_clear():
+        move()
+    <span class="keyword">else</span>:
+        turn_left()
+
+turn_off()
+</pre>
+
+<p>现在试一下这个程序，可以发现这个修改以后的程序让乐跑成功地环游一周了吧！现在大家一起来想象一下在哪种情况下这个程序是不能成功运作吗？</p>
+
+<div class="lessons_nav">
+<a href="19-amazing3.htm"><img alt="previous" src=
+"../../images/previous.png" /> 神奇的解决方案-复习三</a> - <a href=
+"../lessons_toc.htm"><img alt="home" src="../../images/home.png" /></a> - <a href=
+"21-amazing5.htm">神奇的解决方案-复习五 <img alt="next" src=
+"../../images/next.png" /></a>
+</div>
+</body>
+</html>
