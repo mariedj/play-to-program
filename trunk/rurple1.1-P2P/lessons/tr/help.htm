@@ -1,0 +1,142 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<link rel="stylesheet" href="rurple.css" type="text/css" />
+
+<title>Komutların Özeti</title>
+</head>
+<body>
+<h2 class="title">Python Öğreniyorum: RUR-PLE! ile oynamak</h2>
+<h6>André Roberge, © 2005-2010</h6>
+
+<h3 class="section">Komutların Özeti</h3>
+
+<p>Reeborg’un Hareketleri:</p>
+
+<pre>
+move()
+turn_left()
+pick_beeper()
+put_beeper()
+turn_off()
+</pre>
+
+<p>Testler: </p>
+
+<pre>
+front_is_clear()
+left_is_clear()
+right_is_clear()
+facing_north()
+carries_beepers()
+on_beeper() <span class="comment"># equivalent to:</span> next_to_a_beeper()
+</pre>
+
+<p>Fonksiyonları: </p>
+
+<pre>
+repeat(function, number_of_times)
+<span class="comment"># Bu aşağıdakine eşittir</span>
+<span class="keyword">for</span> number <span class="keyword">in</span> range(number_of_times):
+    function()
+</pre>
+
+<p>Nesneye Dayalı Programlama:</p>
+
+<pre>
+Reeborg = UsedRobot()
+Reeborg.move()
+Reeborg.turn_left()
+Reeborg.pick_beeper()
+Reeborg.put_beeper()
+Reeborg.front_is_clear()
+Reeborg.left_is_clear()
+Reeborg.right_is_clear()
+Reeborg.facing_north()
+Reeborg.carries_beepers()
+Reeborg.on_beeper() <span class="comment"># Bu aşağıdakine eşittir:</span> Reeborg.next_to_a_beeper()
+</pre>
+
+<p>Gelişmiş Seçenekler:</p>
+
+<pre>
+set_trace_style(style=1, colour=<span class="string">'sea green'</span>)
+<span class="comment"># wxPython tarafından tanınan herhangi bir renk kabul edilebilir</span>
+<span class="comment"># style [1, 2, 3, 4, 5] den birisidir</span>
+set_delay(time)
+<span class="comment"># 0 &lt; time &lt; 10 (saniye olarak)</span>
+
+Reeborg = UsedRobot(avenues=1, streets=1, orient_key = <span class="string">'E'</span>,
+                 beepers=0, name=<span class="string">'robot'</span>, colour=<span class="string">'grey'</span>)
+<span class="comment">orient_key yön bildirir ve bunlardan birisidir: <span class="string">'E'</span> veya <span class="string">'e'</span>, <span class="string">'W'</span> veya <span class="string">'w'</span>, <span class="string">'S'</span> veya <span class="string">'s'</span>, <span class="string">'N'</span> veya <span class="string">'n'</span>.</span>
+
+<span class="comment"># <b>robot</b> renkleri: <span class="string">'yellow'</span>, 
+# <span class="string">'blue'</span>, <span class="string">'light blue'</span>, <span class="string">'purple'</span> ve <span class="string">'green'</span> olabilir.  
+# Başka bir renk kullanıldıysa bu (<span class="string">'grey'</span>) olur.</span>
+
+<span class="comment"># Robotun adına ("name" özelliği) bir numara ilave edilebilir.
+# Böylece, her robotun kendine has bir adı olacaktır.</span>
+
+Reeborg.set_trace_style(style=1, colour=<span class="string">'sea green'</span>) 
+Reeborg.set_delay(time)
+</pre>
+
+<p>Yeni ve gelişmiş bir Robot! (Gelecek Sürüm)</p>
+
+<pre>
+Guido = RefurbishedRobot()  <span class="comment"># UsedRobot'tan miras</span>
+
+<span class="comment"># İlave Metodlar:</span>
+
+Guido.turn_right()
+Guido.left_clear()
+Guido.right_clear()
+Guido.facing_east()
+Guido.facing_south()
+Guido.facing_west()
+Guido.roll_dice(n=6) <span class="comment"># 1 ile n arasında tesadüfi bir tamsayı.</span>
+</pre>
+
+<h3 class="section"><a name="Acknowledgements" id=
+"Acknowledgements"><b>Teşekkürler</b></a></h3>
+
+<p>Çocuklarım Julien ve Evelyne olmasaydı bu program olmazdı. Onların bu paket 
+yardımıyla programlamanın temellerini eğlenerek öğrenmeleri umuyorum ve bu 
+paketi onlara ithaf ediyorum. Julien'a  robot resimlerini ve 
+kullanıldıkları ekranları tasarladığı için ayrıca teşekkür ediyorum.</p>
+
+<p>Bu paketi hazırlayarak çok şey öğrendim. Aslında Python öğrenmeye bu paketi 
+hazırlamaya başlamadan bir kaç ay önce başladığımı itiraf etmeliyim. 
+Python ve 
+wxPython'la ilgilenen ve gelişmesine katkı sağlayan kişiler olmasaydı, benim 
+öğrenmem çok daha zor olacak ve bu paketin hazırlanması mümkün olmayacaktı.  
+Bu program Guido van Robot (GvR)'dan esinlenerek yaratıldı. Guido van Robot (GvR) 
+ise Pattis'in  orjinal "Karel the Robot"'unun Python'a uyarlanmışıdır. GvR 
+geliştiricilerinden bana çok yararı olan değerlendirmeler aldım  özellikle Stas
+Zykiewicz'e bana wxPython'u öğrenmemde yardımcı olduğu ve yazdığım programları 
+kontrol ettiği için çok teşekkür ediyorum.</p>
+
+<p>Butanlarda kullanılan pek çok resim Davis Vignoni tarafından tasarlanan 
+Nuvola ikon setinden alındı. Keşke bende onun tasarladığı gibi güzel ve estetik 
+resimler tasarlayabilseydim.</p>
+
+<p>Tony Payzant derslerin ilk sürümlerini kontrol etmek için çok zaman harcadı. Bob Gailer 
+yararlı olacak düzeltmeler önerdi.</p>
+
+<p>Luis Sureda İspanyolca çeviriyi yaptı ve dil seçimi ile ilgili kodlamaları 
+basitleştirecek tavsiyeler de bulundu. </p>
+
+<p>Richard E. Brown rur-ple'ın MacOS'da daha iyi çalışmasını sağlayacak 
+tavsiyelerde bulundu.</p>
+
+<p>Andy Judkis used rur-ple with his students and made many suggestions for improvement; in many ways, he became a driving force behind this project.</p>
+
+<div class="lessons_nav">
+<a href="rur.htm"><img alt="home" src=
+"../images/home.png" /></a>
+</div>
+</body>
+</html>
+
