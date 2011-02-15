@@ -144,6 +144,7 @@ class RURApp(wx.Frame):
         self.SetStatusBar(self.status_bar)
         self.problemNumber = 0
         self.problem_choice = [0, 1, 2, 3, 4]
+        self.inst_screen = None
 
         # icon on top left of window
         icon = wx.EmptyIcon()
@@ -221,8 +222,11 @@ class RURApp(wx.Frame):
             del(self.problem_choice[temp])
         
 
-            inst_screen = InstructionScreen(None, -1, 'Instruction Screen')
-            inst_screen.setInstructions(dict_ins[n])
+            if self.inst_screen:
+                self.inst_screen.Close()
+            
+            self.inst_screen = InstructionScreen(None, -1, 'Instruction Screen')
+            self.inst_screen.setInstructions(dict_ins[n])
      
             #Based on what problem it is change the browswer screen
             #Pass n to a function that changes the browser screen
@@ -240,7 +244,12 @@ class RURApp(wx.Frame):
             return openedFileName
         else:
             #todo: clean this up w/ a pop-up
-            sys.exit(-1)
+            self.inst_screen.Close()
+            dlg = wx.MessageDialog(self, "You have completed all of the required problems." +
+                                   "Rurple will now log you out and close.", "Complete")
+            dlg.ShowModal()
+            dlg.Destroy()
+            self.Close(True)
 
     def OnClose(self, event):
         if self.ProgramEditor.GetModify():
@@ -401,7 +410,7 @@ class RURApp(wx.Frame):
         self.world_filename = str(user_id) + '_world_' + str(self.problemNumber) + '.txt'
         
         dirHome = os.getcwd()
-        dir = self.getUserDir()
+        dir = getUserDir()
         student_dirs = os.path.join(dir, 'StudentFiles', 'Worlds')
         try:
             os.makedirs(student_dirs)
@@ -455,28 +464,6 @@ class RURApp(wx.Frame):
             else:
                 code = ""
                 dialogs.messageDialog(mesg, _("Program will not be used."))
-    
-    def getUserDir(self):
-        '''Returns the user directory, i.e. the place where user specific
-        data are stored.
-        @return (str): the platform dependent user directory.
-        '''
-        platform = sys.platform
-
-        userdir = ''
-        if platform in ('linux2', 'darwin', 'cygwin') or os.name == 'posix':
-            home = os.path.expanduser('~')
-            if home != '~':
-                userdir = os.path.join(home, '.config', 'rurple')
-        elif platform == 'win32':
-            if 'APPDATA' in  os.environ:
-                userdir = os.path.join(os.environ['APPDATA'], 'rurple')
-
-        if userdir == '':
-            userdir =  os.path.join(tempfile.gettempdir(), 'rurple')
-
-        return userdir
-
 
     def SaveProgramFile(self, dummy):
         #IF NOT in step mode. Useful so that each step doesnt append
@@ -499,7 +486,7 @@ class RURApp(wx.Frame):
 
             
             dirHome = os.getcwd()
-            dir = self.getUserDir()
+            dir = getUserDir()
             student_dirs = os.path.join(dir, 'StudentFiles', 'SourceCode')
 #            student_dirs = dir + "/StudentFiles/SourceCode/"
             try:
@@ -574,6 +561,7 @@ class RURApp(wx.Frame):
             return
         self.OpenWorldFile(0)
         self.ProgramEditor.SetText("")
+        
 
 #--- World controls
 
@@ -802,7 +790,6 @@ class NewUserScreen(wx.Frame):
 
             #Error checking could be made more complete
             if (self.lastName.GetValue() == "") or (self.firstName.GetValue() == ""):
-                print "IF"
                 dlg = wx.MessageDialog(self, "Please complete the missing information", 
                                        "Missing Information!")
                 dlg.ShowModal()
@@ -810,7 +797,6 @@ class NewUserScreen(wx.Frame):
                 event.Skip()
 
             else:
-                print "Else"
                  #Create the key file with the user_id for lookup
                 directory = os.getcwd()
                 os.chdir(os.getcwd())
@@ -828,7 +814,7 @@ class NewUserScreen(wx.Frame):
                     pass
 
                 os.chdir(student_dirs)
-                print "Else2"
+
                 file = open(demo_filename, "w")
                 file.write(self.lastName.GetValue() + '\n')
                 file.write(self.firstName.GetValue() + '\n')
