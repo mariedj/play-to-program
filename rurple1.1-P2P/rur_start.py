@@ -677,7 +677,7 @@ class RURApp(wx.Frame):
 class NewUserScreen(wx.Frame):
     def __init__(self, parent, id, title):
         frameX = 500
-        frameY = 500
+        frameY = 800
         wx.Frame.__init__(self, parent, id, title, size=(frameX, frameY))
         largeFont = wx.Font(36, wx.FONTFAMILY_DEFAULT, wx.FONTSTYLE_NORMAL,
                             wx.FONTWEIGHT_BOLD)        
@@ -691,31 +691,75 @@ class NewUserScreen(wx.Frame):
         label.SetFont(largeFont)
         label2.SetFont(largeFont)
 
+
         promptLabel = wx.StaticText(self, -1, 'Please Enter your information below.',
                                     (20, 150))
         firstNameLabel =  wx.StaticText(self, -1, 'First Name: ',
                                     (20, 180))
         lastNameLabel = wx.StaticText(self, -1, 'Last Name: ',
                                     (20, 210))
-        courseLevelLabel =  wx.StaticText(self, -1, 'Highest CMSC Course Completed: ',
-                                    (20, 240))
+        ageLabel = wx.StaticText(self, -1, 'Age: ', (20, 240))
+        #courseLevelLabel =  wx.StaticText(self, -1, 'Highest CMSC Course Completed: ',
+        #                            (20, 240))
         umbcEmailLabel = wx.StaticText(self, -1, 'UMBC Email: ',
                                     (20, 270))
         domainLabel =  wx.StaticText(self, -1, '@umbc.edu',
                                     (300, 270))
+        sexLabel = wx.StaticText(self, -1, 'Sex: ', (20, 300))
+        creditLabel = wx.StaticText(self, -1, 'Credit Count: ', (20, 330))
+        transferLabel = wx.StaticText(self, -1, 'Are you a transfer student? ', (20, 360))
+        courseLabel = wx.StaticText(self, -1, "Please enter the courses you have completed and the", 
+                                    (20, 390))
+        courseLabel2 = wx.StaticText(self, -1, "grade that you earned in each.",
+                                     (20, 420))
+
+        courseNameLabel = wx.StaticText(self, -1, "Course", 
+                                        (20, 450))
+        courseGradeLabel = wx.StaticText(self, -1, "Grade",
+                                         (250, 450))
+
         promptLabel.SetFont(buttonFont)
         firstNameLabel.SetFont(labelFont)
         lastNameLabel.SetFont(labelFont)
-        courseLevelLabel.SetFont(labelFont)
+#        courseLevelLabel.SetFont(labelFont)
         umbcEmailLabel.SetFont(labelFont)
+        ageLabel.SetFont(labelFont)
+        sexLabel.SetFont(labelFont)
+        creditLabel.SetFont(labelFont)
+        transferLabel.SetFont(labelFont)
+        courseLabel.SetFont(labelFont)
+        courseLabel2.SetFont(labelFont)
+        courseNameLabel.SetFont(labelFont)
+        courseGradeLabel.SetFont(labelFont)
         domainLabel.SetFont(labelFont)
         
         firstName = wx.TextCtrl(self, -1, '', (120, 180), size = (150, 20))
         lastName = wx.TextCtrl(self, -1, '', (120, 210), size = (150, 20))
-        cmscLevel = wx.TextCtrl(self, -1, '', (300, 240), size = (150, 20))
+        #cmscLevel = wx.TextCtrl(self, -1, '', (300, 240), size = (150, 20))
         self.email = wx.TextCtrl(self, -1, '', (120, 270), size = (150, 20))
+        age = wx.TextCtrl(self, -1, '', (120, 240), size = (30, 20))
+        sex = wx.Choice(self, -1, (120, 300), (100, 20), ["Male", "Female"])
+        creditCount = wx.TextCtrl(self, -1, '', (150, 330), size = (70, 20))
+        isTransfer = wx.Choice(self, -1, (250, 360), (70, 20), ["Yes", "No"])
+        
+        course1 = wx.TextCtrl(self, -1, '', (20, 480), size = (70, 20))
+        course2 = wx.TextCtrl(self, -1, '', (20, 510), size = (70, 20))
+        course3 = wx.TextCtrl(self, -1, '', (20, 540), size = (70, 20))
+        course4 = wx.TextCtrl(self, -1, '', (20, 570), size = (70, 20))
+        course5 = wx.TextCtrl(self, -1, '', (20, 600), size = (70, 20))
+        course6 = wx.TextCtrl(self, -1, '', (20, 630), size = (70, 20))
 
-        button1 = wx.Button(self, -1, 'Create', pos = wx.Point(70, 400), 
+        grades = ["A", "B", "C", "D", "F", "P", "I", "Currently Enrolled"]
+        grade1 = wx.Choice(self, -1, (250, 480), (200, 20), grades)
+        grade2 = wx.Choice(self, -1, (250, 510), (200, 20), grades)
+        grade3 = wx.Choice(self, -1, (250, 540), (200, 20), grades)
+        grade4 = wx.Choice(self, -1, (250, 570), (200, 20), grades)
+        grade5 = wx.Choice(self, -1, (250, 600), (200, 20), grades)
+        grade6 = wx.Choice(self, -1, (250, 630), (200, 20), grades)
+
+        
+
+        button1 = wx.Button(self, -1, 'Create', pos = wx.Point(70, 700), 
                             size = wx.Size(300, 1000))
         button1.SetFont(buttonFont)
 
