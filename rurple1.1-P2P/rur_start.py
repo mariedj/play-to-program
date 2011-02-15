@@ -121,6 +121,7 @@ class RURnotebook(wx.Notebook):
             event_manager.SendCustomEvent(self.parent, arg)
             event.Skip()
  
+    #Check if I need to blow this out
     def ShowInstructions(self):
         status_bar = self.parent.status_bar
         # status_bar is dead during shutdown so check if it's alive.

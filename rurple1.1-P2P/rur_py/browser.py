@@ -120,7 +120,7 @@ class TestHtmlPanel(wx.Panel):
         self.SetSizer(self.box)
         self.SetAutoLayout(True)
 
-        self.name = os.path.join(self.lessons_dir, 'help.htm')
+        self.name = os.path.join(self.lessons_dir, 'summary.htm')
 	print self.name
         self.html.LoadPage(self.name)
 
@@ -168,7 +168,7 @@ class TestHtmlPanel(wx.Panel):
         self.grand_parent.world.DoDrawing()
 
     def OnHome(self, event):
-        name = os.path.join(self.lessons_dir, 'help.htm')
+        name = os.path.join(self.lessons_dir, 'summary.htm')
 	self.html.LoadPage(name) 
 		
     #Change it to all files
@@ -193,11 +193,13 @@ class TestHtmlPanel(wx.Panel):
         dict_ins = {0:'2-explore.htm', 1:'9-walls.htm', 
                     2:'10-def.htm', 3:'11-repeat.htm'}
         chosenFile = 0
-        opened_file = self.lessons_dir + '/intro/' + dict_ins[chosenFile]
+        opened_file = os.path.join(self.lessons_dir, 'intro', 
+                                   dict_ins[chosenFile])
         print opened_file
         self.html.LoadPage(opened_file)
     
     def problemChanged(self, ins_dict, chosenFile):
-        opened_file = self.lessons_dir + '/intro/' + ins_dict[chosenFile]
+        opened_file = os.path.join(self.lessons_dir, 'intro', 
+                                   ins_dict[chosenFile])
         print opened_file
         self.html.LoadPage(opened_file)
