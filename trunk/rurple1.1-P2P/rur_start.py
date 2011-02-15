@@ -728,9 +728,9 @@ class NewUserScreen(wx.Frame):
         sexLabel = wx.StaticText(self, -1, 'Sex: ', (20, 300))
         creditLabel = wx.StaticText(self, -1, 'Credit Count: ', (20, 330))
         transferLabel = wx.StaticText(self, -1, 'Are you a transfer student? ', (20, 360))
-        courseLabel = wx.StaticText(self, -1, "Please enter the courses you have completed and the", 
+        courseLabel = wx.StaticText(self, -1, "Please enter the computer science courses that you",
                                     (20, 390))
-        courseLabel2 = wx.StaticText(self, -1, "grade that you earned in each.",
+        courseLabel2 = wx.StaticText(self, -1, "have completed and the grade that you earned in each.",
                                      (20, 420))
 
         courseNameLabel = wx.StaticText(self, -1, "Course", 
@@ -769,7 +769,7 @@ class NewUserScreen(wx.Frame):
         self.course5 = wx.TextCtrl(self, -1, '', (20, 600), size = (70, 20))
         self.course6 = wx.TextCtrl(self, -1, '', (20, 630), size = (70, 20))
 
-        grades = ["A", "B", "C", "D", "F", "P", "I", "Currently Enrolled"]
+        grades = ["", "A", "B", "C", "D", "F", "P", "I", "Currently Enrolled"]
         self.grade1 = wx.Choice(self, -1, (250, 480), (200, 20), grades)
         self.grade2 = wx.Choice(self, -1, (250, 510), (200, 20), grades)
         self.grade3 = wx.Choice(self, -1, (250, 540), (200, 20), grades)
@@ -795,55 +795,74 @@ class NewUserScreen(wx.Frame):
     
     def OnCreate(self, event):
         global user_id
-  
-        #Create the key file with the user_id for lookup
-        directory = os.getcwd()
-        os.chdir(os.getcwd())
-        logfile = open("key.txt", "a+")
-        user_id = random.randint(0, 400000)
-        logfile.write(self.email.GetValue() + "     " + str(user_id) + "\n")
-
-        #Create the demographic file
-        student_dirs = os.path.join(getUserDir(), 'StudentFiles', 'Demographics')
-        demo_filename = str(user_id) + '_demo' + '.txt'
 
         try:
-            os.makedirs(student_dirs)
-        except OSError:
-            pass
+            int_age = int(self.age.GetValue())
+            int_creditCount = int(self.creditCount.GetValue())
+        except ValueError:
+            dlg = wx.MessageDialog(self, "Age and Credit count must be an integer values!",
+                                   "Invalid Information!")            
+            dlg.ShowModal()
+            dlg.Destroy()
+            event.Skip()
 
-        os.chdir(student_dirs)
-        file = open(demo_filename, "w")
-        file.write(self.lastName.GetValue() + '\n')
-        file.write(self.firstName.GetValue() + '\n')
-        file.write(self.email.GetValue() + '\n')
-        file.write(self.age.GetValue() + '\n')
-        file.write(self.sex.GetString(self.sex.GetSelection()) + '\n')
-        file.write(self.creditCount.GetValue() + '\n')
-        file.write(self.isTransfer.GetString(self.isTransfer.GetSelection()) + '\n')
+        #Error checking could be made more complete
+        if (self.lastName.GetValue() == "") or (self.firstName.GetValue() == ""):
+            dlg = wx.MessageDialog(self, "Please complete the missing information", "Missing Information!")
+            dlg.ShowModal()
+            dlg.Destroy()
+            event.Skip()
 
-        #Temporary way for storing the couses and grades
-        #May change to a separate panel to store each of these in an extendable array
-        file.write(self.course1.GetValue() + '\n')
-        file.write(self.grade1.GetString(self.grade1.GetSelection()) + '\n')
-        file.write(self.course2.GetValue() + '\n')
-        file.write(self.grade2.GetString(self.grade1.GetSelection()) + '\n')
-        file.write(self.course3.GetValue() + '\n')
-        file.write(self.grade3.GetString(self.grade1.GetSelection()) + '\n')
-        file.write(self.course4.GetValue() + '\n')
-        file.write(self.grade4.GetString(self.grade1.GetSelection()) + '\n')
-        file.write(self.course5.GetValue() + '\n')
-        file.write(self.grade5.GetString(self.grade1.GetSelection()) + '\n')
-        file.write(self.course6.GetValue() + '\n')
-        file.write(self.grade6.GetString(self.grade1.GetSelection()) + '\n')
-        file.close()
-        os.chdir(directory)
+        else:
+            #Create the key file with the user_id for lookup
+            directory = os.getcwd()
+            os.chdir(os.getcwd())
+            logfile = open("key.txt", "a+")
+            user_id = random.randint(0, 400000)
+            logfile.write(self.email.GetValue() + "     " + str(user_id) + "\n")
+
+            #Create the demographic file
+            student_dirs = os.path.join(getUserDir(), 'StudentFiles', 'Demographics')
+            demo_filename = str(user_id) + '_demo' + '.txt'
+
+            try:
+                os.makedirs(student_dirs)
+            except OSError:
+                pass
+
+            os.chdir(student_dirs)
+
+            file = open(demo_filename, "w")
+            file.write(self.lastName.GetValue() + '\n')
+            file.write(self.firstName.GetValue() + '\n')
+            file.write(self.email.GetValue() + '\n')
+            file.write(self.age.GetValue() + '\n')
+            file.write(self.sex.GetString(self.sex.GetSelection()) + '\n')
+            file.write(self.creditCount.GetValue() + '\n')
+            file.write(self.isTransfer.GetString(self.isTransfer.GetSelection()) + '\n')
+
+            #Temporary way for storing the couses and grades
+            #May change to a separate panel to store each of these in an extendable array
+            file.write(self.course1.GetValue() + '\n')
+            file.write(self.grade1.GetString(self.grade1.GetSelection()) + '\n')
+            file.write(self.course2.GetValue() + '\n')
+            file.write(self.grade2.GetString(self.grade2.GetSelection()) + '\n')
+            file.write(self.course3.GetValue() + '\n')
+            file.write(self.grade3.GetString(self.grade3.GetSelection()) + '\n')
+            file.write(self.course4.GetValue() + '\n')
+            file.write(self.grade4.GetString(self.grade4.GetSelection()) + '\n')
+            file.write(self.course5.GetValue() + '\n')
+            file.write(self.grade5.GetString(self.grade5.GetSelection()) + '\n')
+            file.write(self.course6.GetValue() + '\n')
+            file.write(self.grade6.GetString(self.grade6.GetSelection()) + '\n')
+            file.close()
+            os.chdir(directory)
 
 
-        #Run the program
-        dummy = RURApp()
-        self.Destroy()
-#        event.Skip()
+            #Run the program
+            dummy = RURApp()
+            self.Destroy()
+    #        event.Skip()
     
     def OnCancel(self, event):
         self.Close(True)
