@@ -71,7 +71,7 @@ Updates to come:
 	rur_start.py look at the ShowInstruction Method and decide if it is 
 	needed
 
-	Move key.txt to .config
+	----Move key.txt to .config
 	New user name make sure they can not input a previous existing username
 
 	---rur_its.py has been renamed to environment.py and moved to 

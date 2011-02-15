@@ -121,7 +121,6 @@ class RURnotebook(wx.Notebook):
             event_manager.SendCustomEvent(self.parent, arg)
             event.Skip()
  
-    #Check if I need to blow this out
     def ShowInstructions(self):
         status_bar = self.parent.status_bar
         # status_bar is dead during shutdown so check if it's alive.
@@ -800,7 +799,7 @@ class NewUserScreen(wx.Frame):
             else:
                  #Create the key file with the user_id for lookup
                 directory = os.getcwd()
-                os.chdir(os.getcwd())
+                os.chdir(getUserDir())
                 logfile = open("key.txt", "a+")
                 user_id = random.randint(0, 400000)
                 logfile.write(self.email.GetValue() + "     " + str(user_id) + "\n")
