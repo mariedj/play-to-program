@@ -74,5 +74,5 @@ Updates to come:
 	Move key.txt to .config
 	New user name make sure they can not input a previous existing username
 
-	rur_its.py has been renamed to environment.py and moved to 
+	---rur_its.py has been renamed to environment.py and moved to 
 	rur_py directory. 
