@@ -802,6 +802,7 @@ class NewUserScreen(wx.Frame):
 
             #Error checking could be made more complete
             if (self.lastName.GetValue() == "") or (self.firstName.GetValue() == ""):
+                print "IF"
                 dlg = wx.MessageDialog(self, "Please complete the missing information", 
                                        "Missing Information!")
                 dlg.ShowModal()
@@ -809,6 +810,7 @@ class NewUserScreen(wx.Frame):
                 event.Skip()
 
             else:
+                print "Else"
                  #Create the key file with the user_id for lookup
                 directory = os.getcwd()
                 os.chdir(os.getcwd())
@@ -820,10 +822,13 @@ class NewUserScreen(wx.Frame):
                 student_dirs = os.path.join(getUserDir(), 'StudentFiles', 'Demographics')
                 demo_filename = str(user_id) + '_demo' + '.txt'
 
-                os.makedirs(student_dirs)
-                
-                os.chdir(student_dirs)
+                try:
+                    os.makedirs(student_dirs)
+                except OSError:
+                    pass
 
+                os.chdir(student_dirs)
+                print "Else2"
                 file = open(demo_filename, "w")
                 file.write(self.lastName.GetValue() + '\n')
                 file.write(self.firstName.GetValue() + '\n')
@@ -862,10 +867,6 @@ class NewUserScreen(wx.Frame):
             dlg.ShowModal()
             dlg.Destroy()
             event.Skip()
-        
-        except OSError:
-            pass
-
     
     def OnCancel(self, event):
         self.Close(True)
