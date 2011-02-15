@@ -80,11 +80,32 @@ from rur_py.status_bar import rurStatusBar
 
 # global variable defined for convenience; contains user program
 code = ""
-user_name = ""
 user_id = 0
 SUBMITTED = 1
 TEST_RUN = 2
 STEP = 3
+
+def getUserDir():
+    '''Returns the user directory, i.e. the place where user specific
+    data are stored.
+    @return (str): the platform dependent user directory.
+    '''
+    platform = sys.platform
+
+    userdir = ''
+    if platform in ('linux2', 'darwin', 'cygwin') or os.name == 'posix':
+        home = os.path.expanduser('~')
+        if home != '~':
+            userdir = os.path.join(home, '.config', 'rurple')
+    elif platform == 'win32':
+        if 'APPDATA' in  os.environ:
+            userdir = os.path.join(os.environ['APPDATA'], 'rurple')
+
+    if userdir == '':
+        userdir =  os.path.join(tempfile.gettempdir(), 'rurple')
+
+    return userdir
+
 
 class RURnotebook(wx.Notebook):
     def __init__(self, parent):
@@ -381,7 +402,6 @@ class RURApp(wx.Frame):
         
         dirHome = os.getcwd()
         dir = self.getUserDir()
-#        student_dirs = dir + "/StudentFiles/Worlds/"
         student_dirs = os.path.join(dir, 'StudentFiles', 'Worlds')
         try:
             os.makedirs(student_dirs)
@@ -733,29 +753,29 @@ class NewUserScreen(wx.Frame):
         courseGradeLabel.SetFont(labelFont)
         domainLabel.SetFont(labelFont)
         
-        firstName = wx.TextCtrl(self, -1, '', (120, 180), size = (150, 20))
-        lastName = wx.TextCtrl(self, -1, '', (120, 210), size = (150, 20))
+        self.firstName = wx.TextCtrl(self, -1, '', (120, 180), size = (150, 20))
+        self.lastName = wx.TextCtrl(self, -1, '', (120, 210), size = (150, 20))
         #cmscLevel = wx.TextCtrl(self, -1, '', (300, 240), size = (150, 20))
         self.email = wx.TextCtrl(self, -1, '', (120, 270), size = (150, 20))
-        age = wx.TextCtrl(self, -1, '', (120, 240), size = (30, 20))
-        sex = wx.Choice(self, -1, (120, 300), (100, 20), ["Male", "Female"])
-        creditCount = wx.TextCtrl(self, -1, '', (150, 330), size = (70, 20))
-        isTransfer = wx.Choice(self, -1, (250, 360), (70, 20), ["Yes", "No"])
+        self.age = wx.TextCtrl(self, -1, '', (120, 240), size = (30, 20))
+        self.sex = wx.Choice(self, -1, (120, 300), (100, 20), ["Male", "Female"])
+        self.creditCount = wx.TextCtrl(self, -1, '', (150, 330), size = (70, 20))
+        self.isTransfer = wx.Choice(self, -1, (250, 360), (70, 20), ["Yes", "No"])
         
-        course1 = wx.TextCtrl(self, -1, '', (20, 480), size = (70, 20))
-        course2 = wx.TextCtrl(self, -1, '', (20, 510), size = (70, 20))
-        course3 = wx.TextCtrl(self, -1, '', (20, 540), size = (70, 20))
-        course4 = wx.TextCtrl(self, -1, '', (20, 570), size = (70, 20))
-        course5 = wx.TextCtrl(self, -1, '', (20, 600), size = (70, 20))
-        course6 = wx.TextCtrl(self, -1, '', (20, 630), size = (70, 20))
+        self.course1 = wx.TextCtrl(self, -1, '', (20, 480), size = (70, 20))
+        self.course2 = wx.TextCtrl(self, -1, '', (20, 510), size = (70, 20))
+        self.course3 = wx.TextCtrl(self, -1, '', (20, 540), size = (70, 20))
+        self.course4 = wx.TextCtrl(self, -1, '', (20, 570), size = (70, 20))
+        self.course5 = wx.TextCtrl(self, -1, '', (20, 600), size = (70, 20))
+        self.course6 = wx.TextCtrl(self, -1, '', (20, 630), size = (70, 20))
 
         grades = ["A", "B", "C", "D", "F", "P", "I", "Currently Enrolled"]
-        grade1 = wx.Choice(self, -1, (250, 480), (200, 20), grades)
-        grade2 = wx.Choice(self, -1, (250, 510), (200, 20), grades)
-        grade3 = wx.Choice(self, -1, (250, 540), (200, 20), grades)
-        grade4 = wx.Choice(self, -1, (250, 570), (200, 20), grades)
-        grade5 = wx.Choice(self, -1, (250, 600), (200, 20), grades)
-        grade6 = wx.Choice(self, -1, (250, 630), (200, 20), grades)
+        self.grade1 = wx.Choice(self, -1, (250, 480), (200, 20), grades)
+        self.grade2 = wx.Choice(self, -1, (250, 510), (200, 20), grades)
+        self.grade3 = wx.Choice(self, -1, (250, 540), (200, 20), grades)
+        self.grade4 = wx.Choice(self, -1, (250, 570), (200, 20), grades)
+        self.grade5 = wx.Choice(self, -1, (250, 600), (200, 20), grades)
+        self.grade6 = wx.Choice(self, -1, (250, 630), (200, 20), grades)
 
         
 
@@ -763,22 +783,71 @@ class NewUserScreen(wx.Frame):
                             size = wx.Size(300, 1000))
         button1.SetFont(buttonFont)
 
-        self.Bind(wx.EVT_BUTTON, self.OnCreate, id=button1.GetId())
+        button2 = wx.Button(self, -1, 'Cancel', pos = wx.Point(70, 730), 
+                            size = wx.Size(300, 1000))
+        button2.SetFont(buttonFont)
+
+#        self.Bind(wx.EVT_BUTTON, self.OnCreate, id.button1.GetId())
+        self.Bind(wx.EVT_BUTTON, self.OnCreate, button1)
+        self.Bind(wx.EVT_BUTTON, self.OnCancel, button2)
 
         self.Show(True)
     
     def OnCreate(self, event):
-        global user_name
         global user_id
+  
+        #Create the key file with the user_id for lookup
         directory = os.getcwd()
         os.chdir(os.getcwd())
         logfile = open("key.txt", "a+")
-        user_name = self.email.GetValue()
-        user_id = random.randint(0, 4000)
-        logfile.write(user_name + "     " + str(user_id) + "\n")
+        user_id = random.randint(0, 400000)
+        logfile.write(self.email.GetValue() + "     " + str(user_id) + "\n")
+
+        #Create the demographic file
+        student_dirs = os.path.join(getUserDir(), 'StudentFiles', 'Demographics')
+        demo_filename = str(user_id) + '_demo' + '.txt'
+
+        try:
+            os.makedirs(student_dirs)
+        except OSError:
+            pass
+
+        os.chdir(student_dirs)
+        file = open(demo_filename, "w")
+        file.write(self.lastName.GetValue() + '\n')
+        file.write(self.firstName.GetValue() + '\n')
+        file.write(self.email.GetValue() + '\n')
+        file.write(self.age.GetValue() + '\n')
+        file.write(self.sex.GetString(self.sex.GetSelection()) + '\n')
+        file.write(self.creditCount.GetValue() + '\n')
+        file.write(self.isTransfer.GetString(self.isTransfer.GetSelection()) + '\n')
+
+        #Temporary way for storing the couses and grades
+        #May change to a separate panel to store each of these in an extendable array
+        file.write(self.course1.GetValue() + '\n')
+        file.write(self.grade1.GetString(self.grade1.GetSelection()) + '\n')
+        file.write(self.course2.GetValue() + '\n')
+        file.write(self.grade2.GetString(self.grade1.GetSelection()) + '\n')
+        file.write(self.course3.GetValue() + '\n')
+        file.write(self.grade3.GetString(self.grade1.GetSelection()) + '\n')
+        file.write(self.course4.GetValue() + '\n')
+        file.write(self.grade4.GetString(self.grade1.GetSelection()) + '\n')
+        file.write(self.course5.GetValue() + '\n')
+        file.write(self.grade5.GetString(self.grade1.GetSelection()) + '\n')
+        file.write(self.course6.GetValue() + '\n')
+        file.write(self.grade6.GetString(self.grade1.GetSelection()) + '\n')
+        file.close()
+        os.chdir(directory)
+
+
+        #Run the program
         dummy = RURApp()
         self.Destroy()
-        event.Skip()
+#        event.Skip()
+    
+    def OnCancel(self, event):
+        self.Close(True)
+
         
 class ReturnUserScreen(wx.Frame):
     def __init__(self, parent, id, title):
