@@ -12,6 +12,7 @@ from translation import _
 
 class rurStatusBar(wx.StatusBar):
     def __init__(self, parent):
+        global user_id
         wx.StatusBar.__init__(self, parent, -1)
         event_manager.myEVT_StatusBarChanged(parent, self.UpdateFields)
         # status bar with four fields, of equal widths
@@ -31,7 +32,7 @@ class rurStatusBar(wx.StatusBar):
         self.run_text = _("Program not running")
         self.beeper_text = _("Robot has %s beeper")%0
         self.world_text = _("Default world")
-        self.name_text = _("%s")%0
+        self.name_text = _("%s")%""
         self.problem_text = _("Problem #%s")%0
 
         #=== when changing language
