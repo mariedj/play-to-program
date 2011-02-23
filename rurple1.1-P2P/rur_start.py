@@ -121,12 +121,12 @@ class RURnotebook(wx.Notebook):
             event_manager.SendCustomEvent(self.parent, arg)
             event.Skip()
  
-    def ShowInstructions(self):
-        status_bar = self.parent.status_bar
-        # status_bar is dead during shutdown so check if it's alive.
-        if status_bar:
-            arg = status_bar.notebook_new_page, 0
-            event_manager.SendCustomEvent(self.parent, arg)
+#    def ShowInstructions(self):
+#        status_bar = self.parent.status_bar
+#        # status_bar is dead during shutdown so check if it's alive.
+#        if status_bar:
+#            arg = status_bar.notebook_new_page, 0
+#            event_manager.SendCustomEvent(self.parent, arg)
 
 class RURApp(wx.Frame):
     def __init__(self):
@@ -233,7 +233,7 @@ class RURApp(wx.Frame):
             #May need to pass the dict
             #self.browser_win.problemChanged(dict_ins, n)
             self.browser_win.name = os.path.join(self.browser_win.lessons_dir,
-                                                 'intro/' + dict_ins[n])
+                                                 'intro' + dict_ins[n])
             
 
 
@@ -488,7 +488,6 @@ class RURApp(wx.Frame):
             dirHome = os.getcwd()
             dir = getUserDir()
             student_dirs = os.path.join(dir, 'StudentFiles', 'SourceCode')
-#            student_dirs = dir + "/StudentFiles/SourceCode/"
             try:
                 os.makedirs(student_dirs)
             except OSError:
@@ -787,72 +786,100 @@ class NewUserScreen(wx.Frame):
         try:
             int_age = int(self.age.GetValue())
             int_creditCount = int(self.creditCount.GetValue())
-
-            #Error checking could be made more complete
-            if (self.lastName.GetValue() == "") or (self.firstName.GetValue() == ""):
-                dlg = wx.MessageDialog(self, "Please complete the missing information", 
-                                       "Missing Information!")
-                dlg.ShowModal()
-                dlg.Destroy()
-                event.Skip()
-
-            else:
-                 #Create the key file with the user_id for lookup
-                directory = os.getcwd()
-                os.chdir(getUserDir())
-                logfile = open("key.txt", "a+")
-                user_id = random.randint(0, 400000)
-                logfile.write(self.email.GetValue() + "     " + str(user_id) + "\n")
-
-                #Create the demographic file
-                student_dirs = os.path.join(getUserDir(), 'StudentFiles', 'Demographics')
-                demo_filename = str(user_id) + '_demo' + '.txt'
-
-                try:
-                    os.makedirs(student_dirs)
-                except OSError:
-                    pass
-
-                os.chdir(student_dirs)
-
-                file = open(demo_filename, "w")
-                file.write(self.lastName.GetValue() + '\n')
-                file.write(self.firstName.GetValue() + '\n')
-                file.write(self.email.GetValue() + '\n')
-                file.write(self.age.GetValue() + '\n')
-                file.write(self.sex.GetString(self.sex.GetSelection()) + '\n')
-                file.write(self.creditCount.GetValue() + '\n')
-                file.write(self.isTransfer.GetString(self.isTransfer.GetSelection()) + '\n')
-
-                #Temporary way for storing the couses and grades
-                #May change to a separate panel to store each of these in an extendable array
-                file.write(self.course1.GetValue() + '\n')
-                file.write(self.grade1.GetString(self.grade1.GetSelection()) + '\n')
-                file.write(self.course2.GetValue() + '\n')
-                file.write(self.grade2.GetString(self.grade2.GetSelection()) + '\n')
-                file.write(self.course3.GetValue() + '\n')
-                file.write(self.grade3.GetString(self.grade3.GetSelection()) + '\n')
-                file.write(self.course4.GetValue() + '\n')
-                file.write(self.grade4.GetString(self.grade4.GetSelection()) + '\n')
-                file.write(self.course5.GetValue() + '\n')
-                file.write(self.grade5.GetString(self.grade5.GetSelection()) + '\n')
-                file.write(self.course6.GetValue() + '\n')
-                file.write(self.grade6.GetString(self.grade6.GetSelection()) + '\n')
-                file.close()
-                os.chdir(directory)
-
-
-                #Run the program
-                dummy = RURApp()
-                self.Destroy()
-       #        event.Skip()
-
         except ValueError:
             dlg = wx.MessageDialog(self, "Age and Credit count must be an integer values!",
                                    "Invalid Information!")            
             dlg.ShowModal()
             dlg.Destroy()
             event.Skip()
+
+        directory = os.getcwd()
+        os.chdir(getUserDir())
+        
+        profiles = {}
+        names = []
+
+        try:
+            logfile = open("key.txt", "r")
+            for line in logfile:
+                name, id = line.strip().split()
+                profiles[id] = name
+            logfile.close()
+        except IOError:
+            pass
+
+        names = profiles.values()
+        ids = profiles.keys()
+
+        if self.email.GetValue().strip() in names:
+            dlg = wx.MessageDialog(self, "This username is already in use.", 
+                                       "Invalid username.")
+            dlg.ShowModal()
+            dlg.Destroy()
+            event.Skip()
+
+        #Error checking could be made more complete
+        elif (self.lastName.GetValue() == "") or (self.firstName.GetValue() == ""):
+            dlg = wx.MessageDialog(self, "Please complete the missing information", 
+                                   "Missing Information!")
+            dlg.ShowModal()
+            dlg.Destroy()
+            event.Skip()
+
+        else:
+            #Create the key file with the user_id for lookup
+
+            logfile = open("key.txt", "a+")
+            
+            user_id = random.randint(0, 10 * ((len(ids)) + 1))
+            while user_id in ids:
+                user_id = random.randint(0, len(ids))
+
+            logfile.write(self.email.GetValue() + "     " + str(user_id) + "\n")
+            
+            #Create the demographic file
+            student_dirs = os.path.join(getUserDir(), 'StudentFiles', 'Demographics')
+            demo_filename = str(user_id) + '_demo' + '.txt'
+            
+            try:
+                os.makedirs(student_dirs)
+            except OSError:
+                pass
+            
+            os.chdir(student_dirs)
+
+            file = open(demo_filename, "w")
+            file.write(self.lastName.GetValue().strip() + '\n')
+            file.write(self.firstName.GetValue().strip() + '\n')
+            file.write(self.email.GetValue().strip() + '\n')
+            file.write(self.age.GetValue().strip() + '\n')
+            file.write(self.sex.GetString(self.sex.GetSelection()).strip() + '\n')
+            file.write(self.creditCount.GetValue().strip() + '\n')
+            file.write(self.isTransfer.GetString(self.isTransfer.GetSelection()).strip() + '\n')
+
+            #Temporary way for storing the couses and grades
+            #May change to a separate panel to store each of these in an extendable array
+            file.write(self.course1.GetValue().strip() + '\n')
+            file.write(self.grade1.GetString(self.grade1.GetSelection()).strip() + '\n')
+            file.write(self.course2.GetValue().strip() + '\n')
+            file.write(self.grade2.GetString(self.grade2.GetSelection()).strip() + '\n')
+            file.write(self.course3.GetValue().strip() + '\n')
+            file.write(self.grade3.GetString(self.grade3.GetSelection()).strip() + '\n')
+            file.write(self.course4.GetValue().strip() + '\n')
+            file.write(self.grade4.GetString(self.grade4.GetSelection()).strip() + '\n')
+            file.write(self.course5.GetValue().strip() + '\n')
+            file.write(self.grade5.GetString(self.grade5.GetSelection()).strip() + '\n')
+            file.write(self.course6.GetValue().strip() + '\n')
+            file.write(self.grade6.GetString(self.grade6.GetSelection()).strip() + '\n')
+            file.close()
+            os.chdir(directory)
+
+
+            #Run the program
+            dummy = RURApp()
+            self.Destroy()
+#        event.Skip()
+        
     
     def OnCancel(self, event):
         self.Close(True)
@@ -898,21 +925,36 @@ class ReturnUserScreen(wx.Frame):
     def OnLogin(self, event):
         #Check if umbc name is in logfile
         global user_id
-        file = open("key.txt", "r")
-        studentFound = False
-        for line in file:
-            student = line.split()
-            print student
-            if student[0] == self.email.GetValue():
-                studentFound = True
-                user_id = int(student[1])
-        if studentFound:
-            dummy = RURApp()
-            self.Destroy()
+
+        directory = os.getcwd()
+        os.chdir(getUserDir())
+        
+        try:
+            file = open("key.txt", "r")
+            studentFound = False
+            for line in file:
+                student = line.split()
+                if student[0] == self.email.GetValue():
+                    studentFound = True
+                    user_id = int(student[1])
+            if studentFound:
+                dummy = RURApp()
+                self.Destroy()
+                event.Skip()
+            else:
+                #todo: Clean this up, create a pop-up asking for a different loging
+                dlg = wx.MessageDialog(self, "This username is not registered.", 
+                                       "Username not found.")
+                dlg.ShowModal()
+                dlg.Destroy()
+                event.Skip()
+
+        except IOError:
+            dlg = wx.MessageDialog(self, "You are not registered.", 
+                                   "Please create a new account first.")
+            dlg.ShowModal()
+            dlg.Destroy()
             event.Skip()
-        else:
-            #todo: Clean this up, create a pop-up asking for a different loging
-            sys.exit(-1)
 
 
 class InstructionScreen(wx.Frame):
@@ -937,19 +979,11 @@ class InstructionScreen(wx.Frame):
         event.Skip()
 
     def setInstructions(self, ins):
-        htmlFiles = os.getcwd() + "/lessons/en/intro/"
+        htmlFiles = os.join.path(os.getcwd(), 'lessons', 'en', 'intro')
                 
         page = htmlFiles + ins
 
         self.html.LoadPage(page)
-        
-
-#        label2 = wx.StaticText(self, -1, 'Instructions', (0, 30))
-#        label2.SetFont(self.labelFont)
-		
-        #os.path.join(self.browser_win.lessons_dir,'intro/' + dict_ins[n])
-        #page = os.path.join(self.lessons_dir, 'help.htm')
-        #self.html.LoadPage(page)
 		
 
 

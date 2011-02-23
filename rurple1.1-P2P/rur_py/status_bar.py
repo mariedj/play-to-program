@@ -15,20 +15,24 @@ class rurStatusBar(wx.StatusBar):
         wx.StatusBar.__init__(self, parent, -1)
         event_manager.myEVT_StatusBarChanged(parent, self.UpdateFields)
         # status bar with four fields, of equal widths
-        self.SetFieldsCount(4)
-        self.SetStatusWidths([-1, -1, -1, -1])
+        self.SetFieldsCount(6)
+        self.SetStatusWidths([-1, -1, -1, -1, -1, -1])
 
         self.no_robot = -1
         self.program_field = 0
         self.running_field = 1
         self.beeper_field = 2
         self.world_field = 3
+        self.name_field = 4
+        self.problem_field = 5
 
         # Initial values for the fields
         self.prog_text = _("No program loaded")
         self.run_text = _("Program not running")
         self.beeper_text = _("Robot has %s beeper")%0
         self.world_text = _("Default world")
+        self.name_text = _("%s")%0
+        self.problem_field = _("Problem #%s")%0
 
         #=== when changing language
         self.running_dict = {'0': _("Program not running"),
@@ -42,7 +46,7 @@ class rurStatusBar(wx.StatusBar):
         self.notebook_new_page = 99
 
     def ClearFields(self):
-        for field in range(4):
+        for field in range(6):
             self.SetStatusText('', field)
 
     def WriteFields(self):
@@ -50,9 +54,12 @@ class rurStatusBar(wx.StatusBar):
         self.SetStatusText(self.run_text, self.running_field)
         self.SetStatusText(self.beeper_text, self.beeper_field)
         self.SetStatusText(self.world_text, self.world_field)
+        self.SetStatusText(self.name_test, self.name_field)
+        self.SetStatusText(self.problem_test, self.problem_field)
 
     def UpdateFields(self, *args):
         field, info = args[0].data[0]
+        print field, info
         if field == self.notebook_new_page:
             if info != 1:  # Code and Learn page
                 self.ClearFields()
@@ -79,6 +86,8 @@ class rurStatusBar(wx.StatusBar):
         elif field == self.program_field:
             self.prog_text = _("Program File: %s") % info
             self.fields_info['program'] = info
+#        elif field == self.name_field:
+ #           self.name_text = _("
         self.WriteFields()
 
     def ChangeLanguage(self):

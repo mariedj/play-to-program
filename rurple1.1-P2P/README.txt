@@ -67,12 +67,14 @@ Updates to come:
 
 	Add open-ended comments at the end for questions and suggestions.
 
-	Change directory issues. Use os.join
+	----Change directory issues. Use os.join
 	rur_start.py look at the ShowInstruction Method and decide if it is 
 	needed
 
 	----Move key.txt to .config
-	New user name make sure they can not input a previous existing username
+	----New user name make sure they can not input a previous existing username
 
 	---rur_its.py has been renamed to environment.py and moved to 
 	rur_py directory. 
+
+	Save the state of the current user when logging out
