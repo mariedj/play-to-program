@@ -15,8 +15,8 @@ class rurStatusBar(wx.StatusBar):
         wx.StatusBar.__init__(self, parent, -1)
         event_manager.myEVT_StatusBarChanged(parent, self.UpdateFields)
         # status bar with four fields, of equal widths
-        self.SetFieldsCount(6)
-        self.SetStatusWidths([-1, -1, -1, -1, -1, -1])
+        self.SetFieldsCount(4)
+        self.SetStatusWidths([-1, -1, -1, -1])
 
         self.no_robot = -1
         self.program_field = 0
@@ -54,8 +54,8 @@ class rurStatusBar(wx.StatusBar):
         self.SetStatusText(self.run_text, self.running_field)
         self.SetStatusText(self.beeper_text, self.beeper_field)
         self.SetStatusText(self.world_text, self.world_field)
-        self.SetStatusText(self.name_test, self.name_field)
-        self.SetStatusText(self.problem_test, self.problem_field)
+        self.SetStatusText(self.name_text, self.name_field)
+        self.SetStatusText(self.problem_text, self.problem_field)
 
     def UpdateFields(self, *args):
         field, info = args[0].data[0]
