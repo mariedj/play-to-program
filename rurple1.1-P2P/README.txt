@@ -71,6 +71,8 @@ Updates to come:
 	rur_start.py look at the ShowInstruction Method and decide if it is 
 	needed
 
+
+	--Added 3 problems
 	----Move key.txt to .config
 	----New user name make sure they can not input a previous existing username
 
@@ -78,3 +80,5 @@ Updates to come:
 	rur_py directory. 
 
 	Save the state of the current user when logging out
+	
+	-Error after completion
