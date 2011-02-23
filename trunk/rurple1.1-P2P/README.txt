@@ -67,18 +67,19 @@ Updates to come:
 
 	Add open-ended comments at the end for questions and suggestions.
 
-	----Change directory issues. Use os.join
+	Change directory issues. Use os.join -- Completed
 	rur_start.py look at the ShowInstruction Method and decide if it is 
-	needed
+	needed -- Completed
 
 
-	--Added 3 problems
-	----Move key.txt to .config
-	----New user name make sure they can not input a previous existing username
+	Added 3 problems -- Completed
+	Move key.txt to .config  -- Completed
+	New user name make sure they can not input a previous existing 
+	username -- Completed
 
-	---rur_its.py has been renamed to environment.py and moved to 
-	rur_py directory. 
+	rur_its.py has been renamed to environment.py and moved to 
+	rur_py directory. --- Completed
 
 	Save the state of the current user when logging out
 	
-	-Error after completion
+	Error after completion -- Completed
