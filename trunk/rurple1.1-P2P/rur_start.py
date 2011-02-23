@@ -143,7 +143,7 @@ class RURApp(wx.Frame):
         self.status_bar = rurStatusBar(self)
         self.SetStatusBar(self.status_bar)
         self.problemNumber = 0
-        self.problem_choice = [0, 1, 2, 3, 4]
+        self.problem_choice = [0, 1, 2, 3, 4, 5, 6, 7]
         self.inst_screen = None
 
         # icon on top left of window
@@ -214,8 +214,10 @@ class RURApp(wx.Frame):
         #Two dictionaries coresspond
         #May need to may one dictionary that corresponds to a class which
         #contains the problem .wld and the directions .htm
-        dict = {0:'problem1.wld', 1:'problem2.wld', 2:'problem3.wld', 3:'problem4.wld', 4:'problem5.wld'}
-        dict_ins = {0:'prob1.htm', 1:'prob2.htm', 2:'prob3.htm', 3:'prob4.htm', 4:'prob5.htm'}
+        dict = {0:'problem1.wld', 1:'problem2.wld', 2:'problem3.wld', 3:'problem4.wld', \
+                    4:'problem5.wld', 5:'problem6.wld', 6:'problem7.wld', 7:'problem8.wld'}
+        dict_ins = {0:'prob1.htm', 1:'prob2.htm', 2:'prob3.htm', 3:'prob4.htm', \
+                        4:'prob5.htm', 5:'prob6.htm', 6:'prob7.htm', 7:'prob8.htm'}
         if len(self.problem_choice) > 0:
             temp = random.randint(0, len(self.problem_choice) - 1)
             n = self.problem_choice[temp]
