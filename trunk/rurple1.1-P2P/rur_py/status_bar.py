@@ -15,8 +15,8 @@ class rurStatusBar(wx.StatusBar):
         wx.StatusBar.__init__(self, parent, -1)
         event_manager.myEVT_StatusBarChanged(parent, self.UpdateFields)
         # status bar with four fields, of equal widths
-        self.SetFieldsCount(4)
-        self.SetStatusWidths([-1, -1, -1, -1])
+        self.SetFieldsCount(6)
+        self.SetStatusWidths([-1, -1, -1, -1, -1, -1])
 
         self.no_robot = -1
         self.program_field = 0
@@ -32,7 +32,7 @@ class rurStatusBar(wx.StatusBar):
         self.beeper_text = _("Robot has %s beeper")%0
         self.world_text = _("Default world")
         self.name_text = _("%s")%0
-        self.problem_field = _("Problem #%s")%0
+        self.problem_text = _("Problem #%s")%0
 
         #=== when changing language
         self.running_dict = {'0': _("Program not running"),
