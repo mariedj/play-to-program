@@ -84,6 +84,7 @@ user_id = 0
 SUBMITTED = 1
 TEST_RUN = 2
 STEP = 3
+NUM_PROBLEMS = 8
 
 def getUserDir():
     '''Returns the user directory, i.e. the place where user specific
@@ -120,13 +121,6 @@ class RURnotebook(wx.Notebook):
             arg = status_bar.notebook_new_page, event.GetSelection()
             event_manager.SendCustomEvent(self.parent, arg)
             event.Skip()
- 
-#    def ShowInstructions(self):
-#        status_bar = self.parent.status_bar
-#        # status_bar is dead during shutdown so check if it's alive.
-#        if status_bar:
-#            arg = status_bar.notebook_new_page, 0
-#            event_manager.SendCustomEvent(self.parent, arg)
 
 class RURApp(wx.Frame):
     def __init__(self):
@@ -240,18 +234,10 @@ class RURApp(wx.Frame):
 
 
             if settings.USER_WORLDS_DIR[startingPoint:] != 'samples':
-                openedFileName = settings.USER_WORLDS_DIR + '/samples/' + dict[n]
+                openedFileName = os.path.join(settings.USER_WORLDS_DIR, 'samples', dict[n])
             else:
-                openedFileName = settings.USER_WORLDS_DIR + '/' + dict[n]
+                openedFileName = os.path.join(settings.USER_WORLDS_DIR, dict[n])
             return openedFileName
-        else:
-            #todo: clean this up w/ a pop-up
-            self.inst_screen.Close()
-            dlg = wx.MessageDialog(self, "You have completed all of the required problems." +
-                                   "Rurple will now log you out and close.", "Complete")
-            dlg.ShowModal()
-            dlg.Destroy()
-            self.Close(True)
 
     def OnClose(self, event):
         if self.ProgramEditor.GetModify():
@@ -398,11 +384,19 @@ class RURApp(wx.Frame):
     def Submit(self, dummy):
         if self.isRunning:
             return
-        self.SaveProgramFile(SUBMITTED)
-        self.SaveWorldFile(SUBMITTED)
-        self.OpenWorldFile(0)
+        if self.problemNumber < NUM_PROBLEMS:
+           self.SaveProgramFile(SUBMITTED)
+           self.SaveWorldFile(SUBMITTED)
+           self.OpenWorldFile(0)
 
-        self.ProgramEditor.SetText("")
+           self.ProgramEditor.SetText("")
+        else:
+            self.inst_screen.Close()
+            dlg = wx.MessageDialog(self, "You have completed all of the required problems." +
+                                   "Rurple will now log you out and close.", "Complete")
+            dlg.ShowModal()
+            dlg.Destroy()
+            self.Close(True)
 
     def SaveWorldFile(self, dummy):
         '''Saves in .config
