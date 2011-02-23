@@ -284,6 +284,8 @@ class RURApp(wx.Frame):
         #Will be some function that handles problem selection
         openedFileName = self.chooseWorld()
         self.problemNumber += 1
+        arg = self.status_bar.problem_field, _("#" + str(self.problemNumber))
+        event_manager.SendCustomEvent(self, arg)
 
         if openedFileName != "":
             self.world_filename = openedFileName
@@ -955,7 +957,7 @@ class ReturnUserScreen(wx.Frame):
             dlg.ShowModal()
             dlg.Destroy()
             event.Skip()
-
+        os.chdir(directory)
 
 class InstructionScreen(wx.Frame):
     def __init__(self, parent, id, title):
@@ -979,9 +981,9 @@ class InstructionScreen(wx.Frame):
         event.Skip()
 
     def setInstructions(self, ins):
-        htmlFiles = os.join.path(os.getcwd(), 'lessons', 'en', 'intro')
-                
-        page = htmlFiles + ins
+        htmlFiles = os.path.join(os.getcwd(), 'lessons', 'en', 'intro')
+        
+        page = os.path.join(htmlFiles, ins)
 
         self.html.LoadPage(page)
 		
