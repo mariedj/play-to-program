@@ -131,9 +131,9 @@ class RURApp(wx.Frame):
         self.raw_code = ""
         self.filename = ""
         self.world_filename = ""
-        self.isPaused = False
-        self.isRunning = False
-        self.isStepped = False
+#        self.isPaused = False
+#        self.isRunning = False
+#        self.isStepped = False
         self.status_bar = rurStatusBar(self)
         self.SetStatusBar(self.status_bar)
         self.problemNumber = 0
@@ -229,7 +229,7 @@ class RURApp(wx.Frame):
             #May need to pass the dict
             #self.browser_win.problemChanged(dict_ins, n)
             self.browser_win.name = os.path.join(self.browser_win.lessons_dir,
-                                                 'intro' + dict_ins[n])
+                                                 'intro', dict_ins[n])
             
 
 
@@ -262,12 +262,9 @@ class RURApp(wx.Frame):
 
 #---- World file methods
     def OpenWorldFile(self, dummy):
-        if self.isRunning:
+        #Changed to user_program.isRunning
+        if self.user_program.isRunning:
             return
-
-#        openedFileName = dialogs.openDialog(_("Choose a file"),
-#            _("World files (*.wld)|*.wld| All files (*.*)|*.*"),
-#            "", settings.USER_WORLDS_DIR)
 
         #Will be some function that handles problem selection
         openedFileName = self.chooseWorld()
@@ -286,7 +283,8 @@ class RURApp(wx.Frame):
             event_manager.SendCustomEvent(self, arg)
 
     def ReadWorldFile(self):
-        if self.isRunning:
+        #Changed to user_program.isRunning
+        if self.user_program.isRunning:
             return
         txt = open(self.world_filename, 'r').read()
         txt = parser.FixLineEnding(txt)
@@ -297,7 +295,8 @@ class RURApp(wx.Frame):
                                      # walls and beepers
 
     def Reset(self, dummy):
-        if self.isRunning:
+        #Changed to user_program.isRunning
+        if self.user_program.isRunning:
             return
         self.UpdateWorld()
 
@@ -382,7 +381,8 @@ class RURApp(wx.Frame):
     #Added to submit the code and proceed to next question
     #Modified from original source
     def Submit(self, dummy):
-        if self.isRunning:
+        #Changed to user_program.isRunning
+        if self.user_program.isRunning:
             return
         if self.problemNumber < NUM_PROBLEMS:
            self.SaveProgramFile(SUBMITTED)
@@ -392,16 +392,19 @@ class RURApp(wx.Frame):
            self.ProgramEditor.SetText("")
         else:
             self.inst_screen.Close()
+
             dlg = wx.MessageDialog(self, "You have completed all of the required problems." +
-                                   "Rurple will now log you out and close.", "Complete")
+                                   " We invite you to give us feedback.", "Complete")
             dlg.ShowModal()
             dlg.Destroy()
+            self.notes = Notes(None, -1, 'Notes')
             self.Close(True)
 
     def SaveWorldFile(self, dummy):
         '''Saves in .config
         '''
-        if self.isRunning:
+        #Changed to user_program.isRunning
+        if self.user_program.isRunning:
             return
         txt = self.WorldDisplay.UpdateEditor()
 
@@ -436,7 +439,8 @@ class RURApp(wx.Frame):
 #----- Program files methods
 
     def OpenProgramFile(self, dummy):
-        if self.isRunning:
+        #Changed to user_program.isRunning
+        if self.user_program.isRunning:
             return
 
 #        openedFileName = dialogs.openDialog(_("Choose a file"),
@@ -465,20 +469,13 @@ class RURApp(wx.Frame):
 
     def SaveProgramFile(self, dummy):
         #IF NOT in step mode. Useful so that each step doesnt append
-        if self.isRunning or self.user_program.isStepped:
+        #Changed to user_program.isRunning
+        if self.user_program.isRunning or self.user_program.isStepped:
             return
         global code
         code = self.ProgramEditor.GetText()
         no_error, mesg = parser.ParseProgram(code)
         if no_error:
-#            savedFileName = savedFileName = dialogs.checkedSaveDialog(
-#                code,
-#                _("Save new program as"),
-#                _("Program files (*.rur)|*.rur| All files (*.*)|*.*"),
-#                self.filename, settings.USER_PROGS_DIR)
-            
-#            self.filename = savedFileName
-#            print settings.USER_PROGS_DIR
             self.filename = str(user_id) + '_code_' + str(self.problemNumber) + '.txt'
 
 
@@ -506,7 +503,7 @@ class RURApp(wx.Frame):
             os.chdir(dirHome)
             arg = self.status_bar.program_field, \
                   os.path.basename(self.filename)
-#            print arg
+
             event_manager.SendCustomEvent(self, arg)
             settings.USER_PROGS_DIR = os.path.dirname(self.filename)
             self.ProgramEditor.SetSavePoint()
@@ -542,6 +539,7 @@ class RURApp(wx.Frame):
         self.SaveProgramFile(STEP)
         self.user_program.isStepped = True
         if not self.user_program.isRunning:
+#            pass
             self.RunProgram(None)
         else:
             self.Pause(None)
@@ -552,12 +550,6 @@ class RURApp(wx.Frame):
         arg = self.status_bar.running_field, _("Program not running")
         event_manager.SendCustomEvent(self, arg)
         self.user_program.stopped_by_user = True
-
-    def StartSession(self, dummy):
-        if self.isRunning:
-            return
-        self.OpenWorldFile(0)
-        self.ProgramEditor.SetText("")
         
 
 #--- World controls
@@ -954,6 +946,65 @@ class ReturnUserScreen(wx.Frame):
             dlg.Destroy()
             event.Skip()
         os.chdir(directory)
+
+class Notes(wx.Frame):
+    def __init__(self, parent, id, title):
+        frameX = 500
+        frameY = 500
+        wx.Frame.__init__(self, parent, id, title, size=(frameX, frameY))
+        largeFont = wx.Font(36, wx.FONTFAMILY_DEFAULT, wx.FONTSTYLE_NORMAL,
+                            wx.FONTWEIGHT_BOLD)        
+
+        buttonFont = wx.Font(20, wx.FONTFAMILY_DEFAULT, wx.FONTSTYLE_NORMAL,
+                            wx.FONTWEIGHT_BOLD)
+
+        label = wx.StaticText(self, -1, 'Notes', (5, 5))
+        label.SetFont(largeFont)
+        
+        label2 = wx.StaticText(self, -1, 'Please inform us of any suggestions or problems', \
+                                   (5, 50))
+        label2.SetFont(buttonFont)
+                    
+
+        self.box = wx.TextCtrl(self, -1, '', (60, 80), (300, 300), style=wx.TE_MULTILINE)
+
+        button = wx.Button(self, -1, 'Submit', pos = wx.Point(60, 430), 
+                            size = wx.Size(300, 300))
+        button.SetFont(buttonFont)
+
+        wx.EVT_CLOSE(self, self.OnClose)
+
+        self.Bind(wx.EVT_BUTTON, self.Submit, id=button.GetId())
+        self.Show(True)
+
+
+    def OnClose(self, event):
+        self.Destroy()
+        event.Skip()
+
+    def Submit(self, ins):
+        global user_id
+
+        dirHome = os.getcwd()
+        dir = getUserDir()
+        student_dirs = os.path.join(dir, 'StudentFiles', 'Notes')
+        try:
+            os.makedirs(student_dirs)
+        except OSError:
+            pass
+
+        os.chdir(student_dirs)
+        fileName = "Notes_" + str(user_id)
+        file = open(fileName, "w")
+        file.write(self.box.GetValue())
+        file.close()
+        os.chdir(dirHome)
+
+        dlg = wx.MessageDialog(self, "Complete.", 
+                               "Thank you for using the P2P Sytem.")
+        dlg.ShowModal()
+        dlg.Destroy()
+        self.Close(True)
 
 class InstructionScreen(wx.Frame):
     def __init__(self, parent, id, title):

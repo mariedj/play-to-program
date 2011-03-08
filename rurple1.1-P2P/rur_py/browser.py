@@ -120,7 +120,7 @@ class TestHtmlPanel(wx.Panel):
         self.SetSizer(self.box)
         self.SetAutoLayout(True)
 
-        self.name = os.path.join(self.lessons_dir, 'summary.htm')
+        self.name = os.path.join(self.lessons_dir, 'instr.htm')
 	print self.name
         self.html.LoadPage(self.name)
 
@@ -168,7 +168,7 @@ class TestHtmlPanel(wx.Panel):
         self.grand_parent.world.DoDrawing()
 
     def OnHome(self, event):
-        name = os.path.join(self.lessons_dir, 'summary.htm')
+        name = os.path.join(self.lessons_dir, 'instr.htm')
 	self.html.LoadPage(name) 
 		
     #Change it to all files

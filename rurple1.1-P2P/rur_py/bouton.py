@@ -42,6 +42,12 @@ class rurChoiceWindow(wx.ScrolledWindow):
             [None,      SPACER, None, None, spacer_large, None],
             [wx.NewId(), BUTTON, self.ggp.Submit,
                 getImage(images.CHECK_MARK), btn_size, tip_list[0]],
+            [None, SPACER, None, None, spacer_large, None],
+            [None, SPACER, None, None, spacer_large, None],
+            [None, SPACER, None, None, spacer_large, None],
+            [None, SPACER, None, None, spacer_large, None],
+            [None, SPACER, None, None, spacer_large, None],
+            [None, SPACER, None, None, spacer_large, None],
             [wx.NewId(), BUTTON, self.ggp.Reset,
                 getImage(images.RESET_WORLD), btn_size, tip_list[1]],
             [wx.NewId(), BUTTON, self.ggp.RunProgram,
@@ -52,10 +58,9 @@ class rurChoiceWindow(wx.ScrolledWindow):
                 getImage(images.PAUSE), btn_size, tip_list[4]],
             [wx.NewId(), BUTTON, self.ggp.StopProgram,
                 getImage(images.STOP), btn_size, tip_list[5]],
-            [None, SPACER, None, None, spacer_large, None],
-            [None, SPACER, None, None, spacer_large, None],
-            [wx.NewId(), BUTTON, self.ggp.StartSession,
-                getImage(images.START), btn_size, tip_list[6]]
+            [None, SPACER, None, None, spacer_large, None]#,,
+#            [wx.NewId(), BUTTON, self.ggp.StartSession,
+#                getImage(images.START), btn_size, tip_list[6]]
             ]
 
 

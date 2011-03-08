@@ -56,7 +56,7 @@ Bugs being addressed:
 Updates to come:
 	Removal of all buttons upon intial boot up of 'a Python Learning 
 	Environment' excluding the START button, and then reintroducing the
-	buttons and removing the start button.
+	buttons and removing the start button. -- COMPLETED
 
 	Isolation of check mark button with a text label to say the button
 	Submits.
@@ -83,3 +83,6 @@ Updates to come:
 	Save the state of the current user when logging out
 	
 	Error after completion -- Completed
+
+	Add Pretest to the system
+	Use correct code and diff w/ the incorrect code
