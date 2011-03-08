@@ -5,6 +5,7 @@
     Version 1.0
     Author: André Roberge    Copyright  2006
     andre.roberge@gmail.com
+    Edited by: Robert Deloatch
 """
 # This program is free software; you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by

@@ -175,8 +175,8 @@ Editing world:
 Robot actions:
             Up arrow:     move robot forward
             Left arrow:   turn robot left
-            lower case p: pick_beeper
-            upper case P: put_beeper
+            lower case p: grab_beeper
+            upper case P: drop_beeper
 
             Errors will occur if you attempt to move through a wall,
             put a beeper when you carry none,
@@ -199,7 +199,7 @@ For testing only (future features):
         elif code == 112:            # p - lower case
             if 'robot' in self.world.robot_dict:
                 try:
-                    self.world.robot_dict['robot'].pick_beeper()
+                    self.world.robot_dict['robot'].grab_beeper()
                     if self.editor:
                         self.editor.DestroyChildren()
                         wx.StaticText(self.editor, -1, self.UpdateEditor(), (10, 10))
@@ -208,7 +208,7 @@ For testing only (future features):
         elif code == 80:             # P - upper case
             if 'robot' in self.world.robot_dict:
                 try:
-                    self.world.robot_dict['robot'].put_beeper()
+                    self.world.robot_dict['robot'].drop_beeper()
                     if self.editor:
                         self.editor.DestroyChildren()
                         wx.StaticText(self.editor, -1, self.UpdateEditor(), (10, 10))

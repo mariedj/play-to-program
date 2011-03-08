@@ -109,14 +109,14 @@ class rur_program(Singleton):
         robot.turn_right()  # must occur after line_trace.append
         self.update_refresh(robot, name)
 
-    def put_beeper(self, name='robot'):
+    def drop_beeper(self, name='robot'):
         robot = self.robot_dict[name]
-        robot.put_beeper() # may raise an exception
+        robot.drop_beeper() # may raise an exception
         self.update_refresh(robot, name)
 
-    def pick_beeper(self, name='robot'):
+    def grab_beeper(self, name='robot'):
         robot = self.robot_dict[name]
-        robot.pick_beeper() # may raise an exception
+        robot.grab_beeper() # may raise an exception
         self.update_refresh(robot, name)
 
     def set_trace_style(self, style=1, colour='sea green', name='robot'):
@@ -250,8 +250,8 @@ class rur_program(Singleton):
         self.isRunning = True
         MyGlobals = {'move': self.move,
                      'turn_left': self.turn_left,
-                     'pick_beeper': self.pick_beeper,
-                     'put_beeper': self.put_beeper,
+                     'grab_beeper': self.grab_beeper,
+                     'drop_beeper': self.drop_beeper,
                      'set_trace_style': self.set_trace_style,
                      'set_delay': self.set_delay,
                      'RefurbishedRobot': RefurbishedRobot,
@@ -343,10 +343,10 @@ class UsedRobot(object):
         self.program.turn_left(self.name)
     def turn_right(self):
         self.program.turn_right(self.name)
-    def put_beeper(self):
-        self.program.put_beeper(self.name)
-    def pick_beeper(self):
-        self.program.pick_beeper(self.name)
+    def drop_beeper(self):
+        self.program.drop_beeper(self.name)
+    def grab_beeper(self):
+        self.program.grab_beeper(self.name)
     def set_trace_style(self, style=1, colour='sea green'):
         self.program.set_trace_style(style, colour, self.name)
     def set_delay(self, delay=0.3):

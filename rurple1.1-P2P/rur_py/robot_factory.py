@@ -48,7 +48,7 @@ class Robot_brain1(object):
         self._x = avenues
         self._y = streets
         self._facing = self._orient_dict[orient_key.upper()]
-
+    
     #--- "public" getter
     def getPos(self):
         """ returns current robot position; intended to be
@@ -92,7 +92,7 @@ class Robot_brain1(object):
         row = 2*self._y - 1
         xx, yy = self._directions[self._facing]
         return self.parent.isClear(col+xx, row+yy)
-
+    
     def facing_north(self):
         ''' True if Robot facing north'''
         if self._facing == 0:
@@ -159,10 +159,10 @@ class Robot_brain1(object):
 Please, make sure that there is no wall in front of me!""")
             raise dialogs.HitWallException(mesg)
 
-    def turn_off(self):
-        mesg = _("I obey your command:\n turning myself off.")
-        raise dialogs.NormalEnd(mesg)
-
+#    def turn_off(self):
+#        mesg = _("I obey your command:\n turning myself off.")
+#        raise dialogs.NormalEnd(mesg)
+        
     def turn_left(self):
         '''Robot turns left by 90 degrees.'''
         self._facing += 1
@@ -174,25 +174,25 @@ Please, make sure that there is no wall in front of me!""")
         self._facing += 3
         self._facing %= 4
 
-    def put_beeper(self):
+    def drop_beeper(self):
         '''Robot put one beeper down at current location.'''
         if self.any_beepers_in_beeper_bag():
             self._beeper_bag -= 1
             self.parent.addOneBeeper(self._x, self._y)
         else:
-            mesg = _("put_beeper() failed.\n I am not carrying any beepers.")
+            mesg = _("drop_beeper() failed.\n I am not carrying any beepers.")
             raise dialogs.PutBeeperException(mesg)
-
-    def pick_beeper(self):
+            
+    def grab_beeper(self):
         '''Robot picks one beeper up at current location.'''
         if self.next_to_a_beeper():
             self.parent.removeOneBeeper(self._x, self._y)
             self._beeper_bag += 1
         else:
-            mesg = _("""pick_beeper failed.
+            mesg = _("""grab_beeper() failed.
 I must be next to a beeper before I can pick it up.""")
             raise dialogs.PickBeeperException(mesg)
-
+            
     def at_beeper(self, x, y):
         '''Notifies interested parties about robot
         being at a beeper.
@@ -206,7 +206,6 @@ class Robot_brain2(Robot_brain1):
                  beepers=0):
         Robot_brain1.__init__(self, parent, avenues, streets,
                               orient_key, beepers)
-
     #--- Additional built-in tests
 
     def facing_east(self):
@@ -245,7 +244,6 @@ class Used_robot(Robot_brain1):
                  beepers=0, name = 'robot', colour = 'grey', parent=None):
         Robot_brain1.__init__(self, parent, avenues, streets,
                               orient_key, beepers)
-
         settings = conf.getSettings()
         
         self._delay = 0.3
