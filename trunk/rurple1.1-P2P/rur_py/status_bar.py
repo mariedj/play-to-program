@@ -60,7 +60,6 @@ class rurStatusBar(wx.StatusBar):
 
     def UpdateFields(self, *args):
         field, info = args[0].data[0]
-        print field, info
         if field == self.notebook_new_page:
             if info != 1:  # Code and Learn page
                 self.ClearFields()
@@ -87,8 +86,9 @@ class rurStatusBar(wx.StatusBar):
         elif field == self.program_field:
             self.prog_text = _("Program File: %s") % info
             self.fields_info['program'] = info
-#        elif field == self.name_field:
- #           self.name_text = _("
+        elif field == self.name_field:
+            pass
+#           self.name_text = _("
         self.WriteFields()
 
     def ChangeLanguage(self):
