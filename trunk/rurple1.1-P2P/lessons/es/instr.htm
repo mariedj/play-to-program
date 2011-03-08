@@ -1,0 +1,146 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en"><head>
+
+
+
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+<link rel="stylesheet" href="rurple.css" type="text/css" /><title>RUR-PLE Instructions</title></head><body>
+<h2 class="title">Playing to Program: Learning Python with RUR-PLE!</h2>
+
+<h6>André Roberge, © 2005-2010<br />
+David Walser, Robert Deloatch, Eliana Feasley, Amy Ciavolino, © 2010-2011<br />
+</h6>
+<p>Welcome to RUR-PLE!&nbsp; In RUR-PLE, you will find a robot named
+Reeborg who is controlled by Python programs.&nbsp; These Python
+programs contain instructions that tell Reeborg to perform actions and
+tests that help Reeborg decide what to do.&nbsp; Reeborg is placed in
+an environment that is surrounded by walls and can contain other walls
+as well as objects called beepers, which Reeborg can pick up, hold on
+to, and put down.&nbsp; To help test and develop your understanding of
+Python, you will be given an environment and a Python program, and your
+task will be to predict what Reeborg will do when running the given
+program.&nbsp; The instructions for Reeborg's actions and tests are
+below.<br />
+</p>
+<h3 class="section">Summary of instructions</h3>
+
+<p>Reeborg's actions:</p>
+
+<pre>move()		- moves Reeborg forward one step<br />turn_left()	- turns Reeborg 90° to the left<br />turn_right()	- turns Reeborg 90° to the right<br />grab_beeper()	- pick up one of the beepers Reeborg is standing on<br />drop_beeper()	- puts down one of the beepers that Reeborg is holding<br />turn_off()	- turns Reeborg off when he has completed a task<br /></pre>
+
+<p>Tests:</p>
+
+<pre>front_is_clear()	- returns True if there is no wall directly in front of Reeborg<br />left_is_clear()		- returns True if there is no wall on Reeborg's left side<br />right_is_clear()	- returns True if there is no wall on Reeborg's right side<br />facing_north()		- returns True if Reeborg is facing upward<br />carries_beepers()	- returns True if Reeborg is holding any beepers<br />on_beeper()		- returns True if Reeborg is standing on any beepers<br /></pre>
+
+<h3 class="section">Entering Your Prediction<br />
+</h3>
+<p>To get started, click on the Robot: Code and Learn tab above, and then click on the Submit/Next button on the toolbar.&nbsp; <img style="width: 32px; height: 32px;" alt="Submit/Next" title="Submit/Next" src="../../rur_images/goto.png" /><br />
+</p>
+<p>An environment and program will be loaded.&nbsp; Your task is to
+predict the sequence of actions that Reeborg will perform by running
+the given program, and input this prediciton using the keyboard and
+mouse.&nbsp; If you click outside of the robot area while your entering
+your prediction, you may need to click the robot area to regain control
+of the robot.<br />
+</p>
+<p>The controls for Reeborg's actions are:<br />
+</p>
+<ul>
+  <li>Move - up arrow key on the keyboard</li>
+</ul>
+<ul>
+  <li>Turn Left - left arrow key on the keyboard</li>
+</ul>
+<ul>
+  <li>Turn Right - right arrow key on the keyboard</li>
+</ul>
+<ul>
+  <li>Grab Beeper - 'g' key on the keyboard or the Grab beeper button on the toolbar&nbsp;  <img style="width: 22px; height: 22px;" alt="Grab Beeper" title="Grab Beeper" src="../../rur_images/beepers_minus.png" /></li>
+</ul>
+<ul>
+  <li>Drop Beeper - 'd' key on the keyboard or the Drop beeper button on the toolbar&nbsp; <img style="width: 22px; height: 22px;" alt="Drop Beeper" title="Drop Beeper" src="../../rur_images/beepers_plus.png" /></li>
+</ul>
+<ul>
+  <li>Print text to console (Python print statement) - 'p' key on the keyboard or the Print text to console button on the toolbar  <img style="width: 22px; height: 22px;" alt="Print text to console" title="Print text to console" src="../../rur_images/pencil.png" /></li>
+</ul>
+<ul>
+  <li>Undo a previously entered action - 'u' key on the keyboard or the Undo robot action button on the toolbar  <img style="width: 32px; height: 32px;" alt="Undo robot action" title="Undo robot action" src="../../rur_images/show_hide.png" /></li>
+</ul>
+<ul>
+  <li>Reset and start the prediction over from the beginning - Reset world button on the toolbar&nbsp; <img style="width: 32px; height: 32px;" alt="Reset world" title="Reset world" src="../../rur_images/reset_world.png" /><br />
+  </li>
+</ul>
+<ul>
+  <li>Turn Off - 'o' key on the keyboard or the Turn robot off button on the toolbar &nbsp;  <img style="width: 22px; height: 30px;" alt="Turn robot off" title="Turn robot off" src="../../rur_images/robot_off.png" /></li>
+</ul>
+<span class="warning"></span>
+<p class="warning important"><span class="important"><span class="warning important">*** Don't forget to turn Reeborg off at the end of your prediction!!!</span></span><span class="important"></span> ***<br />
+</p>
+<h3><span class="section">Errors</span><br />
+</h3>
+<p>Certain actions can cause errors which make Reeborg complain and
+turn off.&nbsp; If you believe an action in the program will cause an
+error, do not enter any more actions after the one that causes the
+error.&nbsp; If you input an action that causes an error and you did
+not mean to, make sure you Undo that action (you will see that action
+disappear from the console window on the bottom right).<br />
+</p>
+<p>Actions which cause errors:<br />
+</p>
+<ul>
+  <li>Move - when a wall is in front of Reeborg</li>
+  <li>Grab Beeper - when Reeborg is not standing on any beepers</li>
+  <li>Drop Beeper - when Reeborg is not holding any beepers<br />
+  </li>
+</ul>
+<h3><span class="section">Checking your answer</span><br />
+</h3>
+<p>Once you have entered your prediction, click on the Submit/Next button on the toolbar.&nbsp; <img style="width: 32px; height: 32px;" alt="Submit/Next" title="Submit/Next" src="../../rur_images/goto.png" /><br />
+</p>
+<p>RUR-PLE will then run the robot program, and you can watch and see
+what it really does.&nbsp; You can control the speed with which the
+program runs by using the Adjust robot speed slider on the
+toolbar&nbsp; <img style="width: 22px; height: 22px;" alt="Adjust robot speed" title="Adjust robot speed" src="../../rur_images/speed.png" />,
+but you have to set the speed before the program starts running for the
+adjustment to take effect.&nbsp; As the program runs, the line of code
+that is currently executing will be highlighted in the code window on
+the left.&nbsp; When the program is done running, RUR-PLE will pop up a
+dialog telling you whether or not your prediction was correct.<br />
+</p>
+<p>Once the program has run, if there were errors in your prediction,
+you can run the program again and see where your prediction and the
+actions that were actually taken by the robot differ.&nbsp; The
+controls for this are on the toolbar and behave like a visual debugger,
+which will be familiar if you have ever used one.&nbsp; These controls
+are:</p>
+<ul>
+  <li><img style="width: 32px; height: 32px;" alt="Run robot program" title="Run robot program" src="../../rur_images/run1.png" />- Run the program</li>
+  <li><img style="width: 32px; height: 32px;" alt="Step through robot program instructions" title="Step through robot program instructions" src="../../rur_images/step.png" />- Execute one statement and move to the next statement</li>
+  <li><img style="width: 32px; height: 32px;" alt="Pause program" title="Pause program" src="../../rur_images/pause.png" />- Pause/Unpause execution of the program</li>
+  <li><img style="width: 22px; height: 22px;" alt="Stop program" title="Stop program" src="../../rur_images/stop.png" />&nbsp;&nbsp; - Stop running the program</li>
+</ul>
+<p>As the program executes, the line of code that is currently
+executing will again be highlighted in the code window on the
+left.&nbsp; As the robot actions execute, the robot executing your
+predicted actions will be blue&nbsp; <img style="width: 22px; height: 30px;" alt="Your prediction robot" title="Your prediction robot" src="../../rur_images/blue_robot_e.png" />
+and trace a blue line through the environment.&nbsp; The robot
+executing with correct actions will be the normal gray color&nbsp; <img style="width: 22px; height: 30px;" alt="Correct robot" title="Correct robot" src="../../rur_images/robot_e.png" /> and trace a green line through the environment.&nbsp; Also,
+the next robot action that will execute will be highlighted in the
+console window on the bottom right.&nbsp; These actions will be
+preceded by a word which indicates which robot will execute them, and
+those words are:<br />
+</p>
+<ul>
+  <li>CORRECT:&nbsp; Your prediction of this action was correct and both robots will perform the action</li>
+  <li>INCORRECT:&nbsp; Your prediction of this action was incorrect, and only your robot will perform it</li>
+  <li>CORRECTED:&nbsp; You did not predict this action, and the robot performing the correct actions will</li>
+</ul>
+<p><span class="comment">Note:&nbsp;  Incorrect actions involving beepers (grab and drop) will not be reflected in the environment.</span></p>
+<p class="suggested">Note:&nbsp; If the program is paused, make sure you run it to completion or stop it before proceeding to the next problem.<br />
+</p>
+<p>When you are satisifed that you understand the differences between
+your prediction and the correct actions of the robot, you may proceed
+to the next problem by clicking on the Submit/Next button on the
+toolbar.&nbsp; <img style="width: 32px; height: 32px;" alt="Submit/Next" title="Submit/Next" src="../../rur_images/goto.png" /></p>
+<br />
+</body></html>
