@@ -374,6 +374,11 @@ class RURApp(wx.Frame):
            self.ProgramEditor.SetText("")
         else:
             self.inst_screen.Close()
+            dlg = wx.MessageDialog(self, "You will now be given a post-test.")
+            dlg.ShowModal()
+            dlg.Destroy()
+
+            TestScreen(None, -1, 'Post-Test', questions.post, 0)
 
             dlg = wx.MessageDialog(self, "You have completed all of the required problems." +
                                    " We invite you to give us feedback.", "Complete")
@@ -658,11 +663,11 @@ class NewUserScreen(wx.Frame):
         frameX = 900
         frameY = 700
         wx.Frame.__init__(self, parent, id, title, size=(frameX, frameY))
-        largeFont = wx.Font(36, wx.FONTFAMILY_DEFAULT, wx.FONTSTYLE_NORMAL,
+        largeFont = wx.Font(24, wx.FONTFAMILY_DEFAULT, wx.FONTSTYLE_NORMAL,
                             wx.FONTWEIGHT_BOLD)        
-        buttonFont = wx.Font(20, wx.FONTFAMILY_DEFAULT, wx.FONTSTYLE_NORMAL,
+        buttonFont = wx.Font(16, wx.FONTFAMILY_DEFAULT, wx.FONTSTYLE_NORMAL,
                             wx.FONTWEIGHT_BOLD)
-        labelFont = wx.Font(16, wx.FONTFAMILY_DEFAULT, wx.FONTSTYLE_NORMAL,
+        labelFont = wx.Font(10, wx.FONTFAMILY_DEFAULT, wx.FONTSTYLE_NORMAL,
                             wx.FONTWEIGHT_BOLD)
 
         panel = wx.Panel(self, -1)
@@ -974,7 +979,7 @@ class NewUserScreen(wx.Frame):
             
 #            dummy = RURApp()
             self.Destroy()
-#        event.Skip()
+            event.Skip()
         
     
     def OnCancel(self, event):
@@ -1062,10 +1067,10 @@ class Notes(wx.Frame):
         frameX = 500
         frameY = 500
         wx.Frame.__init__(self, parent, id, title, size=(frameX, frameY))
-        largeFont = wx.Font(36, wx.FONTFAMILY_DEFAULT, wx.FONTSTYLE_NORMAL,
+        largeFont = wx.Font(24, wx.FONTFAMILY_DEFAULT, wx.FONTSTYLE_NORMAL,
                             wx.FONTWEIGHT_BOLD)        
 
-        buttonFont = wx.Font(20, wx.FONTFAMILY_DEFAULT, wx.FONTSTYLE_NORMAL,
+        buttonFont = wx.Font(18, wx.FONTFAMILY_DEFAULT, wx.FONTSTYLE_NORMAL,
                             wx.FONTWEIGHT_BOLD)
 
         panel = wx.Panel(self, -1)
@@ -1081,7 +1086,7 @@ class Notes(wx.Frame):
 
         vbox = wx.BoxSizer(wx.VERTICAL)
         vbox.Add(label, 0, wx.ALIGN_CENTER | wx.ALL | wx.ALIGN_TOP, 5)
-        vbox.Add(label2, 0, wx.ALIGN_LEFT | wx.ALL | wx.EXPAND | wx.ALIGN_TOP, 5)
+        vbox.Add(label2, 0, wx.ALIGN_CENTER | wx.ALL | wx.EXPAND | wx.ALIGN_TOP, 5)
         vbox.Add(self.box, 0, wx.ALIGN_CENTER | wx.ALL | wx.ALIGN_TOP, 5)
         vbox.Add(button, 0, wx.ALIGN_CENTER | wx.ALL | wx.ALIGN_BOTTOM, 20)
         panel.SetSizer(vbox)
@@ -1160,10 +1165,10 @@ class LoginScreen(wx.Frame):
         panel = wx.Panel(self, -1)
         panel.SetBackgroundColour('WHEAT')
 
-        largeFont = wx.Font(36, wx.FONTFAMILY_DEFAULT, wx.FONTSTYLE_NORMAL,
+        largeFont = wx.Font(24, wx.FONTFAMILY_DEFAULT, wx.FONTSTYLE_NORMAL,
                             wx.FONTWEIGHT_BOLD)        
 
-        buttonFont = wx.Font(20, wx.FONTFAMILY_DEFAULT, wx.FONTSTYLE_NORMAL,
+        buttonFont = wx.Font(18, wx.FONTFAMILY_DEFAULT, wx.FONTSTYLE_NORMAL,
                             wx.FONTWEIGHT_BOLD)
         
         #panel was self
@@ -1319,7 +1324,6 @@ class TestScreen(wx.Frame):
     def OnClose(self, event):
         self.SaveAnswer()
         if self.CheckComplete() and not self.exitOnClose:
-            self.Destroy()
             dlg = wx.MessageDialog(self, "You will now begin a written RUR-PLE exercise.", \
                                        "Please wait for assistance.")
             dlg.ShowModal()
@@ -1331,6 +1335,7 @@ class TestScreen(wx.Frame):
 
             Splash = MySplashScreen()
             Splash.Show()
+            self.Destroy()
             event.Skip()
         else:
             ret = dialogs.messageDialog(_('Are you sure you want to exit?'),
