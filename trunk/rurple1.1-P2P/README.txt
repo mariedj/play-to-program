@@ -69,13 +69,13 @@ Updates to come:
 	2 1/2 hours Friday.
 	Sort by easy, medium, hard.
 	Timestamps
-	Add a field asking what major they are
-	What languages do you know?
-	How long have you known these languages?
-	Sizers or Layout Manager. Example in Dave's code. GridBagSizer or BoxSizer possibly? 
-	Put David's Pretest on here
+#	Add a field asking what major they are
+#	What languages do you know?
+#	How long have you known these languages?
+#	Sizers or Layout Manager. Example in Dave's code. GridBagSizer or BoxSizer possibly? 
+#	Put David's Pretest on here
 	Put David's Post Test on here
-	Email David once I get the frames and everything uploaded on svn w/ screen shot of the dialogs
+#	Email David once I get the frames and everything uploaded on svn w/ screen shot of the dialogs
 	Add image to login screen
 
 	Jane confirming the computer lab ITE_240
