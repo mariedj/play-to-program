@@ -71,6 +71,7 @@ from rur_py.translation import _
 
 from rur_py.sash import MySashWindow
 from rur_py.lightning import EditorSashWindow
+from rur_py.lightning import rur_editor
 import rur_py.parser as parser
 from rur_py.bouton import pythonChoiceWindow
 
@@ -78,6 +79,7 @@ from rur_py.cpu import rur_program
 import rur_py.browser as browser
 import rur_py.event_manager as event_manager
 from rur_py.status_bar import rurStatusBar
+import rur_py.questions as questions
 
 # global variable defined for convenience; contains user program
 code = ""
@@ -965,7 +967,12 @@ class NewUserScreen(wx.Frame):
 
 
             #Run the program
-            dummy = RURApp()
+            dlg = wx.MessageDialog(self, "You will now begin a pre-test exercise.")
+            dlg.ShowModal()
+            dlg.Destroy()
+            TestScreen(None, -1, 'Pre-Test', questions.pre, 0, False)
+            
+#            dummy = RURApp()
             self.Destroy()
 #        event.Skip()
         
@@ -1027,7 +1034,11 @@ class ReturnUserScreen(wx.Frame):
                     studentFound = True
                     user_id = int(student[1])
             if studentFound:
-                dummy = RURApp()
+                dlg = wx.MessageDialog(self, "You will now begin a pre-test exercise.")
+                dlg.ShowModal()
+                dlg.Destroy()
+                TestScreen(None, -1, 'Pre-Test', questions.pre, 0, False)
+#                dummy = RURApp()
                 self.Destroy()
                 event.Skip()
             else:
@@ -1190,7 +1201,6 @@ class LoginScreen(wx.Frame):
         self.Show(True)
 
     def OnNewUser(self, event):
-#        dummy = RURApp()
         self.Destroy()
         NewUserScreen(None, -1, 'New User')
         event.Skip()
@@ -1206,6 +1216,142 @@ class LoginScreen(wx.Frame):
         event.Skip()
 
 
+class TestScreen(wx.Frame):
+    def __init__(self, parent, id, title, source, i, exitOnClose=True):
+        wx.Frame.__init__(self, parent, id, title + " question #" + str(i+1), size=wx.Size(944,708))
+
+        self.title = title
+        self.source = source
+        self.i = i
+        self.question = source[i]
+        self.exitOnClose = exitOnClose
+        
+        labelFont = wx.Font(12, wx.FONTFAMILY_DEFAULT, wx.FONTSTYLE_NORMAL,
+                            wx.FONTWEIGHT_NORMAL)        
+
+        panel = wx.Panel(self, -1)
+        panel.SetBackgroundColour('WHEAT')
+        sizer = wx.BoxSizer(wx.VERTICAL)
+        instr = wx.StaticText(panel, -1, self.question.instr)
+        instr.SetFont(labelFont)
+        sizer.Add(instr, 0, wx.EXPAND | wx.ALL, 5)
+        code = rur_editor(panel, -1)
+        code.SetText(self.question.code)
+        code.SetReadOnly(True)
+        sizer.Add(code, 2, wx.EXPAND)
+        if len(self.question.choices) > 0:
+            self.choices = wx.RadioBox(panel, -1, 'Select your answer choice', choices=self.question.choices, majorDimension=len(self.question.choices), style=wx.RA_SPECIFY_ROWS)
+            if 'answer' in self.question.__dict__:
+                self.choices.SetSelection(self.question.answer)
+            self.choices.SetFocus()
+            sizer.Add(self.choices, 0, wx.EXPAND | wx.ALL, 5)
+        else:
+            header = wx.StaticText(panel, -1, 'Enter your answer below')
+            sizer.Add(header, 0, wx.EXPAND | wx.TOP | wx.LEFT, 5)
+            self.shortAns = wx.TextCtrl(panel, -1, '', style=wx.TE_MULTILINE)
+            if 'answer' in self.question.__dict__:
+                self.shortAns.SetValue(self.question.answer)
+            self.Bind(wx.EVT_TEXT, self.FinishStatus, self.shortAns)
+            self.shortAns.SetFocus()
+            sizer.Add(self.shortAns, 1, wx.EXPAND | wx.ALL, 5)
+
+        prev = wx.Button(panel, -1, 'Previous')
+        next = wx.Button(panel, -1, 'Next')
+        self.done = wx.Button(panel, -1, 'Finish')
+        buttonsizer = wx.BoxSizer(wx.HORIZONTAL)
+        buttonsizer.Add(prev, 1, wx.ALIGN_CENTER | wx.ALL, 5)
+        buttonsizer.Add(next, 1, wx.ALIGN_CENTER | wx.ALL, 5)
+        buttonsizer.Add(self.done, 1, wx.ALIGN_CENTER | wx.ALL, 5)
+
+        sizer.Add(buttonsizer, 0, wx.ALIGN_CENTER_HORIZONTAL)
+        panel.SetSizer(sizer)
+
+        wx.EVT_CLOSE(self, self.OnClose)
+
+        self.Bind(wx.EVT_BUTTON, self.OnPrev, prev)
+        self.Bind(wx.EVT_BUTTON, self.OnNext, next)
+        self.Bind(wx.EVT_BUTTON, self.OnClose, self.done)
+
+        if i == 0:
+            prev.Disable()
+        if i == len(source)-1:
+            next.Disable()
+        self.FinishStatus()
+
+        self.Show(True)
+
+    def FinishStatus(self, event=None):
+        self.SaveAnswer()
+        if self.CheckComplete():
+            self.done.Enable()
+        else:
+            self.done.Disable()
+
+    def CheckComplete(self):
+        complete = True
+        for question in self.source:
+            if 'answer' not in question.__dict__:
+                complete = False
+                break
+        return complete
+
+    def SaveAnswer(self):
+        if len(self.question.choices) > 0:
+            self.question.answer = self.choices.GetSelection()
+        else:
+            self.question.answer = self.shortAns.GetValue()
+            if self.question.answer == "":
+                del self.question.answer
+
+    def OnPrev(self, event):
+        self.SaveAnswer()
+        self.Destroy()
+        TestScreen(None, -1, self.title, self.source, self.i-1, self.exitOnClose)
+        event.Skip()
+        
+
+    def OnNext(self, event):
+        self.SaveAnswer()
+        self.Destroy()
+        TestScreen(None, -1, self.title, self.source, self.i+1, self.exitOnClose)
+        event.Skip()
+
+    def OnClose(self, event):
+        self.SaveAnswer()
+        if self.CheckComplete() and not self.exitOnClose:
+            self.Destroy()
+            dlg = wx.MessageDialog(self, "You will now begin a written RUR-PLE exercise.", \
+                                       "Please wait for assistance.")
+            dlg.ShowModal()
+            dlg.Destroy()
+            
+            dlg = wx.MessageDialog(self, "Now you will begin a RUR-PLE computer question set.")
+            dlg.ShowModal()
+            dlg.Destroy()
+
+            Splash = MySplashScreen()
+            Splash.Show()
+            event.Skip()
+        else:
+            ret = dialogs.messageDialog(_('Are you sure you want to exit?'),
+                                        _("About to close"), wx.YES | wx.NO
+                                        | wx.ICON_QUESTION | wx.STAY_ON_TOP)
+            if ret == wx.ID_YES:
+                if self.exitOnClose and logData: # log post-test data
+                    logdir = os.path.join(conf.getUserDir(), 'StudentFiles', 'Logs')
+                    tstdir = os.path.join(conf.getUserDir(), 'StudentFiles', 'Tests')
+                    f1 = open(os.path.join(logdir, str(user_id) + '_posttest.txt'), 'w')
+                    f2 = open(os.path.join(tstdir, str(user_id) + '_posttest.txt'), 'w')
+                    for i, question in enumerate(self.source):
+                        if 'answer' in question.__dict__:
+                            correct = question.check()
+                            f1.write(str(i) + ',' + str(correct) + '\n')
+                            f2.write(repr(question.answer) + '\n')
+                    f1.close()
+                    f2.close()
+                self.Destroy()
+                event.Skip()
+
 class MySplashScreen(wx.SplashScreen):
     def __init__(self):
         wx.SplashScreen.__init__(self, getImage(images.SPLASH_SCREEN),
@@ -1215,7 +1361,8 @@ class MySplashScreen(wx.SplashScreen):
 
     def OnClose(self, evt):
         #Change for creating loginScreen
-        LoginScreen(None, -1, 'Login Screen')
+        #LoginScreen(None, -1, 'Login Screen')
+        dummy = RURApp()
         evt.Skip()
 
 if __name__ == "__main__": 
@@ -1225,6 +1372,8 @@ if __name__ == "__main__":
     settings = conf.getSettings()
     settings.SCREEN = wxutils.getscreen()
 
-    Splash = MySplashScreen()
-    Splash.Show()
+    #Splash = MySplashScreen()
+    Login = LoginScreen(None, -1, 'Login Screen')
+    Login.Show()
+#    Splash.Show()
     App.MainLoop()
