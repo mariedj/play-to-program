@@ -87,27 +87,6 @@ TEST_RUN = 2
 STEP = 3
 NUM_PROBLEMS = 8
 
-def getUserDir():
-    '''Returns the user directory, i.e. the place where user specific
-    data are stored.
-    @return (str): the platform dependent user directory.
-    '''
-    platform = sys.platform
-
-    userdir = ''
-    if platform in ('linux2', 'darwin', 'cygwin') or os.name == 'posix':
-        home = os.path.expanduser('~')
-        if home != '~':
-            userdir = os.path.join(home, '.config', 'rurple')
-    elif platform == 'win32':
-        if 'APPDATA' in  os.environ:
-            userdir = os.path.join(os.environ['APPDATA'], 'rurple')
-
-    if userdir == '':
-        userdir =  os.path.join(tempfile.gettempdir(), 'rurple')
-
-    return userdir
-
 
 class RURnotebook(wx.Notebook):
     def __init__(self, parent):
@@ -412,7 +391,7 @@ class RURApp(wx.Frame):
         self.world_filename = str(user_id) + '_world_' + str(self.problemNumber) + '.txt'
         
         dirHome = os.getcwd()
-        dir = getUserDir()
+        dir = conf.getUserDir()
         student_dirs = os.path.join(dir, 'StudentFiles', 'Worlds')
         try:
             os.makedirs(student_dirs)
@@ -482,7 +461,7 @@ class RURApp(wx.Frame):
 
             
             dirHome = os.getcwd()
-            dir = getUserDir()
+            dir = conf.getUserDir()
             student_dirs = os.path.join(dir, 'StudentFiles', 'SourceCode')
             try:
                 os.makedirs(student_dirs)
@@ -674,8 +653,8 @@ class RURApp(wx.Frame):
 ##New User Screen
 class NewUserScreen(wx.Frame):
     def __init__(self, parent, id, title):
-        frameX = 500
-        frameY = 800
+        frameX = 900
+        frameY = 700
         wx.Frame.__init__(self, parent, id, title, size=(frameX, frameY))
         largeFont = wx.Font(36, wx.FONTFAMILY_DEFAULT, wx.FONTSTYLE_NORMAL,
                             wx.FONTWEIGHT_BOLD)        
@@ -684,42 +663,35 @@ class NewUserScreen(wx.Frame):
         labelFont = wx.Font(16, wx.FONTFAMILY_DEFAULT, wx.FONTSTYLE_NORMAL,
                             wx.FONTWEIGHT_BOLD)
 
-        label = wx.StaticText(self, -1, 'Welcome to the Playing', (30, 10))
-        label2 = wx.StaticText(self, -1, 'to Program System!', (60, 50))
-        label.SetFont(largeFont)
+        panel = wx.Panel(self, -1)
+        panel.SetBackgroundColour('WHEAT')
+
+        label = wx.StaticText(panel, -1, 'Welcome to the Playing')
+        label2 = wx.StaticText(panel, -1, 'to Program System!')
+        promptLabel = wx.StaticText(panel, -1, 'Please Enter your information below.')
+        firstNameLabel =  wx.StaticText(panel, -1, 'First Name: ')
+        lastNameLabel = wx.StaticText(panel, -1, 'Last Name: ')
+        ageLabel = wx.StaticText(panel, -1, 'Age: ')
+        umbcEmailLabel = wx.StaticText(panel, -1, 'UMBC Email: ')
+        domainLabel =  wx.StaticText(panel, -1, '@umbc.edu')
+        sexLabel = wx.StaticText(panel, -1, 'Sex: ')
+        creditLabel = wx.StaticText(panel, -1, 'Credit Count: ')
+        transferLabel = wx.StaticText(panel, -1, 'Are you a transfer student? ')
+        courseLabel = wx.StaticText(panel, -1, "Please enter the computer science courses that you")
+        courseLabel2 = wx.StaticText(panel, -1, "have completed and the grade that you earned in each.")
+        courseNameLabel = wx.StaticText(panel, -1, "Course")
+        courseGradeLabel = wx.StaticText(panel, -1, "Grade")
+        languagesLabel = wx.StaticText(panel, -1, "Please list the programming languages that you")
+        languagesLabel2 = wx.StaticText(panel, -1, "have experience with and how long: ")
+        languageNameLabel = wx.StaticText(panel, -1, "Language")
+        yearsLabel = wx.StaticText(panel, -1, "Years")
+        majorLabel = wx.StaticText(panel, -1, "What is your major or intended major?")
+
         label2.SetFont(largeFont)
-
-
-        promptLabel = wx.StaticText(self, -1, 'Please Enter your information below.',
-                                    (20, 150))
-        firstNameLabel =  wx.StaticText(self, -1, 'First Name: ',
-                                    (20, 180))
-        lastNameLabel = wx.StaticText(self, -1, 'Last Name: ',
-                                    (20, 210))
-        ageLabel = wx.StaticText(self, -1, 'Age: ', (20, 240))
-        #courseLevelLabel =  wx.StaticText(self, -1, 'Highest CMSC Course Completed: ',
-        #                            (20, 240))
-        umbcEmailLabel = wx.StaticText(self, -1, 'UMBC Email: ',
-                                    (20, 270))
-        domainLabel =  wx.StaticText(self, -1, '@umbc.edu',
-                                    (300, 270))
-        sexLabel = wx.StaticText(self, -1, 'Sex: ', (20, 300))
-        creditLabel = wx.StaticText(self, -1, 'Credit Count: ', (20, 330))
-        transferLabel = wx.StaticText(self, -1, 'Are you a transfer student? ', (20, 360))
-        courseLabel = wx.StaticText(self, -1, "Please enter the computer science courses that you",
-                                    (20, 390))
-        courseLabel2 = wx.StaticText(self, -1, "have completed and the grade that you earned in each.",
-                                     (20, 420))
-
-        courseNameLabel = wx.StaticText(self, -1, "Course", 
-                                        (20, 450))
-        courseGradeLabel = wx.StaticText(self, -1, "Grade",
-                                         (250, 450))
-
+        label.SetFont(largeFont)
         promptLabel.SetFont(buttonFont)
         firstNameLabel.SetFont(labelFont)
         lastNameLabel.SetFont(labelFont)
-#        courseLevelLabel.SetFont(labelFont)
         umbcEmailLabel.SetFont(labelFont)
         ageLabel.SetFont(labelFont)
         sexLabel.SetFont(labelFont)
@@ -730,44 +702,170 @@ class NewUserScreen(wx.Frame):
         courseNameLabel.SetFont(labelFont)
         courseGradeLabel.SetFont(labelFont)
         domainLabel.SetFont(labelFont)
-        
-        self.firstName = wx.TextCtrl(self, -1, '', (120, 180), size = (150, 20))
-        self.lastName = wx.TextCtrl(self, -1, '', (120, 210), size = (150, 20))
-        #cmscLevel = wx.TextCtrl(self, -1, '', (300, 240), size = (150, 20))
-        self.email = wx.TextCtrl(self, -1, '', (120, 270), size = (150, 20))
-        self.age = wx.TextCtrl(self, -1, '', (120, 240), size = (30, 20))
-        self.sex = wx.Choice(self, -1, (120, 300), (100, 20), ["Male", "Female"])
-        self.creditCount = wx.TextCtrl(self, -1, '', (150, 330), size = (70, 20))
-        self.isTransfer = wx.Choice(self, -1, (250, 360), (70, 20), ["Yes", "No"])
-        
-        self.course1 = wx.TextCtrl(self, -1, '', (20, 480), size = (70, 20))
-        self.course2 = wx.TextCtrl(self, -1, '', (20, 510), size = (70, 20))
-        self.course3 = wx.TextCtrl(self, -1, '', (20, 540), size = (70, 20))
-        self.course4 = wx.TextCtrl(self, -1, '', (20, 570), size = (70, 20))
-        self.course5 = wx.TextCtrl(self, -1, '', (20, 600), size = (70, 20))
-        self.course6 = wx.TextCtrl(self, -1, '', (20, 630), size = (70, 20))
+        languagesLabel.SetFont(labelFont)
+        languagesLabel2.SetFont(labelFont)
+        yearsLabel.SetFont(labelFont)
+        languageNameLabel.SetFont(labelFont)
+        majorLabel.SetFont(labelFont)        
+
+        self.firstName = wx.TextCtrl(panel, -1, '')
+        self.lastName = wx.TextCtrl(panel, -1, '')
+        self.email = wx.TextCtrl(panel, -1, '')
+        self.age = wx.TextCtrl(panel, -1, '')
+        self.sex = wx.Choice(panel, -1, choices = ["Male", "Female"])
+        self.creditCount = wx.TextCtrl(panel, -1, '')
+        self.isTransfer = wx.Choice(panel, -1, choices = ["Yes", "No"])
+        self.major = wx.TextCtrl(panel, -1, '')
+
+        self.course1 = wx.TextCtrl(panel, -1, '')
+        self.course2 = wx.TextCtrl(panel, -1, '')
+        self.course3 = wx.TextCtrl(panel, -1, '')
+        self.course4 = wx.TextCtrl(panel, -1, '')
+        self.course5 = wx.TextCtrl(panel, -1, '')
+        self.course6 = wx.TextCtrl(panel, -1, '')
 
         grades = ["", "A", "B", "C", "D", "F", "P", "I", "Currently Enrolled"]
-        self.grade1 = wx.Choice(self, -1, (250, 480), (200, 20), grades)
-        self.grade2 = wx.Choice(self, -1, (250, 510), (200, 20), grades)
-        self.grade3 = wx.Choice(self, -1, (250, 540), (200, 20), grades)
-        self.grade4 = wx.Choice(self, -1, (250, 570), (200, 20), grades)
-        self.grade5 = wx.Choice(self, -1, (250, 600), (200, 20), grades)
-        self.grade6 = wx.Choice(self, -1, (250, 630), (200, 20), grades)
+        #could loop
+        self.grade1 = wx.Choice(panel, -1, choices = grades)
+        self.grade2 = wx.Choice(panel, -1, choices = grades)
+        self.grade3 = wx.Choice(panel, -1, choices = grades)
+        self.grade4 = wx.Choice(panel, -1, choices = grades)
+        self.grade5 = wx.Choice(panel, -1, choices = grades)
+        self.grade6 = wx.Choice(panel, -1, choices = grades)
+
+        #could loop
+        self.language1 = wx.TextCtrl(panel, -1, '')
+        self.language2 = wx.TextCtrl(panel, -1, '')
+        self.language3 = wx.TextCtrl(panel, -1, '')
+        self.language4 = wx.TextCtrl(panel, -1, '')
+        self.language5 = wx.TextCtrl(panel, -1, '')
+        self.language6 = wx.TextCtrl(panel, -1, '')
+
+        years = ["", "1 or less", "1 year", "2 years", "3 years", "4 or more"] 
+        self.year1 = wx.Choice(panel, -1, choices = years)
+        self.year2 = wx.Choice(panel, -1, choices = years)
+        self.year3 = wx.Choice(panel, -1, choices = years)
+        self.year4 = wx.Choice(panel, -1, choices = years)
+        self.year5 = wx.Choice(panel, -1, choices = years)
+        self.year6 = wx.Choice(panel, -1, choices = years)
 
         
 
-        button1 = wx.Button(self, -1, 'Create', pos = wx.Point(70, 700), 
-                            size = wx.Size(300, 1000))
+        button1 = wx.Button(panel, -1, 'Create')
         button1.SetFont(buttonFont)
 
-        button2 = wx.Button(self, -1, 'Cancel', pos = wx.Point(70, 730), 
-                            size = wx.Size(300, 1000))
+        button2 = wx.Button(panel, -1, 'Cancel')
         button2.SetFont(buttonFont)
 
-#        self.Bind(wx.EVT_BUTTON, self.OnCreate, id.button1.GetId())
         self.Bind(wx.EVT_BUTTON, self.OnCreate, button1)
         self.Bind(wx.EVT_BUTTON, self.OnCancel, button2)
+
+
+        vbox = wx.BoxSizer(wx.VERTICAL)
+        
+        vbox.Add(label, 0, wx.ALIGN_CENTER | wx.ALL | wx.ALIGN_TOP, 5)
+        vbox.Add(label2, 0, wx.ALIGN_CENTER | wx.BOTTOM | wx.ALIGN_TOP, 5)
+        vbox.AddSpacer(20)
+        vbox.Add(promptLabel, 0, wx.EXPAND | wx.ALIGN_LEFT | wx.BOTTOM | wx.LEFT | wx.ALIGN_TOP, 5)
+
+        hbox1 = wx.BoxSizer(wx.HORIZONTAL)
+        hbox1.Add(firstNameLabel, 0, wx.ALIGN_LEFT | wx.BOTTOM | wx.RIGHT | wx.LEFT, 5)
+        hbox1.Add(self.firstName, 0, wx.ALIGN_LEFT | wx.RIGHT, 300)
+#        hbox1.AddSpacer(400)
+        hbox1.Add(majorLabel, 0, wx.ALIGN_LEFT | wx.ALL, 5)
+        vbox.Add(hbox1)
+        
+        hbox2 = wx.BoxSizer(wx.HORIZONTAL)
+        hbox2.Add(lastNameLabel, 0, wx.ALIGN_LEFT | wx.BOTTOM | wx.RIGHT | wx.LEFT, 5)
+        hbox2.Add(self.lastName, 0, wx.ALIGN_LEFT | wx.RIGHT, 300)
+#        hbox2.AddSpacer(400)
+        hbox2.Add(self.major, 0, wx.ALIGN_LEFT | wx.ALL, 5)
+        vbox.Add(hbox2)
+
+        hbox3 = wx.BoxSizer(wx.HORIZONTAL)
+        hbox3.Add(ageLabel, 0, wx.ALIGN_LEFT | wx.BOTTOM | wx.RIGHT | wx.LEFT, 5)
+        hbox3.Add(self.age, 0, wx.ALIGN_LEFT | wx.BOTTOM | wx.RIGHT, 5)
+        vbox.Add(hbox3)
+
+        hbox4 = wx.BoxSizer(wx.HORIZONTAL)
+        hbox4.Add(sexLabel, 0, wx.ALIGN_LEFT | wx.BOTTOM | wx.RIGHT | wx.LEFT, 5)
+        hbox4.Add(self.sex, 0, wx.ALIGN_LEFT | wx.BOTTOM | wx.RIGHT, 5)
+        vbox.Add(hbox4)
+
+        hbox5 = wx.BoxSizer(wx.HORIZONTAL)
+        hbox5.Add(umbcEmailLabel, 0, wx.ALIGN_LEFT | wx.BOTTOM | wx.RIGHT | wx.LEFT, 5)
+        hbox5.Add(self.email, 0, wx.ALIGN_LEFT | wx.BOTTOM | wx.RIGHT | wx.LEFT, 5)
+        hbox5.Add(domainLabel, 0, wx.ALIGN_LEFT | wx.BOTTOM | wx.RIGHT, 5)
+        vbox.Add(hbox5)
+
+        hbox6 = wx.BoxSizer(wx.HORIZONTAL)
+        hbox6.Add(creditLabel, 0, wx.ALIGN_LEFT | wx.BOTTOM | wx.RIGHT | wx.LEFT, 5)
+        hbox6.Add(self.creditCount, 0, wx.ALIGN_LEFT | wx.BOTTOM | wx.RIGHT, 5)
+        vbox.Add(hbox6)
+
+        hbox7 = wx.BoxSizer(wx.HORIZONTAL)
+        hbox7.Add(transferLabel, 0, wx.ALIGN_LEFT | wx.BOTTOM | wx.RIGHT | wx.LEFT, 5)
+        hbox7.Add(self.isTransfer, 0, wx.ALIGN_LEFT | wx.BOTTOM | wx.RIGHT, 5)
+        vbox.Add(hbox7)
+
+        hbox8 = wx.BoxSizer(wx.HORIZONTAL)
+        hbox8.Add(courseLabel, 0, wx.ALIGN_LEFT | wx.LEFT, 5)
+#        hbox8.AddSpacer(100)
+        hbox8.Add(languagesLabel, 0, wx.ALIGN_LEFT | wx.LEFT, 100)
+        vbox.Add(hbox8)
+
+        hbox9 = wx.BoxSizer(wx.HORIZONTAL)
+        hbox9.Add(courseLabel2, 0, wx.ALIGN_LEFT | wx.LEFT, 5)
+#        hbox9.AddSpacer(100)
+        hbox9.Add(languagesLabel2, 0, wx.ALIGN_LEFT | wx.LEFT, 75)
+        vbox.Add(hbox9)
+
+
+        hbox10 = wx.BoxSizer(wx.HORIZONTAL)
+        gSizer = wx.GridSizer(7, 2, 5, 40)
+        gSizer.Add(courseNameLabel, 0, wx.ALL | wx.ALIGN_LEFT)
+        gSizer.Add(courseGradeLabel, 0, wx.ALL | wx.ALIGN_LEFT)
+        gSizer.Add(self.course1, 0, wx.ALL | wx.ALIGN_LEFT)
+        gSizer.Add(self.grade1, 0, wx.ALL | wx.ALIGN_LEFT)
+        gSizer.Add(self.course2, 0, wx.ALL | wx.ALIGN_LEFT)
+        gSizer.Add(self.grade2, 0, wx.ALL | wx.ALIGN_LEFT)
+        gSizer.Add(self.course3, 0, wx.ALL | wx.ALIGN_LEFT)
+        gSizer.Add(self.grade3, 0, wx.ALL | wx.ALIGN_LEFT)
+        gSizer.Add(self.course4, 0, wx.ALL | wx.ALIGN_LEFT)
+        gSizer.Add(self.grade4, 0, wx.ALL | wx.ALIGN_LEFT)
+        gSizer.Add(self.course5, 0, wx.ALL | wx.ALIGN_LEFT)
+        gSizer.Add(self.grade5, 0, wx.ALL | wx.ALIGN_LEFT)
+        gSizer.Add(self.course6, 0, wx.ALL | wx.ALIGN_LEFT)
+        gSizer.Add(self.grade6, 0, wx.ALL | wx.ALIGN_LEFT)
+        hbox10.Add(gSizer, 0, wx.ALIGN_LEFT | wx.LEFT, 5)
+
+        gSizer2 = wx.GridSizer(7, 2, 5, 40)
+        gSizer2.Add(languageNameLabel, 0, wx.ALL | wx.ALIGN_LEFT)
+        gSizer2.Add(yearsLabel, 0, wx.ALL | wx.ALIGN_LEFT)
+        gSizer2.Add(self.language1, 0, wx.ALL | wx.ALIGN_LEFT)
+        gSizer2.Add(self.year1, 0, wx.ALL | wx.ALIGN_LEFT)
+        gSizer2.Add(self.language2, 0, wx.ALL | wx.ALIGN_LEFT)
+        gSizer2.Add(self.year2, 0, wx.ALL | wx.ALIGN_LEFT)
+        gSizer2.Add(self.language3, 0, wx.ALL | wx.ALIGN_LEFT)
+        gSizer2.Add(self.year3, 0, wx.ALL | wx.ALIGN_LEFT)
+        gSizer2.Add(self.language4, 0, wx.ALL | wx.ALIGN_LEFT)
+        gSizer2.Add(self.year4, 0, wx.ALL | wx.ALIGN_LEFT)
+        gSizer2.Add(self.language5, 0, wx.ALL | wx.ALIGN_LEFT)
+        gSizer2.Add(self.year5, 0, wx.ALL | wx.ALIGN_LEFT)
+        gSizer2.Add(self.language6, 0, wx.ALL | wx.ALIGN_LEFT)
+        gSizer2.Add(self.year6, 0, wx.ALL | wx.ALIGN_LEFT)
+        hbox10.Add(gSizer2, 0, wx.ALIGN_LEFT | wx.LEFT, 140)
+
+        vbox.Add(hbox10)
+
+
+        vbox.Add(button1, 0, wx.ALIGN_CENTER | wx.ALL | wx.ALIGN_BOTTOM, 5)
+        vbox.Add(button2, 0, wx.ALIGN_CENTER | wx.ALL | wx.ALIGN_BOTTOM, 5)
+
+
+
+
+        panel.SetSizer(vbox)
 
         self.Show(True)
     
@@ -785,7 +883,7 @@ class NewUserScreen(wx.Frame):
             event.Skip()
 
         directory = os.getcwd()
-        os.chdir(getUserDir())
+        os.chdir(conf.getUserDir())
         
         profiles = {}
         names = []
@@ -829,7 +927,7 @@ class NewUserScreen(wx.Frame):
             logfile.write(self.email.GetValue() + "     " + str(user_id) + "\n")
             
             #Create the demographic file
-            student_dirs = os.path.join(getUserDir(), 'StudentFiles', 'Demographics')
+            student_dirs = os.path.join(conf.getUserDir(), 'StudentFiles', 'Demographics')
             demo_filename = str(user_id) + '_demo' + '.txt'
             
             try:
@@ -918,7 +1016,7 @@ class ReturnUserScreen(wx.Frame):
         global user_id
 
         directory = os.getcwd()
-        os.chdir(getUserDir())
+        os.chdir(conf.getUserDir())
         
         try:
             file = open("key.txt", "r")
@@ -959,19 +1057,23 @@ class Notes(wx.Frame):
         buttonFont = wx.Font(20, wx.FONTFAMILY_DEFAULT, wx.FONTSTYLE_NORMAL,
                             wx.FONTWEIGHT_BOLD)
 
-        label = wx.StaticText(self, -1, 'Notes', (5, 5))
-        label.SetFont(largeFont)
-        
-        label2 = wx.StaticText(self, -1, 'Please inform us of any suggestions or problems', \
-                                   (5, 50))
-        label2.SetFont(buttonFont)
-                    
+        panel = wx.Panel(self, -1)
+        panel.SetBackgroundColour('WHEAT')
+        label = wx.StaticText(panel, -1, 'Notes')
+        label2 = wx.StaticText(panel, -1, 'Please inform us of any suggestions or problems')
+        self.box = wx.TextCtrl(panel, -1, '', size=(300, 300), style=wx.TE_MULTILINE)
+        button = wx.Button(panel, -1, 'Submit')
 
-        self.box = wx.TextCtrl(self, -1, '', (60, 80), (300, 300), style=wx.TE_MULTILINE)
-
-        button = wx.Button(self, -1, 'Submit', pos = wx.Point(60, 430), 
-                            size = wx.Size(300, 300))
         button.SetFont(buttonFont)
+        label.SetFont(largeFont)
+        label2.SetFont(buttonFont)
+
+        vbox = wx.BoxSizer(wx.VERTICAL)
+        vbox.Add(label, 0, wx.ALIGN_CENTER | wx.ALL | wx.ALIGN_TOP, 5)
+        vbox.Add(label2, 0, wx.ALIGN_LEFT | wx.ALL | wx.EXPAND | wx.ALIGN_TOP, 5)
+        vbox.Add(self.box, 0, wx.ALIGN_CENTER | wx.ALL | wx.ALIGN_TOP, 5)
+        vbox.Add(button, 0, wx.ALIGN_CENTER | wx.ALL | wx.ALIGN_BOTTOM, 20)
+        panel.SetSizer(vbox)
 
         wx.EVT_CLOSE(self, self.OnClose)
 
@@ -987,7 +1089,7 @@ class Notes(wx.Frame):
         global user_id
 
         dirHome = os.getcwd()
-        dir = getUserDir()
+        dir = conf.getUserDir()
         student_dirs = os.path.join(dir, 'StudentFiles', 'Notes')
         try:
             os.makedirs(student_dirs)
@@ -1013,14 +1115,13 @@ class InstructionScreen(wx.Frame):
         frameY = 500
         wx.Frame.__init__(self, parent, id, title, size=(frameX, frameY))
         self.lessons_dir = conf.getLessonsNlDir()
-        self.html = html.HtmlWindow(self, id, size=(frameX, frameY))
-        #style=wx.NO_FULL_REPAINT_ON_RESIZE)
+
+        self.html = html.HtmlWindow(self, id)
 
         self.labelFont = wx.Font(20, wx.FONTFAMILY_DEFAULT, wx.FONTSTYLE_NORMAL,
                             wx.FONTWEIGHT_BOLD)
 
         wx.EVT_CLOSE(self, self.OnClose)
-        
 
         self.Show(True)
 
@@ -1044,33 +1145,47 @@ class LoginScreen(wx.Frame):
         frameX = 500
         frameY = 500
         wx.Frame.__init__(self, parent, id, title, size=(frameX, frameY))
+
+        panel = wx.Panel(self, -1)
+        panel.SetBackgroundColour('WHEAT')
+
         largeFont = wx.Font(36, wx.FONTFAMILY_DEFAULT, wx.FONTSTYLE_NORMAL,
                             wx.FONTWEIGHT_BOLD)        
 
         buttonFont = wx.Font(20, wx.FONTFAMILY_DEFAULT, wx.FONTSTYLE_NORMAL,
                             wx.FONTWEIGHT_BOLD)
-
-        label = wx.StaticText(self, -1, 'Welcome to the Playing', (30, 10))
-        label2 = wx.StaticText(self, -1, 'to Program System!', (60, 50))
+        
+        #panel was self
+        label = wx.StaticText(panel, -1, 'Welcome to the Playing')#, (60, 50))
+        label2 = wx.StaticText(panel, -1, 'to Program System!')#, (60, 50))
         label.SetFont(largeFont)
         label2.SetFont(largeFont)
 
-        button1 = wx.Button(self, -1, 'New User', pos = wx.Point(70, 200), 
-                            size = wx.Size(300, 1000))
-        button2 = wx.Button(self, -1, 'Returning User', pos = wx.Point(70, 300), 
-                            size = wx.Size(300, 1000))
+        button1 = wx.Button(panel, -1, 'New User')#, pos = wx.Point(70, 200), 
+                            #size = wx.Size(300, 1000))
+        button2 = wx.Button(panel, -1, 'Returning User')#, pos = wx.Point(70, 300), 
+                            #size = wx.Size(300, 1000))
         button1.SetFont(buttonFont)
         button2.SetFont(buttonFont)
 
+#        print getImage(images.SPLASH_SCREEN).ConvertToImage()
+#        image = wx.Image(getImage(images.SPLASH_SCREEN).ConvertToImage())
+
+
+        vbox = wx.BoxSizer(wx.VERTICAL)
+        vbox.Add(label, 0, wx.ALIGN_CENTER | wx.ALL | wx.ALIGN_TOP, 5)
+        vbox.Add(label2, 0, wx.ALIGN_CENTER | wx.BOTTOM | wx.ALIGN_TOP, 5)
+ #       vbox.Add(getImage(images.SPLASH_SCREEN).ConvertToImage())
+        vbox.AddSpacer(300)
+        vbox.Add(button1, 0, wx.ALIGN_CENTER | wx.ALL | wx.ALIGN_BOTTOM, 5)
+        vbox.Add(button2, 0, wx.ALIGN_CENTER | wx.ALL | wx.ALIGN_BOTTOM, 5)
+
+        panel.SetSizer(vbox)
 
         wx.EVT_CLOSE(self, self.OnClose)
 
         self.Bind(wx.EVT_BUTTON, self.OnNewUser, id=button1.GetId())
         self.Bind(wx.EVT_BUTTON, self.OnReturnUser, id=button2.GetId())
-
-      #  textLogin = wx.TextCtrl(self, -1, '', (10, 40), size = (frameX-20, 20))
-        
-        
 
         self.Show(True)
 
