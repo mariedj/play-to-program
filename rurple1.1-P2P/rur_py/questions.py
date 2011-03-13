@@ -54,7 +54,7 @@ else:
 
 q5 = Question("""Four lines of code are marked A, B, C, and D with comments.
 Which are executed when 45 and 15.00 are entered?""",
-"""print(\"How many hours did you work? \",
+"""print \"How many hours did you work? \",
 hours = input()
 print \"What is your hourly salary? \",
 salary = input()
@@ -74,7 +74,7 @@ else:
 
 q6 = Question("""Four lines of code are marked A, B, C, and D with comments.
 Which are executed when 35 and 17.00 are entered?""",
-"""print(\"How many hours did you work? \",
+"""print \"How many hours did you work? \",
 hours = input()
 print \"What is your hourly salary? \",
 salary = input()
@@ -151,6 +151,106 @@ print count
 """, ["0", "1", "3", "5"], 1, ["IA1","IB1a","IB1b","IIA1","IIA2","IIIA1"])
 
 q15 = Question("What is the output of the following code?",
+"""a = 3 
+b = 17
+
+a = b % a
+a += 1 
+b = a + 5 
+
+print \"a =\", a
+print \"b =\", b
+""", ["a = 3\nb = 7", "a = 2\nb = 7", "a = 3\nb = 8", "a = 2\nb = 8", "None of the above."], 2, ["IIA1","IIA2"])
+
+q16 = Question("What is the output of the following code?",
+"""a = 6
+b = 17
+
+b -= 1
+a = b % a
+b = a * 3 + 5 
+
+print \"a =\", a
+print \"b =\", b
+""", ["a = 6\nb = 17", "a = 4\nb = 17", "a = 6\nb = 23", "a = 4\nb = 23", "None of the above."], 1, ["IIA1","IIA2"])
+
+q17 = Question("After the following code executes, what value will answer have?",
+"""color = 'blue'
+shape = 'square'
+size = 'small'
+answer = -1
+if color == 'red':
+    answer = 2
+elif color == 'blue':
+    if shape == 'square':
+        if size == 'big':
+            answer = 3
+        else:
+            answer = 5
+    else:
+        answer = 4
+else:
+    if size == 'small':
+        answer = 6
+    else:
+        answer = 1
+""", ["1", "2", "3", "4", "5", "6"], 4, ["IA2","IA3","IIA1","IIIA1"])
+
+q18 = Question("After the following code executes, what value will answer have?",
+"""color = 'yellow'
+shape = 'square'
+size = 'big'
+answer = -1
+if color == 'red':
+    answer = 2
+elif color == 'blue':
+    if size == 'small':
+        answer = 6
+    else:
+        answer = 1
+else:
+    if shape == 'circle':
+        answer = 5
+    else:
+        if size == 'big':
+            answer = 4
+        else:
+            answer = 3
+""", ["1", "2", "3", "4", "5", "6"], 3, ["IA2","IA3","IIA1","IIIA1"])
+
+q19 = Question("What is the effect of the following code?",
+"""for i in range(1, 16):
+    if i % 3 == 0:
+        print i
+""", ["It prints out the integers from 3 to 15.", "It prints out the multiples of 3 from 3 to 15.", "It prints out the sum of the integers from 3 to 15.", "It prints out the sum of the multiples of 3 from 3 to 15."], 1, ["IA1","IB2a","IB2c","IIIA1","IIIB2"])
+
+q20 = Question("What is the effect of the following code?",
+"""for i in range(1, 17):
+    if i % 4 == 0:
+        print i
+""", ["It prints out the integers from 4 to 16.", "It prints out the multiples of 4 from 4 to 16.", "It prints out the sum of the integers from 4 to 16.", "It prints out the sum of the multiples of 4 from 4 to 16."], 1, ["IA1","IB2a","IB2c","IIIA1","IIIB2"])
+
+q21 = Question("What is the output of the following code?",
+"""def f(x):
+    return 2 * x + 1
+
+def main():
+    print f(5), f(f(7))
+
+main()
+""", [], "11 31", ["IC","IIB1","IIB2"])
+
+q22 = Question("What is the output of the following code?",
+"""def f(x):
+    return 3 * x - 1
+
+def main():
+    print f(f(4)), f(8)
+
+main()
+""", [], "32 23", ["IC","IIB1","IIB2"])
+
+q23 = Question("What is the output of the following code?",
 """x = 1
 
 if x > 3:
@@ -165,7 +265,7 @@ elif x < 2:
 print \"D\"
 """, [], "C D", ["IA1","IA2","IA3","IIA1","IIIA1"])
 
-q16 = Question("What is the output of the following code?",
+q24 = Question("What is the output of the following code?",
 """y = 5
 
 if y > 4:
@@ -180,7 +280,7 @@ elif y < 3:
 print \"C\"
 """, [], "U C", ["IA1","IA2","IA3","IIA1","IIIA1"])
 
-q17 = Question("What is the output of the following code?",
+q25 = Question("What is the output of the following code?",
 """n = 1234
 
 while n > 0:
@@ -188,7 +288,7 @@ while n > 0:
     print n
 """, [], "123\n12\n1\n0", ["IB1a","IIA1","IIA2","IIIA1"])
 
-q18 = Question("What is the output of the following code?",
+q26 = Question("What is the output of the following code?",
 """n = 23456
 
 while n > 50:
@@ -196,7 +296,7 @@ while n > 50:
     print n
 """, [], "2345\n234\n23", ["IB1a","IIA1","IIA2","IIIA1"])
 
-q19 = Question("What is the output of the following code?",
+q27 = Question("What is the output of the following code?",
 """for g in range (1, 4):
     for h in range (3):
         if g == h:
@@ -206,7 +306,7 @@ q19 = Question("What is the output of the following code?",
     print
 """, [], "X O X \nX X O \nX X X ", ["IA1","IB2a","IB2c","IB3","IIIA1","IIIB1","IIIB2"])
 
-q20 = Question("What is the output of the following code?",
+q28 = Question("What is the output of the following code?",
 """for i in range(1,5):
     for j in range(5):
         if i == j:
@@ -216,7 +316,7 @@ q20 = Question("What is the output of the following code?",
     print
 """, [], "o + o o o \no o + o o \no o o + o \no o o o + ", ["IA1","IB2a","IB2c","IB3","IIIA1","IIIB1","IIIB2"])
 
-q21 = Question("What is the output of the following code?",
+q29 = Question("What is the output of the following code?",
 """def f1(a, b):
     print \"f1:\", a, b
     return a
@@ -239,7 +339,7 @@ def main():
 main()
 """, [], "f1: 2 5\nmain: 2 5 2\nf2: 2 2\nmain: 2 2 2", ["IC","IIA1","IIB1","IIB2"])
 
-q22 = Question("What is the output of the following code?",
+q30 = Question("What is the output of the following code?",
 """def f1(a, b):
     print \"f1:\", a, b
     return a
@@ -261,106 +361,6 @@ def main():
 
 main()
 """, [], "f1: 2 5\nmain: 2 5 2\nf2: 5 2\nmain: 5 5 2", ["IC","IIA1","IIB1","IIB2"])
-
-q23 = Question("What is the output of the following code?",
-"""a = 3 
-b = 17
-
-a = b % a
-a += 1 
-b = a + 5 
-
-print \"a =\", a
-print \"b =\", b
-""", ["a = 3\nb = 7", "a = 2\nb = 7", "a = 3\nb = 8", "a = 2\nb = 8", "None of the above."], 2, ["IIA1","IIA2"])
-
-q24 = Question("What is the output of the following code?",
-"""a = 6
-b = 17
-
-b -= 1
-a = b % a
-b = a * 3 + 5 
-
-print \"a =\", a
-print \"b =\", b
-""", ["a = 6\nb = 17", "a = 4\nb = 17", "a = 6\nb = 23", "a = 4\nb = 23", "None of the above."], 1, ["IIA1","IIA2"])
-
-q25 = Question("After the following code executes, what value will answer have?",
-"""color = 'blue'
-shape = 'square'
-size = 'small'
-answer = -1
-if color == 'red':
-    answer = 2
-elif color == 'blue':
-    if shape == 'square':
-        if size == 'big':
-            answer = 3
-        else:
-            answer = 5
-    else:
-        answer = 4
-else:
-    if size == 'small':
-        answer = 6
-    else:
-        answer = 1
-""", ["1", "2", "3", "4", "5", "6"], 4, ["IA2","IA3","IIA1","IIIA1"])
-
-q26 = Question("After the following code executes, what value will answer have?",
-"""color = 'yellow'
-shape = 'square'
-size = 'big'
-answer = -1
-if color == 'red':
-    answer = 2
-elif color == 'blue':
-    if size == 'small':
-        answer = 6
-    else:
-        answer = 1
-else:
-    if shape == 'circle':
-        answer = 5
-    else:
-        if size == 'big':
-            answer = 4
-        else:
-            answer = 3
-""", ["1", "2", "3", "4", "5", "6"], 3, ["IA2","IA3","IIA1","IIIA1"])
-
-q27 = Question("What is the effect of the following code?",
-"""for i in range(1, 16):
-    if i % 3 == 0:
-        print i
-""", ["It prints out the integers from 3 to 15.", "It prints out the multiples of 3 from 3 to 15.", "It prints out the sum of the integers from 3 to 15.", "It prints out the sum of the multiples of 3 from 3 to 15."], 1, ["IA1","IB2a","IB2c","IIIA1","IIIB2"])
-
-q28 = Question("What is the effect of the following code?",
-"""for i in range(1, 17):
-    if i % 4 == 0:
-        print i
-""", ["It prints out the integers from 4 to 16.", "It prints out the multiples of 4 from 4 to 16.", "It prints out the sum of the integers from 4 to 16.", "It prints out the sum of the multiples of 4 from 4 to 16."], 1, ["IA1","IB2a","IB2c","IIIA1","IIIB2"])
-
-q29 = Question("What is the output of the following code?",
-"""def f(x):
-    return 2 * x + 1
-
-def main():
-    print f(5), f(f(7))
-
-main()
-""", [], "11 31", ["IC","IIB1","IIB2"])
-
-q30 = Question("What is the output of the following code?",
-"""def f(x):
-    return 3 * x - 1
-
-def main():
-    print f(f(4)), f(8)
-
-main()
-""", [], "32 23", ["IC","IIB1","IIB2"])
 
 q31 = Question("How many times is the loop executed in the following code?",
 """number = 0
