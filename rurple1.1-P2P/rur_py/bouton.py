@@ -58,10 +58,7 @@ class rurChoiceWindow(wx.ScrolledWindow):
                 getImage(images.PAUSE), btn_size, tip_list[4]],
             [wx.NewId(), BUTTON, self.ggp.StopProgram,
                 getImage(images.STOP), btn_size, tip_list[5]],
-            [None, SPACER, None, None, spacer_large, None]#,,
-#            [wx.NewId(), BUTTON, self.ggp.StartSession,
-#                getImage(images.START), btn_size, tip_list[6]]
-            ]
+            [None, SPACER, None, None, spacer_large, None]]
 
 
         box = wx.BoxSizer(wx.HORIZONTAL)
