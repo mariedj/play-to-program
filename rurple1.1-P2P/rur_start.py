@@ -1168,15 +1168,17 @@ class LoginScreen(wx.Frame):
         button1.SetFont(buttonFont)
         button2.SetFont(buttonFont)
 
-#        print getImage(images.SPLASH_SCREEN).ConvertToImage()
-#        image = wx.Image(getImage(images.SPLASH_SCREEN).ConvertToImage())
+        bmp = wx.BitmapFromImage(getImage(images.SPLASH_SCREEN).ConvertToImage())
+        #print getImage(images.SPLASH_SCREEN)
 
+        image = wx.StaticBitmap(panel, -1, size = (300,300), bitmap = bmp)
 
         vbox = wx.BoxSizer(wx.VERTICAL)
         vbox.Add(label, 0, wx.ALIGN_CENTER | wx.ALL | wx.ALIGN_TOP, 5)
         vbox.Add(label2, 0, wx.ALIGN_CENTER | wx.BOTTOM | wx.ALIGN_TOP, 5)
- #       vbox.Add(getImage(images.SPLASH_SCREEN).ConvertToImage())
-        vbox.AddSpacer(300)
+ #       vbox.Add(getImage(images.SPLASH_SCREEN))
+#        vbox.AddSpacer(300)
+        vbox.Add(image, 0, wx.ALIGN_CENTER)
         vbox.Add(button1, 0, wx.ALIGN_CENTER | wx.ALL | wx.ALIGN_BOTTOM, 5)
         vbox.Add(button2, 0, wx.ALIGN_CENTER | wx.ALL | wx.ALIGN_BOTTOM, 5)
 
