@@ -71,7 +71,7 @@ from rur_py.translation import _
 
 from rur_py.sash import MySashWindow
 from rur_py.lightning import EditorSashWindow
-from rur_py.lightning import rur_editor
+from rur_py.editor import rur_editor
 import rur_py.parser as parser
 from rur_py.bouton import pythonChoiceWindow
 
