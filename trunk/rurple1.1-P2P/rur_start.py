@@ -1176,8 +1176,6 @@ class LoginScreen(wx.Frame):
         vbox = wx.BoxSizer(wx.VERTICAL)
         vbox.Add(label, 0, wx.ALIGN_CENTER | wx.ALL | wx.ALIGN_TOP, 5)
         vbox.Add(label2, 0, wx.ALIGN_CENTER | wx.BOTTOM | wx.ALIGN_TOP, 5)
- #       vbox.Add(getImage(images.SPLASH_SCREEN))
-#        vbox.AddSpacer(300)
         vbox.Add(image, 0, wx.ALIGN_CENTER)
         vbox.Add(button1, 0, wx.ALIGN_CENTER | wx.ALL | wx.ALIGN_BOTTOM, 5)
         vbox.Add(button2, 0, wx.ALIGN_CENTER | wx.ALL | wx.ALIGN_BOTTOM, 5)
