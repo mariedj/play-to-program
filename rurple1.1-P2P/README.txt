@@ -59,13 +59,30 @@ Updates to come:
 	buttons and removing the start button. -- COMPLETED
 
 	Isolation of check mark button with a text label to say the button
-	Submits.
+	Submits. --Complete
 
 	Problem Number counter on screen.
 
 	Username on screen.
 
-	Add open-ended comments at the end for questions and suggestions.
+	6 questions, easy one's.
+	2 1/2 hours Friday.
+	Sort by easy, medium, hard.
+	Timestamps
+	Add a field asking what major they are
+	What languages do you know?
+	How long have you known these languages?
+	Sizers or Layout Manager. Example in Dave's code. GridBagSizer or BoxSizer possibly? 
+	Put David's Pretest on here
+	Put David's Post Test on here
+	Email David once I get the frames and everything uploaded on svn w/ screen shot of the dialogs
+	Add image to login screen
+
+	Jane confirming the computer lab ITE_240
+	201E 6:30-7:30 pizza
+	Test this on GL	29th, 31st, Friday 10-1 and 1-4
+
+	Add open-ended comments at the end for questions and suggestions. -- Completed
 
 	Change directory issues. Use os.join -- Completed
 	rur_start.py look at the ShowInstruction Method and decide if it is 
