@@ -1,6 +1,3 @@
-# Created by David progromatically creates worlds.
-# Look to see how to upload a world from a dict, rather than a file
-
 import random
 
 def default(width=10,height=10,xpos=1,ypos=1,dir='E',beepers=600):
@@ -43,8 +40,12 @@ def trash(height=1):
     env['walls'].append((2,height*2 + 1))
     for i in range(1,height+1):
         for j in range(2,11):
-            if random.random() < 1.0/(height+1):
-                env['beepers'][(j,i)] = random.randint(1,15) # prefer small?
+            if random.random() < 1.0/(height+2):
+                m = 10
+                b = random.randint(1,m)
+                if b > m/2 and random.random() < 1.0/2:
+                    b = m - b + 1
+                env['beepers'][(j,i)] = b
     return env
 
 # measurement default(0,0,0,0) vary dir?
@@ -93,11 +94,11 @@ def hurdles(spacing=True,height=True,finish=True):
         env['beepers'][(10,1)] = 1
     return env
 
-def harvest2():
-    env = default(width=12, height=12, beepers=0)
-    for i in range(1,7):
-        j = 8-i
-        for k in range(6):
+def harvest2(size=6):
+    env = default(width=size*2, height=size*2, beepers=0)
+    for i in range(1,size+1):
+        j = size+2-i
+        for k in range(size):
             env['beepers'][(i+k,j+k)] = 1
     return env
 
@@ -362,22 +363,22 @@ def perimeter(amazing=0):
     if amazing == 0:
         amazing = random.randint(1,4)
     if amazing == 1:
-        return default(5,5,beepers=0)
+        return default(5,5)
     if amazing == 2:
-        env = default(7,7,beepers=0)
+        env = default(7,7)
         for i in range(7, 14, 2):
             env['walls'].append((6, i))
             env['walls'].append((i, 6))
         return env
     if amazing == 3:
-        env = default(7,7,beepers=0)
+        env = default(7,7)
         env['walls'].append((2, 1))
         env['walls'].append((3, 2))
         env['walls'].append((5, 2))
         for i in range(3, 14, 2):
             env['walls'].append((6, i))
         return env
-    env = default(7,7,beepers=0)
+    env = default(7,7)
     env['walls'].append((4, 1))
     env['walls'].append((3, 2))
     env['walls'].append((2, 3))
