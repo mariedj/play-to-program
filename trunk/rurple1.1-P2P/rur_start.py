@@ -300,26 +300,7 @@ class RURApp(wx.Frame):
                 openedFileName = os.path.join(settings.USER_WORLDS_DIR, env) #dict[n])
             return openedFileName
 
-#    def OnClose(self, event):
-#        if self.ProgramEditor.GetModify():
-#                ret = dialogs.messageDialog(_(u'Save changes to %s?')
-#                    % unicode(self.filename), _("About to close"), wx.YES
-#                    | wx.NO | wx.CANCEL | wx.ICON_QUESTION | wx.STAY_ON_TOP)
-#                if ret == wx.ID_YES:
-#                    if len(self.filename) > 0:
-#                        try:
-#                            f = open(self.filename, 'w')
-#                            f.write(content)
-#                            f.close()
-#                        except IOError, e:
-#                            messageDialog(unicode(e[1]), (u'IO Error'),
-#                                wx.OK | wx.STAY_ON_TOP)
-#                    else:
-#                        self.SaveProgramFile(event)
-#                elif ret == wx.ID_NO:
-#                    self.Destroy()
-#        else:
-#            self.Destroy()
+
 
 #---- World file methods
     def OpenWorldFile(self, dummy):
@@ -453,7 +434,8 @@ class RURApp(wx.Frame):
 
            self.ProgramEditor.SetText("")
         else:
-            self.inst_screen.Close()
+            if self.inst_screen:
+                self.inst_screen.Close()
 #            dlg = wx.MessageDialog(self, "You will now be given a post-test.")
 #            dlg.ShowModal()
 #            dlg.Destroy()
