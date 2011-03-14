@@ -121,7 +121,7 @@ class RURApp(wx.Frame):
         self.SetStatusBar(self.status_bar)
 #        self.problemNumber = 0
 #        self.problem_choice = [0, 1, 2, 3, 4, 5, 6, 7]
-#        self.inst_screen = None
+        self.inst_screen = None
 
         # icon on top left of window
         icon = wx.EmptyIcon()
@@ -311,7 +311,7 @@ class RURApp(wx.Frame):
         #Will be some function that handles problem selection
         openedFileName = self.chooseWorld()
         self.problemNumber += 1
-        self.logfile.write(str(self.problemNumber) + ',' + str(user_id) + '\n') #str(self.stud_num) + '\n')
+        self.logfile.write(str(self.problemNumber) + ',' + str(self.stud.num) + '\n')
         arg = self.status_bar.problem_field, _("#" + str(self.problemNumber))
         event_manager.SendCustomEvent(self, arg)
 
@@ -443,8 +443,8 @@ class RURApp(wx.Frame):
 #            TestScreen(None, -1, 'Post-Test', questions.post, 0)
 
             self.logfile.close()
-            dlg = wx.MessageDialog(self, "You have completed all of the required problems." +
-                                   " We invite you to give us feedback.", "Complete")
+#            dlg = wx.MessageDialog(self, "You have completed all of the required problems." +
+#                                   " We invite you to give us feedback.", "Complete")
 #            dlg.ShowModal()
 #            dlg.Destroy()
 #            self.notes = Notes(None, -1, 'Notes')
@@ -574,6 +574,12 @@ class RURApp(wx.Frame):
             return
         self.user_program.isRunning = True
         self.user_program.restart(self.world.robot_dict)
+
+    def InstructionSheet(self, dummy):
+        if self.inst_screen:
+            pass
+#        else:
+#            self.inst_screen = .Open()
 
     def Pause(self, dummy):
         if not (self.user_program.isRunning or self.user_program.isStepped):
@@ -1110,7 +1116,8 @@ class ReturnUserScreen(wx.Frame):
 
 
         self.Bind(wx.EVT_BUTTON, self.OnLogin, id=button1.GetId())
-
+        
+        self.email.SetFocus()
         self.Show(True)
     
     def OnLogin(self, event):
@@ -1184,6 +1191,7 @@ class Notes(wx.Frame):
         wx.EVT_CLOSE(self, self.OnClose)
 
         self.Bind(wx.EVT_BUTTON, self.Submit, id=button.GetId())
+        self.box.SetFocus()
         self.Show(True)
 
 
@@ -1451,7 +1459,7 @@ class TestScreen(wx.Frame):
                     Notes(None, -1, 'Notes')
            
                 self.Destroy()
-                event.Skip()
+            event.Skip()
 
 class MySplashScreen(wx.SplashScreen):
     def __init__(self):
@@ -1475,6 +1483,6 @@ if __name__ == "__main__":
 
     #Splash = MySplashScreen()
     Login = LoginScreen(None, -1, 'Login Screen')
-    Login.Show()
+#    Login.Show()
 #    Splash.Show()
     App.MainLoop()

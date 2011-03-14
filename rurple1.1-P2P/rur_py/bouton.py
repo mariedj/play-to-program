@@ -35,7 +35,7 @@ class rurChoiceWindow(wx.ScrolledWindow):
                           _("Steps through robot program instructions"), 
                           _("Pause program"), 
                           _("Stops program"),
-                          _("Starts session"), 
+                          _("Bring up instructions"), 
                           _("Adjust robot speed")]
 
         widget_list1 = [
@@ -58,6 +58,8 @@ class rurChoiceWindow(wx.ScrolledWindow):
                 getImage(images.PAUSE), btn_size, tip_list[4]],
             [wx.NewId(), BUTTON, self.ggp.StopProgram,
                 getImage(images.STOP), btn_size, tip_list[5]],
+            [wx.NewId(), BUTTON, self.ggp.InstructionSheet,
+                getImage(images.HELP), btn_size, tip_list[6]],
             [None, SPACER, None, None, spacer_large, None]]
 
 
@@ -88,25 +90,13 @@ class rurChoiceWindow(wx.ScrolledWindow):
             wx.SL_HORIZONTAL | wx.SL_AUTOTICKS #| wx.SL_LABELS
             )
         self.ggp.slider_speed.SetTickFreq(1, 1)
-        self.ggp.slider_speed.SetToolTipString(tip_list[6])
+        self.ggp.slider_speed.SetToolTipString(tip_list[7])
         box.Add(self.ggp.slider_speed, 0, wx.SHAPED)
         self.ggp.slider_speed.SetFocus()  # to make it same colour as background
 
         self.SetSizer(box)
         self.SetScrollRate(10, 0)
 
-    def SelectLanguage(self):
-        tip_list = [_("Submits Answer & proceeds to next question"),
-                          _("Resets World"),
-                          _("Tests the program"),
-                          _("Steps through robot program instructions"), 
-                          _("Pause program"), 
-                          _("Stops program"),
-                          _("Starts session"),
-                          _("Adjust robot speed")]
-        for i in range(len(tip_list)):
-            self.btn_list[i].SetToolTipString(tip_list[i])
-        self.ggp.slider_speed.SetToolTipString(tip_list[9])
 
 class pythonChoiceWindow(wx.Panel):
     def __init__(self, parent, editor):
