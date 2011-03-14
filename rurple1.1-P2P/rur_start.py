@@ -90,6 +90,7 @@ user_id = 0
 SUBMITTED = 1
 TEST_RUN = 2
 STEP = 3
+EXITED = 4
 NUM_PROBLEMS = len(problems.writing)
 
 
@@ -211,25 +212,33 @@ class RURApp(wx.Frame):
         wx.EVT_CLOSE(self, self.OnClose)
 
     def OnClose(self, event):
-        if self.ProgramEditor.GetModify():
-                ret = dialogs.messageDialog(_(u'Save changes to %s?')
-                    % unicode(self.filename), _("About to close"), wx.YES
-                    | wx.NO | wx.CANCEL | wx.ICON_QUESTION | wx.STAY_ON_TOP)
-                if ret == wx.ID_YES:
-                    if len(self.filename) > 0:
-                        try:
-                            f = open(self.filename, 'w')
-                            f.write(content)
-                            f.close()
-                        except IOError, e:
-                            messageDialog(unicode(e[1]), (u'IO Error'),
-                                wx.OK | wx.STAY_ON_TOP)
-                    else:
-                        self.SaveProgramFile(event)
-                elif ret == wx.ID_NO:
-                    self.OnExit(event)
-        else:
-            self.OnExit(event)
+#        if self.ProgramEditor.GetModify():
+#                ret = dialogs.messageDialog(_(u'Save changes to %s?')
+#                    % unicode(self.filename), _("About to close"), wx.YES
+#                    | wx.NO | wx.CANCEL | wx.ICON_QUESTION | wx.STAY_ON_TOP)
+        ret = dialogs.messageDialog(_('Are you sure you want to exit?'), _("About to close"),
+                                    wx.YES | wx.NO)
+        if ret == wx.ID_YES:
+            if len(self.filename) > 0:
+                self.SaveProgramFile(EXITED)
+                self.inst_screen.Close()
+                self.OnExit(event)
+#                        try:
+#                            f = open(self.filename, 'w')
+#                            f.write(content)
+#                            f.close()
+#                        except IOError, e:
+#                            messageDialog(unicode(e[1]), (u'IO Error'),
+#                                          wx.OK | wx.STAY_ON_TOP)
+#                    else:
+#                        self.SaveProgramFile(event)
+#        elif ret == wx.ID_NO:
+
+#            ret.Destroy()
+#            event.Skip()
+#                    self.OnExit(event)
+#        else:
+#            self.OnExit(event)
 
     def OnExit(self, event):
         if logData:
@@ -552,6 +561,8 @@ class RURApp(wx.Frame):
                 proc = "Submitted"
             elif dummy == TEST_RUN:
                 proc = "Test Run"
+            elif dummy == EXITED:
+                proc = "Exited"
             else:
                 proc = "Step"
             file = open(self.filename, "a+")
@@ -1429,9 +1440,14 @@ class TestScreen(wx.Frame):
             self.Destroy()
             event.Skip()
         else:
-            ret = dialogs.messageDialog(_('Are you sure you want to exit?'),
-                                        _("About to close"), wx.YES | wx.NO
-                                        | wx.ICON_QUESTION | wx.STAY_ON_TOP)
+           # ret = None
+            if not self.exitOnClose:
+                ret = dialogs.messageDialog(_('Are you sure you want to exit?'),
+                                            _("About to close"), wx.YES | wx.NO
+                                            | wx.ICON_QUESTION | wx.STAY_ON_TOP)
+            else:
+                ret = wx.ID_YES
+
             if ret == wx.ID_YES:
                 if self.exitOnClose and logData: # log post-test data
                     logdir = os.path.join(conf.getUserDir(), 'StudentFiles', 'Logs')
@@ -1445,7 +1461,9 @@ class TestScreen(wx.Frame):
                             f2.write(repr(question.answer) + '\n')
                     f1.close()
                     f2.close()
-                    dlg = wx.MessageDialog(self, "You have completed all of the required problems. We invite you to give us feedback.", "Complete")
+
+                    dlg = wx.MessageDialog(self, "You have completed all of the required problems. We invite you to give us feedback.", 
+                                           "Complete")
                     dlg.ShowModal()
                     dlg.Destroy()
                     Notes(None, -1, 'Notes')
