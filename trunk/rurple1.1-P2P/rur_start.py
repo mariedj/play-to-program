@@ -122,6 +122,7 @@ class RURApp(wx.Frame):
 #        self.problemNumber = 0
 #        self.problem_choice = [0, 1, 2, 3, 4, 5, 6, 7]
         self.inst_screen = None
+        self.inst = None
 
         # icon on top left of window
         icon = wx.EmptyIcon()
@@ -277,21 +278,21 @@ class RURApp(wx.Frame):
 
         prob = self.stud.next()
         if prob:
-            env, inst = prob()
+            env, self.inst = prob()
 
             if self.inst_screen:
                 self.inst_screen.Close()
             
             self.inst_screen = InstructionScreen(None, -1, 'Instruction Screen')
 #            self.inst_screen.setInstructions(dict_ins[n])
-            self.inst_screen.setInstructions(inst)
+            self.inst_screen.setInstructions(self.inst)
      
             #Based on what problem it is change the browswer screen
             #Pass n to a function that changes the browser screen
             #May need to pass the dict
             #self.browser_win.problemChanged(dict_ins, n)
             self.browser_win.name = os.path.join(self.browser_win.lessons_dir,
-                                                 'intro', inst) #dict_ins[n])
+                                                 'intro', self.inst) #dict_ins[n])
             
 
 
@@ -579,8 +580,9 @@ class RURApp(wx.Frame):
     def InstructionSheet(self, dummy):
         if self.inst_screen:
             pass
-#        else:
-#            self.inst_screen = .Open()
+        else:            
+            self.inst_screen = InstructionScreen(None, -1, 'Instruction Screen')
+            self.inst_screen.setInstructions(self.inst)
 
     def Pause(self, dummy):
         if not (self.user_program.isRunning or self.user_program.isStepped):
