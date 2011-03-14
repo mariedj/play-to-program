@@ -80,14 +80,17 @@ import rur_py.browser as browser
 import rur_py.event_manager as event_manager
 from rur_py.status_bar import rurStatusBar
 import rur_py.questions as questions
+import rur_py.problems as problems
+import rur_py.student as student
 
 # global variable defined for convenience; contains user program
 code = ""
+logData = True
 user_id = 0
 SUBMITTED = 1
 TEST_RUN = 2
 STEP = 3
-NUM_PROBLEMS = 8
+NUM_PROBLEMS = len(problems.writing)
 
 
 class RURnotebook(wx.Notebook):
@@ -113,14 +116,11 @@ class RURApp(wx.Frame):
         self.raw_code = ""
         self.filename = ""
         self.world_filename = ""
-#        self.isPaused = False
-#        self.isRunning = False
-#        self.isStepped = False
         self.status_bar = rurStatusBar(self)
         self.SetStatusBar(self.status_bar)
-        self.problemNumber = 0
-        self.problem_choice = [0, 1, 2, 3, 4, 5, 6, 7]
-        self.inst_screen = None
+#        self.problemNumber = 0
+#        self.problem_choice = [0, 1, 2, 3, 4, 5, 6, 7]
+#        self.inst_screen = None
 
         # icon on top left of window
         icon = wx.EmptyIcon()
@@ -162,7 +162,39 @@ class RURApp(wx.Frame):
         self.world.DoDrawing()
         self.WorldDisplay.drawImage()
         self.WorldDisplay.Refresh()
-        #
+ 
+        if logData:
+            self.logdir = os.path.join(conf.getUserDir(), 'StudentFiles', 'Logs')
+            self.tstdir = os.path.join(conf.getUserDir(), 'StudentFiles', 'Tests')
+            for dir in (self.logdir, self.tstdir):
+                try:
+                    os.makedirs(dir)
+                except OSError:
+                    pass
+            self.logfile = open(os.path.join(self.logdir, str(user_id) + '_problems.txt'), 'w')
+
+        self.stud = student.FPS_Student(problems.writing)
+        self.prepost = True
+        if logData:
+            f1 = open(os.path.join(self.logdir, str(user_id) + '_pretest.txt'), 'w')
+            f2 = open(os.path.join(self.tstdir, str(user_id) + '_pretest.txt'), 'w')
+        for i, question in enumerate(questions.pre):
+            self.stud.external(question)
+            correct = question.check()
+            if correct:
+                self.stud.succ()
+            else:
+                self.stud.fail()
+            if logData:
+                f1.write(str(i) + ',' + str(correct) + '\n')
+                f2.write(repr(question.answer) + '\n')
+        if logData:
+            f1.close()
+            f2.close()
+        self.problemNumber = 0
+        self.inst_screen = None
+
+        # update status bar with User ID if you haven't
         win = py.shell.Shell(self.window, -1,
                             introText = "")
         self.window.AddPage(win, _("Python: Code and Learn"))
@@ -177,49 +209,6 @@ class RURApp(wx.Frame):
         self.window.SetFocus()
         self.SendSizeEvent()  # added to attempt to solve problem on MacOS
         wx.EVT_CLOSE(self, self.OnClose)
-
-#----Helper functions
-    #Modified from original Source
-    def chooseWorld(self):
-        #Make a dictionary corresponding to world names
-        #Choose randomly from the dictionary index
-        #used to parse the path for the problem to add to the name
-        startingPoint = -7
-
-
-        #Two dictionaries coresspond
-        #May need to may one dictionary that corresponds to a class which
-        #contains the problem .wld and the directions .htm
-        dict = {0:'problem1.wld', 1:'problem2.wld', 2:'problem3.wld', 3:'problem4.wld', \
-                    4:'problem5.wld', 5:'problem6.wld', 6:'problem7.wld', 7:'problem8.wld'}
-        dict_ins = {0:'prob1.htm', 1:'prob2.htm', 2:'prob3.htm', 3:'prob4.htm', \
-                        4:'prob5.htm', 5:'prob6.htm', 6:'prob7.htm', 7:'prob8.htm'}
-        if len(self.problem_choice) > 0:
-            temp = random.randint(0, len(self.problem_choice) - 1)
-            n = self.problem_choice[temp]
-            del(self.problem_choice[temp])
-        
-
-            if self.inst_screen:
-                self.inst_screen.Close()
-            
-            self.inst_screen = InstructionScreen(None, -1, 'Instruction Screen')
-            self.inst_screen.setInstructions(dict_ins[n])
-     
-            #Based on what problem it is change the browswer screen
-            #Pass n to a function that changes the browser screen
-            #May need to pass the dict
-            #self.browser_win.problemChanged(dict_ins, n)
-            self.browser_win.name = os.path.join(self.browser_win.lessons_dir,
-                                                 'intro', dict_ins[n])
-            
-
-
-            if settings.USER_WORLDS_DIR[startingPoint:] != 'samples':
-                openedFileName = os.path.join(settings.USER_WORLDS_DIR, 'samples', dict[n])
-            else:
-                openedFileName = os.path.join(settings.USER_WORLDS_DIR, dict[n])
-            return openedFileName
 
     def OnClose(self, event):
         if self.ProgramEditor.GetModify():
@@ -238,9 +227,90 @@ class RURApp(wx.Frame):
                     else:
                         self.SaveProgramFile(event)
                 elif ret == wx.ID_NO:
-                    self.Destroy()
+                    self.OnExit(event)
         else:
-            self.Destroy()
+            self.OnExit(event)
+
+    def OnExit(self, event):
+        if logData:
+            self.logfile.close()
+        if self.prepost:
+            dlg = wx.MessageDialog(self, "You will now be given a post-test.")
+            dlg.ShowModal()
+            dlg.Destroy()
+            TestScreen(None, -1, 'Post-Test', questions.post, 0)
+        self.Destroy()
+        event.Skip()
+
+
+#----Helper functions
+    #Modified from original Source
+    def chooseWorld(self):
+        #Make a dictionary corresponding to world names
+        #Choose randomly from the dictionary index
+        #used to parse the path for the problem to add to the name
+        startingPoint = -7
+
+
+        #Two dictionaries coresspond
+        #May need to may one dictionary that corresponds to a class which
+        #contains the problem .wld and the directions .htm
+#        dict = {0:'problem1.wld', 1:'problem2.wld', 2:'problem3.wld', 3:'problem4.wld', \
+#                    4:'problem5.wld', 5:'problem6.wld', 6:'problem7.wld', 7:'problem8.wld'}
+#        dict_ins = {0:'prob1.htm', 1:'prob2.htm', 2:'prob3.htm', 3:'prob4.htm', \
+#                        4:'prob5.htm', 5:'prob6.htm', 6:'prob7.htm', 7:'prob8.htm'}
+ #       if len(self.problem_choice) > 0:
+ #           temp = random.randint(0, len(self.problem_choice) - 1)
+ #           n = self.problem_choice[temp]
+ #           del(self.problem_choice[temp])
+        
+
+        prob = self.stud.next()
+        if prob:
+            env, inst = prob()
+
+            if self.inst_screen:
+                self.inst_screen.Close()
+            
+            self.inst_screen = InstructionScreen(None, -1, 'Instruction Screen')
+#            self.inst_screen.setInstructions(dict_ins[n])
+            self.inst_screen.setInstructions(inst)
+     
+            #Based on what problem it is change the browswer screen
+            #Pass n to a function that changes the browser screen
+            #May need to pass the dict
+            #self.browser_win.problemChanged(dict_ins, n)
+            self.browser_win.name = os.path.join(self.browser_win.lessons_dir,
+                                                 'intro', inst) #dict_ins[n])
+            
+
+
+            if settings.USER_WORLDS_DIR[startingPoint:] != 'samples':
+                openedFileName = os.path.join(settings.USER_WORLDS_DIR, 'samples', env) #, dict[n])
+            else:
+                openedFileName = os.path.join(settings.USER_WORLDS_DIR, env) #dict[n])
+            return openedFileName
+
+#    def OnClose(self, event):
+#        if self.ProgramEditor.GetModify():
+#                ret = dialogs.messageDialog(_(u'Save changes to %s?')
+#                    % unicode(self.filename), _("About to close"), wx.YES
+#                    | wx.NO | wx.CANCEL | wx.ICON_QUESTION | wx.STAY_ON_TOP)
+#                if ret == wx.ID_YES:
+#                    if len(self.filename) > 0:
+#                        try:
+#                            f = open(self.filename, 'w')
+#                            f.write(content)
+#                            f.close()
+#                        except IOError, e:
+#                            messageDialog(unicode(e[1]), (u'IO Error'),
+#                                wx.OK | wx.STAY_ON_TOP)
+#                    else:
+#                        self.SaveProgramFile(event)
+#                elif ret == wx.ID_NO:
+#                    self.Destroy()
+#        else:
+#            self.Destroy()
 
 #---- World file methods
     def OpenWorldFile(self, dummy):
@@ -251,6 +321,7 @@ class RURApp(wx.Frame):
         #Will be some function that handles problem selection
         openedFileName = self.chooseWorld()
         self.problemNumber += 1
+        self.logfile.write(str(self.problemNumber) + ',' + str(user_id) + '\n') #str(self.stud_num) + '\n')
         arg = self.status_bar.problem_field, _("#" + str(self.problemNumber))
         event_manager.SendCustomEvent(self, arg)
 
@@ -374,17 +445,18 @@ class RURApp(wx.Frame):
            self.ProgramEditor.SetText("")
         else:
             self.inst_screen.Close()
-            dlg = wx.MessageDialog(self, "You will now be given a post-test.")
-            dlg.ShowModal()
-            dlg.Destroy()
+#            dlg = wx.MessageDialog(self, "You will now be given a post-test.")
+#            dlg.ShowModal()
+#            dlg.Destroy()
 
-            TestScreen(None, -1, 'Post-Test', questions.post, 0)
+#            TestScreen(None, -1, 'Post-Test', questions.post, 0)
 
+            self.logfile.close()
             dlg = wx.MessageDialog(self, "You have completed all of the required problems." +
                                    " We invite you to give us feedback.", "Complete")
-            dlg.ShowModal()
-            dlg.Destroy()
-            self.notes = Notes(None, -1, 'Notes')
+#            dlg.ShowModal()
+#            dlg.Destroy()
+#            self.notes = Notes(None, -1, 'Notes')
             self.Close(True)
 
     def SaveWorldFile(self, dummy):
@@ -755,7 +827,6 @@ class NewUserScreen(wx.Frame):
         self.year4 = wx.Choice(panel, -1, choices = years)
         self.year5 = wx.Choice(panel, -1, choices = years)
         self.year6 = wx.Choice(panel, -1, choices = years)
-
         
 
         button1 = wx.Button(panel, -1, 'Create')
@@ -763,10 +834,6 @@ class NewUserScreen(wx.Frame):
 
         button2 = wx.Button(panel, -1, 'Cancel')
         button2.SetFont(buttonFont)
-
-        self.Bind(wx.EVT_BUTTON, self.OnCreate, button1)
-        self.Bind(wx.EVT_BUTTON, self.OnCancel, button2)
-
 
         vbox = wx.BoxSizer(wx.VERTICAL)
         
@@ -869,10 +936,9 @@ class NewUserScreen(wx.Frame):
         vbox.Add(button1, 0, wx.ALIGN_CENTER | wx.ALL | wx.ALIGN_BOTTOM, 5)
         vbox.Add(button2, 0, wx.ALIGN_CENTER | wx.ALL | wx.ALIGN_BOTTOM, 5)
 
-
-
-
         panel.SetSizer(vbox)
+        self.Bind(wx.EVT_BUTTON, self.OnCreate, button1)
+        self.Bind(wx.EVT_BUTTON, self.OnCancel, button2)
 
         self.Show(True)
     
@@ -952,6 +1018,7 @@ class NewUserScreen(wx.Frame):
             file.write(self.sex.GetString(self.sex.GetSelection()).strip() + '\n')
             file.write(self.creditCount.GetValue().strip() + '\n')
             file.write(self.isTransfer.GetString(self.isTransfer.GetSelection()).strip() + '\n')
+            file.write(self.major.GetValue().strip() + '\n')
 
             #Temporary way for storing the couses and grades
             #May change to a separate panel to store each of these in an extendable array
@@ -967,6 +1034,20 @@ class NewUserScreen(wx.Frame):
             file.write(self.grade5.GetString(self.grade5.GetSelection()).strip() + '\n')
             file.write(self.course6.GetValue().strip() + '\n')
             file.write(self.grade6.GetString(self.grade6.GetSelection()).strip() + '\n')
+
+            file.write(self.language1.GetValue().strip() + '\n')
+            file.write(self.year1.GetString(self.grade1.GetSelection()).strip() + '\n')
+            file.write(self.language2.GetValue().strip() + '\n')
+            file.write(self.year2.GetString(self.grade2.GetSelection()).strip() + '\n')
+            file.write(self.language3.GetValue().strip() + '\n')
+            file.write(self.year3.GetString(self.grade3.GetSelection()).strip() + '\n')
+            file.write(self.language4.GetValue().strip() + '\n')
+            file.write(self.year4.GetString(self.grade4.GetSelection()).strip() + '\n')
+            file.write(self.language5.GetValue().strip() + '\n')
+            file.write(self.year5.GetString(self.grade5.GetSelection()).strip() + '\n')
+            file.write(self.language6.GetValue().strip() + '\n')
+            file.write(self.year6.GetString(self.grade6.GetSelection()).strip() + '\n')
+
             file.close()
             os.chdir(directory)
 
@@ -991,33 +1072,49 @@ class ReturnUserScreen(wx.Frame):
         frameX = 500
         frameY = 500
         wx.Frame.__init__(self, parent, id, title, size=(frameX, frameY))
-        largeFont = wx.Font(36, wx.FONTFAMILY_DEFAULT, wx.FONTSTYLE_NORMAL,
+        largeFont = wx.Font(24, wx.FONTFAMILY_DEFAULT, wx.FONTSTYLE_NORMAL,
                             wx.FONTWEIGHT_BOLD)        
-        buttonFont = wx.Font(20, wx.FONTFAMILY_DEFAULT, wx.FONTSTYLE_NORMAL,
+        buttonFont = wx.Font(16, wx.FONTFAMILY_DEFAULT, wx.FONTSTYLE_NORMAL,
                             wx.FONTWEIGHT_BOLD)
-        labelFont = wx.Font(16, wx.FONTFAMILY_DEFAULT, wx.FONTSTYLE_NORMAL,
+        labelFont = wx.Font(10, wx.FONTFAMILY_DEFAULT, wx.FONTSTYLE_NORMAL,
                             wx.FONTWEIGHT_BOLD)
 
-        label = wx.StaticText(self, -1, 'Welcome to the Playing', (30, 10))
-        label2 = wx.StaticText(self, -1, 'to Program System!', (60, 50))
+        
+        panel = wx.Panel(self, -1)
+        panel.SetBackgroundColour('WHEAT')
+        label = wx.StaticText(panel, -1, 'Welcome to the Playing')
+        label2 = wx.StaticText(panel, -1, 'to Program System!')
         label.SetFont(largeFont)
         label2.SetFont(largeFont)
 
-        promptLabel = wx.StaticText(self, -1, 'Please Enter your information below.',
-                                    (20, 150))
-        umbcEmailLabel = wx.StaticText(self, -1, 'UMBC Email: ',
-                                    (20, 180))
-        domainLabel =  wx.StaticText(self, -1, '@umbc.edu',
-                                    (300, 180))
+        promptLabel = wx.StaticText(panel, -1, 'Please Enter your information below.')
+        umbcEmailLabel = wx.StaticText(panel, -1, 'UMBC Email: ')
+        domainLabel =  wx.StaticText(panel, -1, '@umbc.edu')
         promptLabel.SetFont(buttonFont)
         umbcEmailLabel.SetFont(labelFont)
         domainLabel.SetFont(labelFont)
         
-        self.email = wx.TextCtrl(self, -1, '', (120, 180), size = (150, 20))
-        
-        button1 = wx.Button(self, -1, 'Login', pos = wx.Point(70, 400), 
-                            size = wx.Size(300, 1000))
+        self.email = wx.TextCtrl(panel, -1, '')        
+        button1 = wx.Button(panel, -1, 'Login')
         button1.SetFont(buttonFont)
+
+        vbox = wx.BoxSizer(wx.VERTICAL)
+
+        vbox.Add(label, 0, wx.ALIGN_CENTER | wx.ALL | wx.ALIGN_TOP, 5)
+        vbox.Add(label2, 0, wx.ALIGN_CENTER | wx.BOTTOM | wx.ALIGN_TOP, 5)
+        vbox.Add(promptLabel, 0, wx.EXPAND | wx.ALIGN_LEFT | wx.BOTTOM | wx.LEFT | wx.ALIGN_TOP, 5)
+        vbox.AddSpacer(20)
+
+        hbox1 = wx.BoxSizer(wx.HORIZONTAL)
+        hbox1.Add(umbcEmailLabel, 0, wx.ALIGN_LEFT | wx.BOTTOM | wx.RIGHT | wx.LEFT, 5)
+        hbox1.Add(self.email, 0, wx.ALIGN_LEFT | wx.RIGHT, 5)
+        hbox1.Add(domainLabel, 0, wx.ALIGN_LEFT | wx.RIGHT, 300)
+        vbox.Add(hbox1)
+
+        vbox.Add(button1, 0, wx.ALIGN_CENTER | wx.ALL | wx.ALIGN_BOTTOM, 5)
+
+        panel.SetSizer(vbox)
+
 
         self.Bind(wx.EVT_BUTTON, self.OnLogin, id=button1.GetId())
 
@@ -1113,7 +1210,8 @@ class Notes(wx.Frame):
             pass
 
         os.chdir(student_dirs)
-        fileName = "Notes_" + str(user_id)
+#        fileName = "Notes_" + str(user_id)
+        fileName = str(user_id) + "_notes.txt"
         file = open(fileName, "w")
         file.write(self.box.GetValue())
         file.close()
@@ -1172,15 +1270,13 @@ class LoginScreen(wx.Frame):
                             wx.FONTWEIGHT_BOLD)
         
         #panel was self
-        label = wx.StaticText(panel, -1, 'Welcome to the Playing')#, (60, 50))
-        label2 = wx.StaticText(panel, -1, 'to Program System!')#, (60, 50))
+        label = wx.StaticText(panel, -1, 'Welcome to the Playing')
+        label2 = wx.StaticText(panel, -1, 'to Program System!')
         label.SetFont(largeFont)
         label2.SetFont(largeFont)
 
-        button1 = wx.Button(panel, -1, 'New User')#, pos = wx.Point(70, 200), 
-                            #size = wx.Size(300, 1000))
-        button2 = wx.Button(panel, -1, 'Returning User')#, pos = wx.Point(70, 300), 
-                            #size = wx.Size(300, 1000))
+        button1 = wx.Button(panel, -1, 'New User')
+        button2 = wx.Button(panel, -1, 'Returning User')
         button1.SetFont(buttonFont)
         button2.SetFont(buttonFont)
 
@@ -1206,14 +1302,14 @@ class LoginScreen(wx.Frame):
         self.Show(True)
 
     def OnNewUser(self, event):
-        self.Destroy()
         NewUserScreen(None, -1, 'New User')
+        self.Destroy()
         event.Skip()
         
 
     def OnReturnUser(self, event):
-        self.Destroy()
         ReturnUserScreen(None, -1, 'Returning User')
+        self.Destroy()
         event.Skip()
 
     def OnClose(self, event):
@@ -1310,25 +1406,20 @@ class TestScreen(wx.Frame):
 
     def OnPrev(self, event):
         self.SaveAnswer()
-        self.Destroy()
         TestScreen(None, -1, self.title, self.source, self.i-1, self.exitOnClose)
+        self.Destroy()
         event.Skip()
-        
+
 
     def OnNext(self, event):
         self.SaveAnswer()
-        self.Destroy()
         TestScreen(None, -1, self.title, self.source, self.i+1, self.exitOnClose)
+        self.Destroy()
         event.Skip()
 
     def OnClose(self, event):
         self.SaveAnswer()
-        if self.CheckComplete() and not self.exitOnClose:
-            dlg = wx.MessageDialog(self, "You will now begin a written RUR-PLE exercise.", \
-                                       "Please wait for assistance.")
-            dlg.ShowModal()
-            dlg.Destroy()
-            
+        if self.CheckComplete() and not self.exitOnClose:            
             dlg = wx.MessageDialog(self, "Now you will begin a RUR-PLE computer question set.")
             dlg.ShowModal()
             dlg.Destroy()
@@ -1354,6 +1445,11 @@ class TestScreen(wx.Frame):
                             f2.write(repr(question.answer) + '\n')
                     f1.close()
                     f2.close()
+                    dlg = wx.MessageDialog(self, "You have completed all of the required problems. We invite you to give us feedback.", "Complete")
+                    dlg.ShowModal()
+                    dlg.Destroy()
+                    Notes(None, -1, 'Notes')
+           
                 self.Destroy()
                 event.Skip()
 
