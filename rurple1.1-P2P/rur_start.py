@@ -221,7 +221,8 @@ class RURApp(wx.Frame):
         if ret == wx.ID_YES:
             if len(self.filename) > 0:
                 self.SaveProgramFile(EXITED)
-                self.inst_screen.Close()
+                if self.inst_screen:
+                    self.inst_screen.Close()
                 self.OnExit(event)
 #                        try:
 #                            f = open(self.filename, 'w')
