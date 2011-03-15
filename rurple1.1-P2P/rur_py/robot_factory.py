@@ -101,7 +101,7 @@ class Robot_brain1(object):
             return False
 
     def any_beepers_in_beeper_bag(self):
-        '''True if some beepers are left in Robot's bag'''
+        '''True if some beepers are left in Robot\'s bag'''
         if self._beeper_bag == 0:
             return False
         else:
@@ -252,7 +252,7 @@ class Used_robot(Robot_brain1):
 
         # The following are used to follow the robot trail
         self.line_trace = []
-        self.set_trace_style(1, "sea green")  # default
+        self.set_trace_style(5, "sea green")  # default
 
     #--- Robot images
         # create a list of four objects

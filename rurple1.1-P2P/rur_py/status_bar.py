@@ -12,12 +12,11 @@ from translation import _
 
 class rurStatusBar(wx.StatusBar):
     def __init__(self, parent):
-        global user_id
         wx.StatusBar.__init__(self, parent, -1)
         event_manager.myEVT_StatusBarChanged(parent, self.UpdateFields)
         # status bar with four fields, of equal widths
-        self.SetFieldsCount(6)
-        self.SetStatusWidths([-1, -1, -1, -1, -1, -1])
+        self.SetFieldsCount(4)
+        self.SetStatusWidths([-1, -1, -1, -1])
 
         self.no_robot = -1
         self.problem_field = 0

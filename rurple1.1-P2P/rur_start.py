@@ -122,13 +122,6 @@ class RURApp(wx.Frame):
         self.world_filename = ""
         self.status_bar = rurStatusBar(self)
         self.SetStatusBar(self.status_bar)
-#        self.problemNumber = 0
-#        self.problem_choice = [0, 1, 2, 3, 4, 5, 6, 7]
-        self.inst_screen = None
-        self.inst = None
-        self.currTime = time.asctime()
-        self.openedFileName = None
-        self.firstRun = True
 
         directory = os.getcwd()
         # icon on top left of window
@@ -207,6 +200,8 @@ class RURApp(wx.Frame):
             f1.close()
             f2.close()
         self.problemNumber = 0
+        arg = self.status_bar.user_field, str(user_id)
+        event_manager.SendCustomEvent(self, arg)
         self.inst_screen = None
         arg = self.status_bar.user_field, str(user_id)
         event_manager.SendCustomEvent(self, arg)
@@ -306,12 +301,13 @@ class RURApp(wx.Frame):
                                                  'intro', self.inst) #dict_ins[n])
             
 
-
-            if settings.USER_WORLDS_DIR[startingPoint:] != 'samples':
-                openedFileName = os.path.join(settings.USER_WORLDS_DIR, 'samples', env) #, dict[n])
-            else:
-                openedFileName = os.path.join(settings.USER_WORLDS_DIR, env) #dict[n])
+            openedFileName = os.path.join(settings.SAMPLE_WORLDS_DIR, env)
             return openedFileName
+#            if settings.USER_WORLDS_DIR[startingPoint:] != 'samples':
+#                openedFileName = os.path.join(settings.USER_WORLDS_DIR, 'samples', env) #, dict[n])
+#            else:
+#                openedFileName = os.path.join(settings.USER_WORLDS_DIR, env) #dict[n])
+#            return openedFileName
 
 
 
@@ -334,18 +330,18 @@ class RURApp(wx.Frame):
                 self.UpdateWorld()
                 self.user_program.clear_trace()
                 settings.USER_WORLDS_DIR = os.path.dirname(self.world_filename)
-                arg = self.status_bar.world_field, \
-                    os.path.basename(self.world_filename)
-                event_manager.SendCustomEvent(self, arg)
+                #arg = self.status_bar.world_field, \
+                #    os.path.basename(self.world_filename)
+                #event_manager.SendCustomEvent(self, arg)
         else:
             self.world_filename = self.openedFileName
             self.ReadWorldFile()
             self.UpdateWorld()
             self.user_program.clear_trace()
             settings.USER_WORLDS_DIR = os.path.dirname(self.world_filename)
-            arg = self.status_bar.world_field, \
-                os.path.basename(self.world_filename)
-            event_manager.SendCustomEvent(self, arg)
+            #arg = self.status_bar.world_field, \
+            #    os.path.basename(self.world_filename)
+            #event_manager.SendCustomEvent(self, arg)
 
     def ReadWorldFile(self):
         #Changed to user_program.isRunning
@@ -570,7 +566,7 @@ class RURApp(wx.Frame):
             arg = self.status_bar.problem_field, \
                   os.path.basename(self.filename)
 
-            event_manager.SendCustomEvent(self, arg)
+            #event_manager.SendCustomEvent(self, arg)
             settings.USER_PROGS_DIR = os.path.dirname(self.filename)
             self.ProgramEditor.SetSavePoint()
         else:
@@ -593,6 +589,10 @@ class RURApp(wx.Frame):
         self.beeperLocations = self.world.beepers_dict
         self.SaveWorldFile(TEST_RUN)
          
+        self.robotData = self.world.robot_dict['robot']._getInfoString()
+        self.beeperLocations = self.world.beepers_dict
+        self.SaveWorldFile(TEST_RUN)
+
     def InstructionSheet(self, dummy):
         if self.inst_screen:
             pass
@@ -616,7 +616,6 @@ class RURApp(wx.Frame):
         self.SaveProgramFile(STEP)
         self.user_program.isStepped = True
         if not self.user_program.isRunning:
-#            pass
             self.RunProgram(None)
         else:
             self.Pause(None)
