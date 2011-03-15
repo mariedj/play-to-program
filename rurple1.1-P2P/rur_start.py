@@ -133,7 +133,6 @@ class RURApp(wx.Frame):
         self.window = RURnotebook(self)
         #
         win = browser.TestHtmlPanel(self.window, self)
-        self.browser_win = browser.TestHtmlPanel(self.window, self)
         self.window.AddPage(win, _("  RUR: Read and Learn  "))
         #
         self.sash = MySashWindow(self.window, self)
@@ -202,8 +201,6 @@ class RURApp(wx.Frame):
         event_manager.SendCustomEvent(self, arg)
         self.inst_screen = None
         self.inst = None
-        self.openedFileName = None
-        self.firstRun = True
         self.beeperLocations = {}
         self.robotData = ()
         #
@@ -242,7 +239,6 @@ class RURApp(wx.Frame):
         ret = dialogs.messageDialog(_('Are you sure you want to exit?'), _("About to close"),
                                     wx.YES | wx.NO)
         if ret == wx.ID_YES:
-            #self.firstRun
             if len(self.filename) > 0:
                 self.SaveProgramFile(EXITED)
                 if self.inst_screen:
@@ -298,8 +294,6 @@ class RURApp(wx.Frame):
             #Pass n to a function that changes the browser screen
             #May need to pass the dict
             #self.browser_win.problemChanged(dict_ins, n)
-            self.browser_win.name = os.path.join(self.browser_win.lessons_dir,
-                                                 'intro', self.inst) #dict_ins[n])
             
 
             openedFileName = os.path.join(settings.SAMPLE_WORLDS_DIR, env)
@@ -319,14 +313,14 @@ class RURApp(wx.Frame):
             return
         if dummy != RESET:
             #Will be some function that handles problem selection
-            self.openedFileName = self.chooseWorld()
+            openedFileName = self.chooseWorld()
             self.problemNumber += 1
             self.logfile.write(str(self.problemNumber) + ',' + str(self.order[self.problemNumber - 1] + 1) + '\n')
             arg = self.status_bar.problem_field, _("#" + str(self.problemNumber))
             event_manager.SendCustomEvent(self, arg)
 
-            if self.openedFileName != "":
-                self.world_filename = self.openedFileName
+            if openedFileName != "":
+                self.world_filename = openedFileName
                 self.ReadWorldFile()
                 self.UpdateWorld()
                 self.user_program.clear_trace()
@@ -335,7 +329,7 @@ class RURApp(wx.Frame):
                 #    os.path.basename(self.world_filename)
                 #event_manager.SendCustomEvent(self, arg)
         else:
-            self.world_filename = self.openedFileName
+            self.world_filename = openedFileName
             self.ReadWorldFile()
             self.UpdateWorld()
             self.user_program.clear_trace()
@@ -540,7 +534,7 @@ class RURApp(wx.Frame):
         global code
         code = self.ProgramEditor.GetText()
         no_error, mesg = parser.ParseProgram(code)
-        if no_error and self.problemNumber > 0: #self.firstRun == False
+        if no_error and self.problemNumber > 0: 
             self.filename = str(user_id) + '_code_' + str(self.problemNumber) + self.currTime +'.txt'
             
             dirHome = os.getcwd()
@@ -574,8 +568,7 @@ class RURApp(wx.Frame):
             self.ProgramEditor.SetSavePoint()
         else:
             code = ""
-            self.firstRun = False
-#            dialogs.messageDialog(mesg, _("Program will not be saved."))
+
 
 #--- Program controls
 
