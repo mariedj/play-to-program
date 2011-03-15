@@ -205,8 +205,9 @@ class RURApp(wx.Frame):
         self.currTime = time.asctime()
         self.openedFileName = None
         self.firstRun = True
-        self.beepersLocations = {}
+        self.beeperLocations = {}
         self.robotData = ()
+        #
         win = py.shell.Shell(self.window, -1,
                             introText = "")
         self.window.AddPage(win, _("Python: Code and Learn"))
