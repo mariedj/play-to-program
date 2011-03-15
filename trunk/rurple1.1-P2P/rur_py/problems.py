@@ -39,5 +39,5 @@ problem8.concepts = ["IA1","IB2a"]
 problem8.difficulty = 1
 
 
-writing = (problem1,problem2,problem3,problem4,problem5,problem6,problem7,problem8)
+writing = (problem1,problem2,problem3,problem4,problem5,problem6)#,problem7,problem8)
 
