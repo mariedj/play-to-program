@@ -28,16 +28,16 @@ def problem6():
 problem6.concepts = ["IA1","IB2a"]
 problem6.difficulty = 8
 
-#def problem7():
-#    return ('problem7.wld', 'prob7.htm')
-#problem7.concepts = ["IA1","IB2a"]
-#problem7.difficulty = 8
+def problem7():
+    return ('problem7.wld', 'prob7.htm')
+problem7.concepts = ["IA1","IB2a"]
+problem7.difficulty = 8
 
-#def problem8():
-#    return ('problem8.wld', 'prob8.htm')
-#problem8.concepts = ["IA1","IB2a"]
-#problem8.difficulty = 8
+def problem8():
+    return ('problem8.wld', 'prob8.htm')
+problem8.concepts = ["IA1","IB2a"]
+problem8.difficulty = 8
 
 
-writing = (problem1,problem2,problem3,problem4,problem5,problem6) #,problem7,problem8)
+writing = (problem1,problem2,problem3,problem4,problem5,problem6,problem7,problem8)
 
