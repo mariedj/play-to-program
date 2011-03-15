@@ -164,8 +164,6 @@ class RURApp(wx.Frame):
         self.world.DoDrawing()
         self.WorldDisplay.drawImage()
         self.WorldDisplay.Refresh()
-        self.beepersLocations = {}
-        self.robotData = ()
  
         if logData:
             self.logdir = os.path.join(logDataDir, 'StudentFiles', 'Logs')
@@ -203,9 +201,12 @@ class RURApp(wx.Frame):
         arg = self.status_bar.user_field, str(user_id)
         event_manager.SendCustomEvent(self, arg)
         self.inst_screen = None
-        arg = self.status_bar.user_field, str(user_id)
-        event_manager.SendCustomEvent(self, arg)
-        # update status bar with User ID if you haven't
+        self.inst = None
+        self.currTime = time.asctime()
+        self.openedFileName = None
+        self.firstRun = True
+        self.beepersLocations = {}
+        self.robotData = ()
         win = py.shell.Shell(self.window, -1,
                             introText = "")
         self.window.AddPage(win, _("Python: Code and Learn"))
@@ -449,7 +450,7 @@ class RURApp(wx.Frame):
         #Changed to user_program.isRunning
         if self.user_program.isRunning:
             return
-        if self.problemNumber < NUM_PROBLEMS + 1:
+        if self.problemNumber <= NUM_PROBLEMS:
            self.SaveProgramFile(SUBMITTED)
            self.SaveWorldFile(SUBMITTED)
            self.OpenWorldFile(0)
@@ -466,35 +467,36 @@ class RURApp(wx.Frame):
         #Changed to user_program.isRunning
         if self.user_program.isRunning:
             return
-#        txt = self.WorldDisplay.UpdateEditor()
-        if self.problemNumber > 0:
-            self.world_filename = str(user_id) + '_world_' + str(self.problemNumber) + self.currTime + '.txt'
+        if self.problemNumber == 0:
+            return
+        #txt = self.WorldDisplay.UpdateEditor()
+        txt = str(self.robotData) + '\n' + str(self.beeperLocations) + '\n' +
+              str(self.world.av) + '\n' + str(self.world.st) + '\n'
+        self.world_filename = str(user_id) + '_world_' + str(self.problemNumber) + self.currTime + '.txt'
         
-            dirHome = os.getcwd()
-            dir = logDataDir
-            student_dirs = os.path.join(dir, 'StudentFiles', 'Worlds')
-            try:
-                os.makedirs(student_dirs)
-            except OSError:
-                pass
+        dirHome = os.getcwd()
+        dir = logDataDir
+        student_dirs = os.path.join(dir, 'StudentFiles', 'Worlds')
+        try:
+            os.makedirs(student_dirs)
+        except OSError:
+            pass
 
-            os.chdir(student_dirs)
-            file = open(self.world_filename, "a+")
-            txt = str(self.robotData) + '\n' + str(self.beeperLocations) + '\n' + \
-                str(self.world.av) + '\n' + str(self.world.st) + '\n'
-            file.write(txt + "\n\n------------End of Run-----------\n\n")
-            file.close()
+        os.chdir(student_dirs)
+        file = open(self.world_filename, "a+")
+        file.write(txt + "\n\n------------End of Run-----------\n\n")
+        file.close()
             
-            os.chdir(dirHome)
+        os.chdir(dirHome)
 
 
-            arg = self.status_bar.world_field, \
-                os.path.basename(self.world_filename)
-            event_manager.SendCustomEvent(self, arg)
-            settings.SAMPLE_WORLDS_DIR = os.path.dirname(self.world_filename)
-            # save a backup copy to 'reset world'
-            self.backup_dict = {}
-            exec txt in self.backup_dict
+        #arg = self.status_bar.world_field, \
+        #      os.path.basename(self.world_filename)
+        #event_manager.SendCustomEvent(self, arg)
+        #settings.SAMPLE_WORLDS_DIR = os.path.dirname(self.world_filename)
+        # save a backup copy to 'reset world'
+        self.backup_dict = {}
+        exec txt in self.backup_dict
 
 
 
@@ -514,9 +516,9 @@ class RURApp(wx.Frame):
         if openedFileName != "":
             global code
             self.filename = openedFileName
-            arg = self.status_bar.problem_field, \
-                  os.path.basename(self.filename)
-            event_manager.SendCustomEvent(self, arg)
+            #arg = self.status_bar.problem_field, \
+            #      os.path.basename(self.filename)
+            #event_manager.SendCustomEvent(self, arg)
             code = open(self.filename, 'r').read()
             code = parser.FixLineEnding(code)
             self.ProgramEditor.SetText(code)
@@ -563,8 +565,8 @@ class RURApp(wx.Frame):
             file.close()
 
             os.chdir(dirHome)
-            arg = self.status_bar.problem_field, \
-                  os.path.basename(self.filename)
+            #arg = self.status_bar.problem_field, \
+            #      os.path.basename(self.filename)
 
             #event_manager.SendCustomEvent(self, arg)
             settings.USER_PROGS_DIR = os.path.dirname(self.filename)
@@ -585,9 +587,6 @@ class RURApp(wx.Frame):
             return
         self.user_program.isRunning = True
         self.user_program.restart(self.world.robot_dict)
-        self.robotData = self.world.robot_dict['robot']._getInfoString()
-        self.beeperLocations = self.world.beepers_dict
-        self.SaveWorldFile(TEST_RUN)
          
         self.robotData = self.world.robot_dict['robot']._getInfoString()
         self.beeperLocations = self.world.beepers_dict
@@ -619,7 +618,7 @@ class RURApp(wx.Frame):
             self.RunProgram(None)
         else:
             self.Pause(None)
-#        self.SaveWorldFile(TEST_RUN)
+        #self.SaveWorldFile(TEST_RUN)
 
     def StopProgram(self, dummy):
         self.user_program.StopProgram()
