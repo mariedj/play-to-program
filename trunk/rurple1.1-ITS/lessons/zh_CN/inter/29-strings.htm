@@ -1,0 +1,148 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="zh_CN" xml:lang="zh_CN">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<link rel="stylesheet" href="../rurple.css" type="text/css" />
+
+<title>你叫什么名字？</title>
+</head>
+<body>
+<h2 class="title">29. 你叫什么名字？</h2>
+
+<p>我们已经知道了怎么给变量赋值。我们同样也可以给字符串赋值，例如：</p>
+
+<pre>
+>>> FirstName = "Andre"
+>>> LastName = "Roberge"
+>>> FullName = FirstName + LastName
+>>> <span class="keyword">print</span> FullName
+AndreRoberge
+</pre>
+
+<p>注意Python是怎么用加号(<tt>+</tt>)把两个字符串连结到一起了，这个操作我们成为字符串连结。注意一下名和姓中间没有空格的。我们可以通过在两个字符串中间插入第三个由单个空格组成的字符串来更正这个名字。</p>
+
+<pre>
+>>> FullName = FirstName + <span class=
+"string">" "</span> + LastName
+>>> <span class="keyword">print</span> FullName
+Andre Roberge
+</pre>
+
+<p>还有一种方法可以得到相同的结果，就是用我们用过的 <tt>%s</tt> ，来把多个变量放到一个字符串内。</p>
+
+<pre>
+>>> name = <span class=
+"string">"%s %s"</span> % (FirstName, LastName)
+>>> <span class="keyword">print</span> name
+Andre Roberge
+</pre>
+
+<p>最后，我们可以比较两个字符串是否相等。</p>
+
+<pre>
+>>> <span class="keyword">print</span> name == FullName
+True
+</pre>
+
+<p>最后，我们可以比较两个字符串是否相等。</p>
+
+<!--==============================-->
+<hr class="line" />
+
+<h3 class="section">分割</h3>
+
+<p>有时候我们仅仅需要使用字符串里的单个字符。为此，我们需要学习<i>分割</i>。</p>
+
+<p>我会给你们三条规则，一条关于表示方法的提示，和一系列例子的结果。这些例子你可以自己用Python解释器来尝试。除了这三条规则，我<b>不会</b> 
+给你任何别的解释，因此你需要自己仔细观察来完全理解发生了什么。</p>
+
+<ol>
+<li>Python从0开始计数。</li>
+<li>在计数的时候，python不会包括你所期待的最后的数字。</li>
+<li>Python能按一定步长计数。</li>
+</ol>
+
+<ul><li>有用的表达方法： <tt>[</tt>first<tt>:</tt>last<tt>:</tt>step<tt>]</tt><br />;三个都是可选的。</li></ul>
+
+<p>这儿有一些例子。</p>
+
+<pre>
+>>> alphabet = <span class="string">"abcdefghijklmnopqrstuvwxyz"</span>
+>>> digits = <span class="string">'0123456789'</span>
+
+>>> alphabet[0]
+'a'
+
+>>> alphabet[1]
+'b'
+
+>>> alphabet[5]
+'f'
+
+>>> digits[0]
+'0'
+
+>>> digits[7]
+'7'
+
+>>> digits[-1]
+'9'
+
+>>> digits[-2]
+'8'
+
+>>> alphabet[-3]
+'x'
+
+>>> digits[0:3]
+'012'
+
+>>> digits[0:4]
+'0123'
+
+>>> digits[0:5]
+'01234'
+
+>>> digits[2:5]
+'234'
+
+>>> alphabet[2:5]
+'cde'
+
+>>> digits[0:10:2]
+'02468'
+
+>>> digits[0::2]
+'02468'
+
+>>> digits[0::3]
+'0369'
+
+>>> digits[::3]
+'0369'
+
+>>> digits[::-1]
+'9876543210'
+
+>>> digits[::-2]
+'97531'
+
+>>> digits[::-3]
+'9630'
+
+>>> alphabet[:10:2]
+'acegi'
+</pre>
+
+<p>组成你自己的字符串并且尝试更多的例子吧！</p>
+
+<div class="lessons_nav">
+<a href="28-variables2.htm"><img alt="previous" src=
+"../../images/previous.png" />变量和函数</a> - <a href=
+"../lessons_toc.htm"><img alt="home" src="../../images/home.png" /></a> - <a href=
+"30-dot.htm">面向对象编程：“点”符号<img alt="next"
+src="../../images/next.png" /></a>
+</div>
+</body>
+</html>

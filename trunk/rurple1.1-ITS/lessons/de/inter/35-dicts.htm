@@ -1,0 +1,139 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="de" xml:lang="de">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<link rel="stylesheet" href="../rurple.css" type="text/css" />
+
+<title>Merk's dir  mit Python</title>
+</head>
+<body>
+<h2 class="title">35. Merk's dir  mit Python</h2>
+
+<p>Meinst du, das dies eine gute Definition für Reeborg ist?<br />
+<br />
+<b>Roboter</b>: Eine Maschine, die automatisch Aufgaben ausführt, meistens
+von Menschen kontrolliert wird und im Allgemeinen für monotone
+Arbeiten eingesetzt wird.</p>
+
+<p>Wenn du einen Roman schreibst, ist es sehr nützlich zu wissen wie man eine
+Definition in einem Lexikon findet. Python bietet Lexikon-artige Strukturen,
+die sehr nützlich sind, wenn du ein Programm schreibst.</p>
+
+<!--==============================-->
+<hr class="line" />
+
+<h3 class="section">Wie viele Eier waren es doch gleich?</h3>
+
+<p>Unsere Zutatenliste war sehr brauchbar ... Aber weißt du, wieviele Eier
+man braucht ohne nachzuschauen? Könntest du es herausfinden ohne die ganze
+Liste auszudrucken, wenn es dir nicht einfällt? Aber wenn wir ein anderes
+Python-Objekt benutzt hätten, nämlich ein <i>dict</i>, wäre es sehr einfach
+gewesen. Hier kommt ein Beispiel:
+</p>
+
+<pre>
+<span class= "comment"># Siehst du die geschweifte Klammer hinter dem Gleichheitszeichen?</span>
+>>> zutaten_mengen = { <span class="string">'Eier'</span> : 4,
+...     <span class="string">'Zucker'</span>: <span class="string">'100 g'</span>,
+...     <span class="string">'Kakaopulver'</span>: <span class=
+"string">'30 ml'</span>,
+<span class= "comment"># Auch hier eine geschweifte Klammer:</span>
+...     <span class="string">'Halbbitterschokolade'</span>: <span <class="string">'250 g'</span>}
+>>> <span class="keyword">print</span> zutaten_mengen
+{<span class="string">'Eier'</span>: 4, <span class=
+"string">'Halbbitterschokolade'</span>: <span class=
+"string">'250 g'</span>, <span class=
+"string">'Kakaopulver'</span>: <span class=
+"string">'30 ml'</span>, <span class=
+"string">'Zucker'</span>: <span class="string">'100 g'</span>}
+</pre>
+
+<p>Jedes Element in einem <i>dict</i> hat die Form "Schlüssel : Wert"; die
+Elemente werden durch Kommas voneinander getrennt. Beachte, dass die Reihenfolge
+der Elemente beim Drucken eine andere ist als die Reihenfolge, in der wir sie
+hinzugefügt haben.</p>
+
+<p>Wenn wir jetzt die Menge der Eier wissen wollen, schreiben wir einfach:</p>
+
+<pre>
+>>> <span class=
+"keyword">print</span> zutaten_mengen['Eier']
+4
+</pre>
+
+<p>Wenn wir alle Werte in <tt>zutaten_mengen</tt> sehen wollen, können wir
+schreiben:</p>
+
+<pre>
+>>> <span class="keyword">for</span> zutat <span class=
+"keyword">in</span> zutaten_mengen:
+...     <span class="keyword">print</span> zutaten_mengen[zutat]
+...    
+4
+250 g
+30 ml
+100 g
+</pre>
+
+<p>Und das geht auch:</p>
+
+<pre>
+>>> <span class="keyword">for</span> zutat <span class=
+"keyword">in</span> zutaten_mengen:
+...     <span class="keyword">print</span> str(zutat) + <span
+class="string">":"</span> + str(zutaten_mengen[zutat])
+    
+Eier:4
+Halbbitterschokolade:250 g
+Kakaopulver:30 ml
+Zucker:100 g
+</pre>
+
+<p>Wir haben die eingebaute Funktion <tt>str()</tt> benutzt, die jedes Objekt
+in eine Zeichenfolge umwandelt, so dass wir die ausgegebene Zeichenfolge richtig
+verketten konnten.</p>
+
+<p>Oh ... ich glaube, dass ich wieder die Garnierung vergessen habe! Dann fügen
+wir sie jetzt hinzu:</p>
+
+<pre>
+>>> zutaten_mengen[<span class=
+"string">"Schlagsahne"</span>] = <span class=
+"string">"Jede Menge!"</span>
+</pre>
+
+<p>Probier's aus!</p>
+
+<!--==============================-->
+<hr class="line" />
+
+<h3 class="section">Nicht jedes Objekt ist als Schlüssel geeignet.</h3>
+
+<p>Jedes Objekt kann als Wert in einem dict enthalten sein, aber nur
+unveränderliche (<i>immutable</i>) Objekte können als Schlüssel verwendet
+werden. Wir werden etwas später sehen, was das bedeutet; für's erste heißt das,
+dass von allen Objekten, die du kennst, nur strings und Zahlen als Schlüssel
+geeignet sind, nicht aber list- und andere dict-Objekte. Probiere verschiedene
+Kombinationen dieser Objekte als Schlüssel oder Werte aus, und sieh, was
+Python davon hält!</p>
+
+<!--==============================-->
+<hr class="line" />
+
+<h3 class="try">Mini-Quiz</h3>
+
+<p>Errätst du, wie man ein Element aus einem <i>dict</i> entfernt? Wenn ja, dann
+versuche es. Wenn nicht, dann hast du vermutlich in der vorherigen Lektion nicht
+gut aufgepasst. Lies sie nochmal durch, besonders den Abschnitt, in dem wir
+erklärt haben, wie man ein Element aus einer Liste entfernt.</p>
+
+<div class="lessons_nav">
+<a href="34-lists.htm"><img alt="previous" src=
+"../../images/previous.png" />Ein Rezept für Schokoladenschaumkuchen.</a> -
+<a href="../lessons_toc.htm"><img alt="home" src="../../images/home.png" /></a>
+- <a href="36-tuples.htm">Versteinerte Listen<img alt="next"
+src="../../images/next.png" /></a>
+</div>
+</body>
+</html>
