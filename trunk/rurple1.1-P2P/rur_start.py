@@ -122,7 +122,7 @@ class RURApp(wx.Frame):
         self.world_filename = ""
         self.status_bar = rurStatusBar(self)
         self.SetStatusBar(self.status_bar)
-
+        self.currTime = time.asctime()
         directory = os.getcwd()
         # icon on top left of window
         icon = wx.EmptyIcon()
@@ -202,7 +202,6 @@ class RURApp(wx.Frame):
         event_manager.SendCustomEvent(self, arg)
         self.inst_screen = None
         self.inst = None
-        self.currTime = time.asctime()
         self.openedFileName = None
         self.firstRun = True
         self.beeperLocations = {}
@@ -454,6 +453,7 @@ class RURApp(wx.Frame):
         if self.problemNumber <= NUM_PROBLEMS:
            self.SaveProgramFile(SUBMITTED)
            self.SaveWorldFile(SUBMITTED)
+        if self.problemNumber < NUM_PROBLEMS:
            self.OpenWorldFile(0)
            self.ProgramEditor.SetText("")
         else:
@@ -471,7 +471,7 @@ class RURApp(wx.Frame):
         if self.problemNumber == 0:
             return
         #txt = self.WorldDisplay.UpdateEditor()
-        txt = str(self.robotData) + '\n' + str(self.beeperLocations) + '\n' +
+        txt = str(self.robotData) + '\n' + str(self.beeperLocations) + '\n' + \
               str(self.world.av) + '\n' + str(self.world.st) + '\n'
         self.world_filename = str(user_id) + '_world_' + str(self.problemNumber) + self.currTime + '.txt'
         
