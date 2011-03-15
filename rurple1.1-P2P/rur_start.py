@@ -36,6 +36,7 @@ import os
 import sys
 import random
 import wx.html as html
+import time
 
 # Change directory so that rur-ple can be started from everywhere.
 try:
@@ -86,11 +87,13 @@ import rur_py.student as student
 # global variable defined for convenience; contains user program
 code = ""
 logData = True
+logDataDir = conf.getUserDir()
 user_id = 0
 SUBMITTED = 1
 TEST_RUN = 2
 STEP = 3
 EXITED = 4
+RESET = 7
 NUM_PROBLEMS = len(problems.writing)
 
 
@@ -123,7 +126,11 @@ class RURApp(wx.Frame):
 #        self.problem_choice = [0, 1, 2, 3, 4, 5, 6, 7]
         self.inst_screen = None
         self.inst = None
+        self.currTime = time.asctime()
+        self.openedFileName = None
+        self.firstRun = True
 
+        directory = os.getcwd()
         # icon on top left of window
         icon = wx.EmptyIcon()
         icon.CopyFromBitmap(getImage(images.ICON))
@@ -166,16 +173,20 @@ class RURApp(wx.Frame):
         self.WorldDisplay.Refresh()
  
         if logData:
-            self.logdir = os.path.join(conf.getUserDir(), 'StudentFiles', 'Logs')
-            self.tstdir = os.path.join(conf.getUserDir(), 'StudentFiles', 'Tests')
+            self.logdir = os.path.join(logDataDir, 'StudentFiles', 'Logs')
+            self.tstdir = os.path.join(logDataDir, 'StudentFiles', 'Tests')
             for dir in (self.logdir, self.tstdir):
                 try:
                     os.makedirs(dir)
                 except OSError:
                     pass
-            self.logfile = open(os.path.join(self.logdir, str(user_id) + '_problems.txt'), 'w')
+            self.logfile = open(os.path.join(self.logdir, str(user_id) + '_problems_' +  self.currTime + '.txt'), 'w')
 
-        self.stud = student.FPS_Student(problems.writing)
+#        self.stud = student.FPS_Student(problems.writing)
+
+        #Edit problems writing to get random easy, medium, hard
+        probList, self.order = self.RandomizeProblems(problems.writing)
+        self.stud = student.Student(probList)
         self.prepost = True
         if logData:
             f1 = open(os.path.join(self.logdir, str(user_id) + '_pretest.txt'), 'w')
@@ -210,43 +221,40 @@ class RURApp(wx.Frame):
         self.SetSize((settings.SCREEN[0], settings.SCREEN[1]))
         self.window.SetFocus()
         self.SendSizeEvent()  # added to attempt to solve problem on MacOS
+        os.chdir(directory)
         wx.EVT_CLOSE(self, self.OnClose)
 
+    def RandomizeProblems(self, problemList):
+        easy = [0, 3]
+        med = [1, 2]
+        hard = [4, 5]
+        easyRand = random.randint(0, 1)
+        medRand = random.randint(0, 1)
+        hardRand = random.randint(0, 1)
+        newList = (problemList[easy[easyRand]], problemList[easy[abs(1 - easyRand)]],
+                   problemList[med[medRand]], problemList[med[abs(1 - medRand)]],
+                   problemList[hard[hardRand]], problemList[hard[abs(1 - hardRand)]])
+        order = [easy[easyRand], easy[abs(1 - easyRand)], med[medRand], med[abs(1 - medRand)],
+                 hard[hardRand], hard[abs(1 - hardRand)]]
+        return newList, order
+        
+
     def OnClose(self, event):
-#        if self.ProgramEditor.GetModify():
-#                ret = dialogs.messageDialog(_(u'Save changes to %s?')
-#                    % unicode(self.filename), _("About to close"), wx.YES
-#                    | wx.NO | wx.CANCEL | wx.ICON_QUESTION | wx.STAY_ON_TOP)
         ret = dialogs.messageDialog(_('Are you sure you want to exit?'), _("About to close"),
                                     wx.YES | wx.NO)
         if ret == wx.ID_YES:
+            #self.firstRun
             if len(self.filename) > 0:
                 self.SaveProgramFile(EXITED)
                 if self.inst_screen:
                     self.inst_screen.Close()
-                self.OnExit(event)
-#                        try:
-#                            f = open(self.filename, 'w')
-#                            f.write(content)
-#                            f.close()
-#                        except IOError, e:
-#                            messageDialog(unicode(e[1]), (u'IO Error'),
-#                                          wx.OK | wx.STAY_ON_TOP)
-#                    else:
-#                        self.SaveProgramFile(event)
-#        elif ret == wx.ID_NO:
-
-#            ret.Destroy()
-#            event.Skip()
-#                    self.OnExit(event)
-#        else:
-#            self.OnExit(event)
+            self.OnExit(event)
 
     def OnExit(self, event):
         if logData:
             self.logfile.close()
         if self.prepost:
-            dlg = wx.MessageDialog(self, "You will now be given a post-test.")
+            dlg = wx.MessageDialog(self, "You will now be given a post-test.", style = wx.OK)
             dlg.ShowModal()
             dlg.Destroy()
             TestScreen(None, -1, 'Post-Test', questions.post, 0)
@@ -309,41 +317,54 @@ class RURApp(wx.Frame):
         #Changed to user_program.isRunning
         if self.user_program.isRunning:
             return
+        if dummy != RESET:
+            #Will be some function that handles problem selection
+            self.openedFileName = self.chooseWorld()
+            self.problemNumber += 1
+            self.logfile.write(str(self.problemNumber) + ',' + str(self.order[self.problemNumber - 1] + 1) + '\n')
+            arg = self.status_bar.problem_field, _("#" + str(self.problemNumber))
+            event_manager.SendCustomEvent(self, arg)
 
-        #Will be some function that handles problem selection
-        openedFileName = self.chooseWorld()
-        self.problemNumber += 1
-        self.logfile.write(str(self.problemNumber) + ',' + str(self.stud.num) + '\n')
-        arg = self.status_bar.problem_field, _("#" + str(self.problemNumber))
-        event_manager.SendCustomEvent(self, arg)
-
-        if openedFileName != "":
-            self.world_filename = openedFileName
+            if self.openedFileName != "":
+                self.world_filename = self.openedFileName
+                self.ReadWorldFile()
+                self.UpdateWorld()
+                self.user_program.clear_trace()
+                settings.USER_WORLDS_DIR = os.path.dirname(self.world_filename)
+                arg = self.status_bar.world_field, \
+                    os.path.basename(self.world_filename)
+                event_manager.SendCustomEvent(self, arg)
+        else:
+            self.world_filename = self.openedFileName
             self.ReadWorldFile()
             self.UpdateWorld()
             self.user_program.clear_trace()
             settings.USER_WORLDS_DIR = os.path.dirname(self.world_filename)
             arg = self.status_bar.world_field, \
-                  os.path.basename(self.world_filename)
+                os.path.basename(self.world_filename)
             event_manager.SendCustomEvent(self, arg)
 
     def ReadWorldFile(self):
         #Changed to user_program.isRunning
         if self.user_program.isRunning:
             return
-        txt = open(self.world_filename, 'r').read()
+        file = open(self.world_filename, 'r')
+        txt = file.read()
         txt = parser.FixLineEnding(txt)
         flag = parser.ParseWorld(txt)
         if flag:
             self.backup_dict = {} # used to 'reset' the world
             exec txt in self.backup_dict # extracts avenues, streets, robot,
                                      # walls and beepers
+#            print "Back: ", self.backup_dict
+        file.close()
 
     def Reset(self, dummy):
         #Changed to user_program.isRunning
         if self.user_program.isRunning:
             return
-        self.UpdateWorld()
+        self.OpenWorldFile(RESET)
+#        self.UpdateWorld()
 
     def UpdateWorld(self):
         try:
@@ -433,23 +454,11 @@ class RURApp(wx.Frame):
            self.SaveProgramFile(SUBMITTED)
            self.SaveWorldFile(SUBMITTED)
            self.OpenWorldFile(0)
-
            self.ProgramEditor.SetText("")
         else:
             if self.inst_screen:
                 self.inst_screen.Close()
-#            dlg = wx.MessageDialog(self, "You will now be given a post-test.")
-#            dlg.ShowModal()
-#            dlg.Destroy()
-
-#            TestScreen(None, -1, 'Post-Test', questions.post, 0)
-
             self.logfile.close()
-#            dlg = wx.MessageDialog(self, "You have completed all of the required problems." +
-#                                   " We invite you to give us feedback.", "Complete")
-#            dlg.ShowModal()
-#            dlg.Destroy()
-#            self.notes = Notes(None, -1, 'Notes')
             self.Close(True)
 
     def SaveWorldFile(self, dummy):
@@ -460,10 +469,10 @@ class RURApp(wx.Frame):
             return
         txt = self.WorldDisplay.UpdateEditor()
 
-        self.world_filename = str(user_id) + '_world_' + str(self.problemNumber) + '.txt'
+        self.world_filename = str(user_id) + '_world_' + str(self.problemNumber) + self.currTime + '.txt'
         
         dirHome = os.getcwd()
-        dir = conf.getUserDir()
+        dir = logDataDir
         student_dirs = os.path.join(dir, 'StudentFiles', 'Worlds')
         try:
             os.makedirs(student_dirs)
@@ -527,13 +536,11 @@ class RURApp(wx.Frame):
         global code
         code = self.ProgramEditor.GetText()
         no_error, mesg = parser.ParseProgram(code)
-        if no_error:
-            self.filename = str(user_id) + '_code_' + str(self.problemNumber) + '.txt'
-
-
+        if no_error and self.problemNumber > 0: #self.firstRun == False
+            self.filename = str(user_id) + '_code_' + str(self.problemNumber) + self.currTime +'.txt'
             
             dirHome = os.getcwd()
-            dir = conf.getUserDir()
+            dir = logDataDir
             student_dirs = os.path.join(dir, 'StudentFiles', 'SourceCode')
             try:
                 os.makedirs(student_dirs)
@@ -563,7 +570,8 @@ class RURApp(wx.Frame):
             self.ProgramEditor.SetSavePoint()
         else:
             code = ""
-            dialogs.messageDialog(mesg, _("Program will not be saved."))
+            self.firstRun = False
+#            dialogs.messageDialog(mesg, _("Program will not be saved."))
 
 #--- Program controls
 
@@ -750,8 +758,8 @@ class NewUserScreen(wx.Frame):
         label = wx.StaticText(panel, -1, 'Welcome to the Playing')
         label2 = wx.StaticText(panel, -1, 'to Program System!')
         promptLabel = wx.StaticText(panel, -1, 'Please Enter your information below.')
-        firstNameLabel =  wx.StaticText(panel, -1, 'First Name: ')
-        lastNameLabel = wx.StaticText(panel, -1, 'Last Name: ')
+ #       firstNameLabel =  wx.StaticText(panel, -1, 'First Name: ')
+ #       lastNameLabel = wx.StaticText(panel, -1, 'Last Name: ')
         ageLabel = wx.StaticText(panel, -1, 'Age: ')
         umbcEmailLabel = wx.StaticText(panel, -1, 'UMBC Email: ')
         domainLabel =  wx.StaticText(panel, -1, '@umbc.edu')
@@ -771,8 +779,8 @@ class NewUserScreen(wx.Frame):
         label2.SetFont(largeFont)
         label.SetFont(largeFont)
         promptLabel.SetFont(buttonFont)
-        firstNameLabel.SetFont(labelFont)
-        lastNameLabel.SetFont(labelFont)
+#        firstNameLabel.SetFont(labelFont)
+#        lastNameLabel.SetFont(labelFont)
         umbcEmailLabel.SetFont(labelFont)
         ageLabel.SetFont(labelFont)
         sexLabel.SetFont(labelFont)
@@ -789,8 +797,8 @@ class NewUserScreen(wx.Frame):
         languageNameLabel.SetFont(labelFont)
         majorLabel.SetFont(labelFont)        
 
-        self.firstName = wx.TextCtrl(panel, -1, '')
-        self.lastName = wx.TextCtrl(panel, -1, '')
+#        self.firstName = wx.TextCtrl(panel, -1, '')
+#        self.lastName = wx.TextCtrl(panel, -1, '')
         self.email = wx.TextCtrl(panel, -1, '')
         self.age = wx.TextCtrl(panel, -1, '')
         self.sex = wx.Choice(panel, -1, choices = ["Male", "Female"])
@@ -834,7 +842,7 @@ class NewUserScreen(wx.Frame):
         button1 = wx.Button(panel, -1, 'Create')
         button1.SetFont(buttonFont)
 
-        button2 = wx.Button(panel, -1, 'Cancel')
+        button2 = wx.Button(panel, -1, 'Back')
         button2.SetFont(buttonFont)
 
         vbox = wx.BoxSizer(wx.VERTICAL)
@@ -843,20 +851,8 @@ class NewUserScreen(wx.Frame):
         vbox.Add(label2, 0, wx.ALIGN_CENTER | wx.BOTTOM | wx.ALIGN_TOP, 5)
         vbox.AddSpacer(20)
         vbox.Add(promptLabel, 0, wx.EXPAND | wx.ALIGN_LEFT | wx.BOTTOM | wx.LEFT | wx.ALIGN_TOP, 5)
-
-        hbox1 = wx.BoxSizer(wx.HORIZONTAL)
-        hbox1.Add(firstNameLabel, 0, wx.ALIGN_LEFT | wx.BOTTOM | wx.RIGHT | wx.LEFT, 5)
-        hbox1.Add(self.firstName, 0, wx.ALIGN_LEFT | wx.RIGHT, 300)
-#        hbox1.AddSpacer(400)
-        hbox1.Add(majorLabel, 0, wx.ALIGN_LEFT | wx.ALL, 5)
-        vbox.Add(hbox1)
-        
-        hbox2 = wx.BoxSizer(wx.HORIZONTAL)
-        hbox2.Add(lastNameLabel, 0, wx.ALIGN_LEFT | wx.BOTTOM | wx.RIGHT | wx.LEFT, 5)
-        hbox2.Add(self.lastName, 0, wx.ALIGN_LEFT | wx.RIGHT, 300)
-#        hbox2.AddSpacer(400)
-        hbox2.Add(self.major, 0, wx.ALIGN_LEFT | wx.ALL, 5)
-        vbox.Add(hbox2)
+        vbox.Add(majorLabel, 0, wx.EXPAND | wx.ALIGN_LEFT | wx.BOTTOM | wx.LEFT | wx.ALIGN_TOP, 5)
+        vbox.Add(self.major, 0, wx.ALIGN_LEFT | wx.BOTTOM | wx.LEFT | wx.ALIGN_TOP, 5)
 
         hbox3 = wx.BoxSizer(wx.HORIZONTAL)
         hbox3.Add(ageLabel, 0, wx.ALIGN_LEFT | wx.BOTTOM | wx.RIGHT | wx.LEFT, 5)
@@ -886,13 +882,11 @@ class NewUserScreen(wx.Frame):
 
         hbox8 = wx.BoxSizer(wx.HORIZONTAL)
         hbox8.Add(courseLabel, 0, wx.ALIGN_LEFT | wx.LEFT, 5)
-#        hbox8.AddSpacer(100)
         hbox8.Add(languagesLabel, 0, wx.ALIGN_LEFT | wx.LEFT, 100)
         vbox.Add(hbox8)
 
         hbox9 = wx.BoxSizer(wx.HORIZONTAL)
         hbox9.Add(courseLabel2, 0, wx.ALIGN_LEFT | wx.LEFT, 5)
-#        hbox9.AddSpacer(100)
         hbox9.Add(languagesLabel2, 0, wx.ALIGN_LEFT | wx.LEFT, 75)
         vbox.Add(hbox9)
 
@@ -940,28 +934,34 @@ class NewUserScreen(wx.Frame):
 
         panel.SetSizer(vbox)
         self.Bind(wx.EVT_BUTTON, self.OnCreate, button1)
-        self.Bind(wx.EVT_BUTTON, self.OnCancel, button2)
+        self.Bind(wx.EVT_BUTTON, self.OnBack, button2)
 
         self.Show(True)
     
     def OnCreate(self, event):
         global user_id
 
+        int_age = -1
+        int_creditCount = -1
         try:
             int_age = int(self.age.GetValue())
+        except ValueError:
+            int_age = -1
+        try:
             int_creditCount = int(self.creditCount.GetValue())
         except ValueError:
-            dlg = wx.MessageDialog(self, "Age and Credit count must be an integer values!",
-                                   "Invalid Information!")            
-            dlg.ShowModal()
-            dlg.Destroy()
-            event.Skip()
+            int_creditCount = -1
+
 
         directory = os.getcwd()
-        os.chdir(conf.getUserDir())
+        os.chdir(logDataDir)
         
         profiles = {}
         names = []
+        allValid = False
+        ageValid = False
+        creditValid = False
+        emailValid = False
 
         try:
             logfile = open("key.txt", "r")
@@ -975,22 +975,47 @@ class NewUserScreen(wx.Frame):
         names = profiles.values()
         ids = profiles.keys()
 
+
+
         if self.email.GetValue().strip() in names:
             dlg = wx.MessageDialog(self, "This username is already in use.", 
                                        "Invalid username.")
             dlg.ShowModal()
             dlg.Destroy()
             event.Skip()
+        if int_age != -1 and int_age < 100:
+            ageValid = True
+        if int_creditCount != -1 and int_creditCount < 200:
+            creditValid = True
+        if  self.email.GetValue() != "":
+            emailValid = True
+        
+        allValid = ageValid and creditValid and emailValid
 
-        #Error checking could be made more complete
-        elif (self.lastName.GetValue() == "") or (self.firstName.GetValue() == ""):
-            dlg = wx.MessageDialog(self, "Please complete the missing information", 
-                                   "Missing Information!")
+
+        if not ageValid:
+            dlg = wx.MessageDialog(self, "Age must be a number below 100",
+                                   "Invalid Information!",  style = wx.OK)            
             dlg.ShowModal()
             dlg.Destroy()
             event.Skip()
-
+        elif not creditValid:
+            dlg = wx.MessageDialog(self, "Credit Count must be a number below 200",
+                                       "Invalid Information!", style = wx.OK)
+            dlg.ShowModal()
+            dlg.Destroy()
+            event.Skip()
+        elif not emailValid:
+            dlg = wx.MessageDialog(self, "You must enter a UMBC email.",
+                                   "Invalid Information!", style = wx.OK)            
+            dlg.ShowModal()
+            dlg.Destroy()
+            event.Skip()
         else:
+            pass
+
+
+        if allValid:
             #Create the key file with the user_id for lookup
 
             logfile = open("key.txt", "a+")
@@ -1002,7 +1027,7 @@ class NewUserScreen(wx.Frame):
             logfile.write(self.email.GetValue() + "     " + str(user_id) + "\n")
             
             #Create the demographic file
-            student_dirs = os.path.join(conf.getUserDir(), 'StudentFiles', 'Demographics')
+            student_dirs = os.path.join(logDataDir, 'StudentFiles', 'Demographics')
             demo_filename = str(user_id) + '_demo' + '.txt'
             
             try:
@@ -1013,8 +1038,8 @@ class NewUserScreen(wx.Frame):
             os.chdir(student_dirs)
 
             file = open(demo_filename, "w")
-            file.write(self.lastName.GetValue().strip() + '\n')
-            file.write(self.firstName.GetValue().strip() + '\n')
+#            file.write(self.lastName.GetValue().strip() + '\n')
+#            file.write(self.firstName.GetValue().strip() + '\n')
             file.write(self.email.GetValue().strip() + '\n')
             file.write(self.age.GetValue().strip() + '\n')
             file.write(self.sex.GetString(self.sex.GetSelection()).strip() + '\n')
@@ -1053,21 +1078,29 @@ class NewUserScreen(wx.Frame):
             file.close()
             os.chdir(directory)
 
-
-            #Run the program
-            dlg = wx.MessageDialog(self, "You will now begin a pre-test exercise.")
+            dlg = wx.MessageDialog(self, "You will now begin a pre-test exercise.", style = wx.OK)
             dlg.ShowModal()
             dlg.Destroy()
-            TestScreen(None, -1, 'Pre-Test', questions.pre, 0, False)
+            TestScreen(None, -1, 'Pre-Test', questions.pre, 0, False) 
+#            ret = dialogs.messageDialog(_('You will now begin a pre-test exercise.'), _('Demographics Complete'),
+#                                        wx.CANCEL | wx.OK | wx.STAY_ON_TOP)
+            #dlg.ShowModal()
+#            if ret == wx.OK:
+#                dlg = wx.MessageDialog(self, "You will now begin a pre-test exercise.")
+#                TestScreen(None, -1, 'Pre-Test', questions.pre, 0, False) 
+#                self.Destroy()
+                
+#            dlg.Destroy()
             
-#            dummy = RURApp()
+    
             self.Destroy()
-            event.Skip()
+        event.Skip()
         
     
-    def OnCancel(self, event):
+    def OnBack(self, event):
         self.Close(True)
-
+        LoginScreen(None, -1, 'Login Screen')
+        
         
 class ReturnUserScreen(wx.Frame):
     def __init__(self, parent, id, title):
@@ -1098,7 +1131,9 @@ class ReturnUserScreen(wx.Frame):
         
         self.email = wx.TextCtrl(panel, -1, '')        
         button1 = wx.Button(panel, -1, 'Login')
+        button2 = wx.Button(panel, -1, 'Back')
         button1.SetFont(buttonFont)
+        button2.SetFont(buttonFont)
 
         vbox = wx.BoxSizer(wx.VERTICAL)
 
@@ -1114,21 +1149,28 @@ class ReturnUserScreen(wx.Frame):
         vbox.Add(hbox1)
 
         vbox.Add(button1, 0, wx.ALIGN_CENTER | wx.ALL | wx.ALIGN_BOTTOM, 5)
+        vbox.Add(button2, 0, wx.ALIGN_CENTER | wx.ALL | wx.ALIGN_BOTTOM, 5)
 
         panel.SetSizer(vbox)
 
 
         self.Bind(wx.EVT_BUTTON, self.OnLogin, id=button1.GetId())
+        self.Bind(wx.EVT_BUTTON, self.OnBack, id=button2.GetId())
         
         self.email.SetFocus()
         self.Show(True)
+
+    def OnBack(self, event):
+        LoginScreen(None, -1, 'Login')
+        self.Destroy()
+        event.Skip()
     
     def OnLogin(self, event):
         #Check if umbc name is in logfile
         global user_id
 
         directory = os.getcwd()
-        os.chdir(conf.getUserDir())
+        os.chdir(logDataDir)
         
         try:
             file = open("key.txt", "r")
@@ -1206,7 +1248,7 @@ class Notes(wx.Frame):
         global user_id
 
         dirHome = os.getcwd()
-        dir = conf.getUserDir()
+        dir = logDataDir
         student_dirs = os.path.join(dir, 'StudentFiles', 'Notes')
         try:
             os.makedirs(student_dirs)
@@ -1214,8 +1256,7 @@ class Notes(wx.Frame):
             pass
 
         os.chdir(student_dirs)
-#        fileName = "Notes_" + str(user_id)
-        fileName = str(user_id) + "_notes.txt"
+        fileName = str(user_id) + "_notes" + ".txt"
         file = open(fileName, "w")
         file.write(self.box.GetValue())
         file.close()
@@ -1423,8 +1464,9 @@ class TestScreen(wx.Frame):
 
     def OnClose(self, event):
         self.SaveAnswer()
-        if self.CheckComplete() and not self.exitOnClose:            
-            dlg = wx.MessageDialog(self, "Now you will begin a RUR-PLE computer question set.")
+        complete = self.CheckComplete()
+        if complete and not self.exitOnClose:            
+            dlg = wx.MessageDialog(self, "Now you will begin a RUR-PLE computer question set.", style = wx.OK)
             dlg.ShowModal()
             dlg.Destroy()
 
@@ -1434,7 +1476,7 @@ class TestScreen(wx.Frame):
             event.Skip()
         else:
            # ret = None
-            if not self.exitOnClose:
+            if not complete:
                 ret = dialogs.messageDialog(_('Are you sure you want to exit?'),
                                             _("About to close"), wx.YES | wx.NO
                                             | wx.ICON_QUESTION | wx.STAY_ON_TOP)
@@ -1443,8 +1485,8 @@ class TestScreen(wx.Frame):
 
             if ret == wx.ID_YES:
                 if self.exitOnClose and logData: # log post-test data
-                    logdir = os.path.join(conf.getUserDir(), 'StudentFiles', 'Logs')
-                    tstdir = os.path.join(conf.getUserDir(), 'StudentFiles', 'Tests')
+                    logdir = os.path.join(logDataDir, 'StudentFiles', 'Logs')
+                    tstdir = os.path.join(logDataDir, 'StudentFiles', 'Tests')
                     f1 = open(os.path.join(logdir, str(user_id) + '_posttest.txt'), 'w')
                     f2 = open(os.path.join(tstdir, str(user_id) + '_posttest.txt'), 'w')
                     for i, question in enumerate(self.source):
@@ -1456,13 +1498,13 @@ class TestScreen(wx.Frame):
                     f2.close()
 
                     dlg = wx.MessageDialog(self, "You have completed all of the required problems. We invite you to give us feedback.", 
-                                           "Complete")
+                                           "Complete", style = wx.OK)
                     dlg.ShowModal()
                     dlg.Destroy()
                     Notes(None, -1, 'Notes')
            
                 self.Destroy()
-            event.Skip()
+                event.Skip()
 
 class MySplashScreen(wx.SplashScreen):
     def __init__(self):
@@ -1484,8 +1526,6 @@ if __name__ == "__main__":
     settings = conf.getSettings()
     settings.SCREEN = wxutils.getscreen()
 
-    #Splash = MySplashScreen()
-    Login = LoginScreen(None, -1, 'Login Screen')
-#    Login.Show()
-#    Splash.Show()
+
+    LoginScreen(None, -1, 'Login Screen')
     App.MainLoop()
