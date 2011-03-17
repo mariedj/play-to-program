@@ -541,9 +541,6 @@ class RURApp(wx.Frame):
             self.inst_screen.setInstructions(self.inst)
 
     def Pause(self, dummy):
-        print "Stepped: ", self.user_program.isStepped
-        print "Paused: ", self.user_program.isPaused
-        print "Running: ", self.user_program.isRunning
         if not (self.user_program.isRunning or self.user_program.isStepped):
             return
         if self.user_program.isPaused:
