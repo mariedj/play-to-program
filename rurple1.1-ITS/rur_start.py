@@ -1091,17 +1091,17 @@ class NewUserScreen(wx.Frame):
         f.write(self.grade6.GetString(self.grade6.GetSelection()).strip() + '\n')
 
         f.write(self.language1.GetValue().strip() + '\n')
-        f.write(self.year1.GetString(self.grade1.GetSelection()).strip() + '\n')
+        f.write(self.year1.GetString(self.year1.GetSelection()).strip() + '\n')
         f.write(self.language2.GetValue().strip() + '\n')
-        f.write(self.year2.GetString(self.grade2.GetSelection()).strip() + '\n')
+        f.write(self.year2.GetString(self.year2.GetSelection()).strip() + '\n')
         f.write(self.language3.GetValue().strip() + '\n')
-        f.write(self.year3.GetString(self.grade3.GetSelection()).strip() + '\n')
+        f.write(self.year3.GetString(self.year3.GetSelection()).strip() + '\n')
         f.write(self.language4.GetValue().strip() + '\n')
-        f.write(self.year4.GetString(self.grade4.GetSelection()).strip() + '\n')
+        f.write(self.year4.GetString(self.year4.GetSelection()).strip() + '\n')
         f.write(self.language5.GetValue().strip() + '\n')
-        f.write(self.year5.GetString(self.grade5.GetSelection()).strip() + '\n')
+        f.write(self.year5.GetString(self.year5.GetSelection()).strip() + '\n')
         f.write(self.language6.GetValue().strip() + '\n')
-        f.write(self.year6.GetString(self.grade6.GetSelection()).strip() + '\n')
+        f.write(self.year6.GetString(self.year6.GetSelection()).strip() + '\n')
 
         f.close()
 
