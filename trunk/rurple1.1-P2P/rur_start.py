@@ -277,32 +277,22 @@ class RURApp(wx.Frame):
     def OpenWorldFile(self, dummy):
         if self.user_program.isRunning:
             return
-        if dummy != RESET:
-            #Will be some function that handles problem selection
-            openedFileName = self.chooseWorld()
-            self.problemNumber += 1
-            self.logfile.write(str(self.problemNumber) + ',' + str(self.order[self.problemNumber - 1] + 1) + '\n')
-            arg = self.status_bar.problem_field, _("#" + str(self.problemNumber))
-            event_manager.SendCustomEvent(self, arg)
+   
+        #Will be some function that handles problem selection
+        openedFileName = self.chooseWorld()
+        self.problemNumber += 1
+        self.logfile.write(str(self.problemNumber) + ',' + 
+                           str(self.order[self.problemNumber - 1] + 1) + '\n')
+        arg = self.status_bar.problem_field, _("#" + str(self.problemNumber))
+        event_manager.SendCustomEvent(self, arg)
 
-            if openedFileName != "":
-                self.world_filename = openedFileName
-                self.ReadWorldFile()
-                self.UpdateWorld()
-                self.user_program.clear_trace()
-                settings.USER_WORLDS_DIR = os.path.dirname(self.world_filename)
-                #arg = self.status_bar.world_field, \
-                #    os.path.basename(self.world_filename)
-                #event_manager.SendCustomEvent(self, arg)
-        else:
+        if openedFileName != "":
             self.world_filename = openedFileName
             self.ReadWorldFile()
             self.UpdateWorld()
             self.user_program.clear_trace()
-            settings.USER_WORLDS_DIR = os.path.dirname(self.world_filename)
-            #arg = self.status_bar.world_field, \
-            #    os.path.basename(self.world_filename)
-            #event_manager.SendCustomEvent(self, arg)
+#            settings.USER_WORLDS_DIR = os.path.dirname(self.world_filename)
+
 
     def ReadWorldFile(self):
         if self.user_program.isRunning:
@@ -318,11 +308,17 @@ class RURApp(wx.Frame):
                                      # walls and beepers
 #            print "Back: ", self.backup_dict
 
+
     def Reset(self, dummy):
         if self.user_program.isRunning:
+            dlg = wx.MessageDialog(self, "You must stop the program before resetting.",
+                                   "Stop the run.",  style = wx.OK)            
+            dlg.ShowModal()
+            dlg.Destroy()
             return
-        self.OpenWorldFile(RESET)
-#        self.UpdateWorld()
+#        self.world.robot_dict = self.bacup_dict['robot']
+#        self.OpenWorldFile(RESET)
+        self.UpdateWorld()
 
     def UpdateWorld(self):
         try:
@@ -447,8 +443,8 @@ class RURApp(wx.Frame):
         #event_manager.SendCustomEvent(self, arg)
         #settings.SAMPLE_WORLDS_DIR = os.path.dirname(self.world_filename)
         # save a backup copy to 'reset world'
-        self.backup_dict = {}
-        exec txt in self.backup_dict
+        #self.backup_dict = {}
+        #exec txt in self.backup_dict
 
 
 
@@ -545,6 +541,9 @@ class RURApp(wx.Frame):
             self.inst_screen.setInstructions(self.inst)
 
     def Pause(self, dummy):
+        print "Stepped: ", self.user_program.isStepped
+        print "Paused: ", self.user_program.isPaused
+        print "Running: ", self.user_program.isRunning
         if not (self.user_program.isRunning or self.user_program.isStepped):
             return
         if self.user_program.isPaused:
@@ -563,7 +562,6 @@ class RURApp(wx.Frame):
             self.RunProgram(None)
         else:
             self.Pause(None)
-        #self.SaveWorldFile(TEST_RUN)
 
     def StopProgram(self, dummy):
         self.user_program.StopProgram()
@@ -1021,17 +1019,17 @@ class NewUserScreen(wx.Frame):
         f.write(self.grade6.GetString(self.grade6.GetSelection()).strip() + '\n')
 
         f.write(self.language1.GetValue().strip() + '\n')
-        f.write(self.year1.GetString(self.grade1.GetSelection()).strip() + '\n')
+        f.write(self.year1.GetString(self.year1.GetSelection()).strip() + '\n')
         f.write(self.language2.GetValue().strip() + '\n')
-        f.write(self.year2.GetString(self.grade2.GetSelection()).strip() + '\n')
+        f.write(self.year2.GetString(self.year2.GetSelection()).strip() + '\n')
         f.write(self.language3.GetValue().strip() + '\n')
-        f.write(self.year3.GetString(self.grade3.GetSelection()).strip() + '\n')
+        f.write(self.year3.GetString(self.year3.GetSelection()).strip() + '\n')
         f.write(self.language4.GetValue().strip() + '\n')
-        f.write(self.year4.GetString(self.grade4.GetSelection()).strip() + '\n')
+        f.write(self.year4.GetString(self.year4.GetSelection()).strip() + '\n')
         f.write(self.language5.GetValue().strip() + '\n')
-        f.write(self.year5.GetString(self.grade5.GetSelection()).strip() + '\n')
+        f.write(self.year5.GetString(self.year5.GetSelection()).strip() + '\n')
         f.write(self.language6.GetValue().strip() + '\n')
-        f.write(self.year6.GetString(self.grade6.GetSelection()).strip() + '\n')
+        f.write(self.year6.GetString(self.year6.GetSelection()).strip() + '\n')
 
         f.close()
 
