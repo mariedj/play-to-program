@@ -29,6 +29,7 @@
 import os
 import sys
 import random
+import time
 from difflib import Differ
 
 # Change directory so that rur-ple can be started from everywhere.
@@ -81,8 +82,9 @@ import rur_py.student as student
 # global variables defined for convenience
 code = "" # contains user program
 logData = True # save data from all problems attempted by user
-logDataDir = conf.getUserDir() # root location to store user data and logs
+logDataDir = conf.getUserDir()
 user_id = 0
+currTime = ""
 
 class RURnotebook(wx.Notebook):
     def __init__(self, parent):
@@ -161,7 +163,7 @@ class RURApp(wx.Frame):
                     os.makedirs(dir)
                 except OSError:
                     pass
-            self.logfile = open(os.path.join(self.logdir, str(user_id) + '_problems.txt'), 'w')
+            self.logfile = open(os.path.join(self.logdir, str(user_id) + '_problems_' + currTime + '.txt'), 'w')
         #
         self.traceMode = False
         if 'aps' in sys.argv:
@@ -174,8 +176,8 @@ class RURApp(wx.Frame):
         if not 'skip' in sys.argv:
             self.prepost = True
             if logData:
-                f1 = open(os.path.join(self.logdir, str(user_id) + '_pretest.txt'), 'w')
-                f2 = open(os.path.join(self.tstdir, str(user_id) + '_pretest.txt'), 'w')
+                f1 = open(os.path.join(self.logdir, str(user_id) + '_pretest_' + currTime + '.txt'), 'w')
+                f2 = open(os.path.join(self.tstdir, str(user_id) + '_pretest_' + currTime + '.txt'), 'w')
             for i, question in enumerate(questions.pre):
                 self.stud.external(question)
                 correct = question.check()
@@ -262,11 +264,11 @@ class RURApp(wx.Frame):
             self.WorldDisplay.controlMode = False
             self.ResetWorld(None)
             if logData: # log problem and solution
-                storewld = str(user_id) + '_world_' + str(self.problemNumber) + '.txt'
+                storewld = str(user_id) + '_world_' + str(self.problemNumber) + '_' + currTime + '.txt'
                 self.SaveWorldFile(None, os.path.join(self.wlddir, storewld))
-                storerur = str(user_id) + '_code_' + str(self.problemNumber) + '.txt'
+                storerur = str(user_id) + '_code_' + str(self.problemNumber) + '_' + currTime + '.txt'
                 self.SaveProgramFile(None, os.path.join(self.rurdir, storerur))
-                storepre = str(user_id) + '_prediction_' + str(self.problemNumber) + '.txt'
+                storepre = str(user_id) + '_prediction_' + str(self.problemNumber) + '_' + currTime + '.txt'
                 try:
                     f = open(os.path.join(self.predir, storepre), 'w')
                     f.write(prediction)
@@ -1262,20 +1264,16 @@ class Notes(wx.Frame):
     def Submit(self, ins):
         global user_id
 
-        dirHome = os.getcwd()
-        dir = logDataDir
-        student_dirs = os.path.join(dir, 'StudentFiles', 'Notes')
+        student_dir = os.path.join(logDataDir, 'StudentFiles', 'Notes')
         try:
-            os.makedirs(student_dirs)
+            os.makedirs(student_dir)
         except OSError:
             pass
 
-        os.chdir(student_dirs)
-        fileName = str(user_id) + "_notes.txt"
-        file = open(fileName, "w")
-        file.write(self.box.GetValue())
-        file.close()
-        os.chdir(dirHome)
+        fileName = str(user_id) + "_notes_" + currTime + ".txt"
+        f = open(os.path.join(student_dir, fileName), "w")
+        f.write(self.box.GetValue())
+        f.close()
 
         dlg = wx.MessageDialog(self, "Complete.", 
                                "Thank you for using the P2P Sytem.", style = wx.OK)
@@ -1497,8 +1495,8 @@ class TestScreen(wx.Frame):
                 if self.exitOnClose and logData: # log post-test data
                     logdir = os.path.join(logDataDir, 'StudentFiles', 'Logs')
                     tstdir = os.path.join(logDataDir, 'StudentFiles', 'Tests')
-                    f1 = open(os.path.join(logdir, str(user_id) + '_posttest.txt'), 'w')
-                    f2 = open(os.path.join(tstdir, str(user_id) + '_posttest.txt'), 'w')
+                    f1 = open(os.path.join(logdir, str(user_id) + '_posttest_' + currTime + '.txt'), 'w')
+                    f2 = open(os.path.join(tstdir, str(user_id) + '_posttest_' + currTime + '.txt'), 'w')
                     for i, question in enumerate(self.source):
                         if 'answer' in question.__dict__:
                             correct = question.check()
@@ -1532,6 +1530,7 @@ if __name__ == "__main__":
                             
     settings = conf.getSettings()
     settings.SCREEN = wxutils.getscreen()
+    currTime = str(int(time.time()))
 
     if 'skip' in sys.argv:
         Splash = MySplashScreen()
