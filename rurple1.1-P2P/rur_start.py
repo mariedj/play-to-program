@@ -35,7 +35,6 @@
 import os
 import sys
 import random
-import wx.html as html
 import time
 
 # Change directory so that rur-ple can be started from everywhere.
@@ -64,6 +63,7 @@ if not hasattr(sys, 'frozen'):
 import wx
 import wx.lib.buttons
 import wx.py as py           # For the interpreter
+import wx.html as html
 
 import rur_py.images as images # load all images
 from rur_py.images import getImage
@@ -80,6 +80,7 @@ from rur_py.cpu import rur_program
 import rur_py.browser as browser
 import rur_py.event_manager as event_manager
 from rur_py.status_bar import rurStatusBar
+
 import rur_py.questions as questions
 import rur_py.problems as problems
 import rur_py.student as student
@@ -89,6 +90,7 @@ code = ""
 logData = True
 logDataDir = conf.getUserDir()
 user_id = 0
+currTime = ""
 SUBMITTED = 1
 TEST_RUN = 2
 STEP = 3
@@ -122,8 +124,6 @@ class RURApp(wx.Frame):
         self.world_filename = ""
         self.status_bar = rurStatusBar(self)
         self.SetStatusBar(self.status_bar)
-        self.currTime = time.asctime()
-        directory = os.getcwd()
         # icon on top left of window
         icon = wx.EmptyIcon()
         icon.CopyFromBitmap(getImage(images.ICON))
@@ -172,7 +172,7 @@ class RURApp(wx.Frame):
                     os.makedirs(dir)
                 except OSError:
                     pass
-            self.logfile = open(os.path.join(self.logdir, str(user_id) + '_problems_' +  self.currTime + '.txt'), 'w')
+            self.logfile = open(os.path.join(self.logdir, str(user_id) + '_problems_' +  currTime + '.txt'), 'w')
 
 #        self.stud = student.FPS_Student(problems.writing)
 
@@ -181,8 +181,8 @@ class RURApp(wx.Frame):
         self.stud = student.Student(probList)
         self.prepost = True
         if logData:
-            f1 = open(os.path.join(self.logdir, str(user_id) + '_pretest.txt'), 'w')
-            f2 = open(os.path.join(self.tstdir, str(user_id) + '_pretest.txt'), 'w')
+            f1 = open(os.path.join(self.logdir, str(user_id) + '_pretest_' + currTime + '.txt'), 'w')
+            f2 = open(os.path.join(self.tstdir, str(user_id) + '_pretest_' + currTime + '.txt'), 'w')
         for i, question in enumerate(questions.pre):
             self.stud.external(question)
             correct = question.check()
@@ -217,7 +217,6 @@ class RURApp(wx.Frame):
         self.SetSize((settings.SCREEN[0], settings.SCREEN[1]))
         self.window.SetFocus()
         self.SendSizeEvent()  # added to attempt to solve problem on MacOS
-        os.chdir(directory)
         wx.EVT_CLOSE(self, self.OnClose)
 
     def RandomizeProblems(self, problemList):
@@ -260,25 +259,6 @@ class RURApp(wx.Frame):
 #----Helper functions
     #Modified from original Source
     def chooseWorld(self):
-        #Make a dictionary corresponding to world names
-        #Choose randomly from the dictionary index
-        #used to parse the path for the problem to add to the name
-        startingPoint = -7
-
-
-        #Two dictionaries coresspond
-        #May need to may one dictionary that corresponds to a class which
-        #contains the problem .wld and the directions .htm
-#        dict = {0:'problem1.wld', 1:'problem2.wld', 2:'problem3.wld', 3:'problem4.wld', \
-#                    4:'problem5.wld', 5:'problem6.wld', 6:'problem7.wld', 7:'problem8.wld'}
-#        dict_ins = {0:'prob1.htm', 1:'prob2.htm', 2:'prob3.htm', 3:'prob4.htm', \
-#                        4:'prob5.htm', 5:'prob6.htm', 6:'prob7.htm', 7:'prob8.htm'}
- #       if len(self.problem_choice) > 0:
- #           temp = random.randint(0, len(self.problem_choice) - 1)
- #           n = self.problem_choice[temp]
- #           del(self.problem_choice[temp])
-        
-
         prob = self.stud.next()
         if prob:
             env, self.inst = prob()
@@ -287,28 +267,14 @@ class RURApp(wx.Frame):
                 self.inst_screen.Close()
             
             self.inst_screen = InstructionScreen(None, -1, 'Instruction Screen')
-#            self.inst_screen.setInstructions(dict_ins[n])
             self.inst_screen.setInstructions(self.inst)
-     
-            #Based on what problem it is change the browswer screen
-            #Pass n to a function that changes the browser screen
-            #May need to pass the dict
-            #self.browser_win.problemChanged(dict_ins, n)
-            
 
             openedFileName = os.path.join(settings.SAMPLE_WORLDS_DIR, env)
             return openedFileName
-#            if settings.USER_WORLDS_DIR[startingPoint:] != 'samples':
-#                openedFileName = os.path.join(settings.USER_WORLDS_DIR, 'samples', env) #, dict[n])
-#            else:
-#                openedFileName = os.path.join(settings.USER_WORLDS_DIR, env) #dict[n])
-#            return openedFileName
-
 
 
 #---- World file methods
     def OpenWorldFile(self, dummy):
-        #Changed to user_program.isRunning
         if self.user_program.isRunning:
             return
         if dummy != RESET:
@@ -339,11 +305,11 @@ class RURApp(wx.Frame):
             #event_manager.SendCustomEvent(self, arg)
 
     def ReadWorldFile(self):
-        #Changed to user_program.isRunning
         if self.user_program.isRunning:
             return
-        file = open(self.world_filename, 'r')
-        txt = file.read()
+        f = open(self.world_filename, 'r')
+        txt = f.read()
+        f.close()
         txt = parser.FixLineEnding(txt)
         flag = parser.ParseWorld(txt)
         if flag:
@@ -351,10 +317,8 @@ class RURApp(wx.Frame):
             exec txt in self.backup_dict # extracts avenues, streets, robot,
                                      # walls and beepers
 #            print "Back: ", self.backup_dict
-        file.close()
 
     def Reset(self, dummy):
-        #Changed to user_program.isRunning
         if self.user_program.isRunning:
             return
         self.OpenWorldFile(RESET)
@@ -441,7 +405,6 @@ class RURApp(wx.Frame):
     #Added to submit the code and proceed to next question
     #Modified from original source
     def Submit(self, dummy):
-        #Changed to user_program.isRunning
         if self.user_program.isRunning:
             return
         if self.problemNumber <= NUM_PROBLEMS:
@@ -459,7 +422,6 @@ class RURApp(wx.Frame):
     def SaveWorldFile(self, dummy):
         '''Saves in .config
         '''
-        #Changed to user_program.isRunning
         if self.user_program.isRunning:
             return
         if self.problemNumber == 0:
@@ -467,23 +429,18 @@ class RURApp(wx.Frame):
         #txt = self.WorldDisplay.UpdateEditor()
         txt = str(self.robotData) + '\n' + str(self.beeperLocations) + '\n' + \
               str(self.world.av) + '\n' + str(self.world.st) + '\n'
-        self.world_filename = str(user_id) + '_world_' + str(self.problemNumber) + self.currTime + '.txt'
+        self.world_filename = str(user_id) + '_world_' + str(self.problemNumber) + currTime + '.txt'
         
-        dirHome = os.getcwd()
-        dir = logDataDir
-        student_dirs = os.path.join(dir, 'StudentFiles', 'Worlds')
+        student_dir = os.path.join(logDataDir, 'StudentFiles', 'Worlds')
         try:
-            os.makedirs(student_dirs)
+            os.makedirs(student_dir)
         except OSError:
             pass
 
-        os.chdir(student_dirs)
-        file = open(self.world_filename, "a+")
-        file.write(txt + "\n\n------------End of Run-----------\n\n")
-        file.close()
+        f = open(os.path.join(student_dir, self.world_filename), "a+")
+        f.write(txt + "\n\n------------End of Run-----------\n\n")
+        f.close()
             
-        os.chdir(dirHome)
-
 
         #arg = self.status_bar.world_field, \
         #      os.path.basename(self.world_filename)
@@ -498,7 +455,6 @@ class RURApp(wx.Frame):
 #----- Program files methods
 
     def OpenProgramFile(self, dummy):
-        #Changed to user_program.isRunning
         if self.user_program.isRunning:
             return
 
@@ -528,24 +484,20 @@ class RURApp(wx.Frame):
 
     def SaveProgramFile(self, dummy):
         #IF NOT in step mode. Useful so that each step doesnt append
-        #Changed to user_program.isRunning
         if self.user_program.isRunning or self.user_program.isStepped:
             return
         global code
         code = self.ProgramEditor.GetText()
         no_error, mesg = parser.ParseProgram(code)
         if no_error and self.problemNumber > 0: 
-            self.filename = str(user_id) + '_code_' + str(self.problemNumber) + self.currTime +'.txt'
+            self.filename = str(user_id) + '_code_' + str(self.problemNumber) + currTime +'.txt'
             
-            dirHome = os.getcwd()
-            dir = logDataDir
-            student_dirs = os.path.join(dir, 'StudentFiles', 'SourceCode')
+            student_dir = os.path.join(logDataDir, 'StudentFiles', 'SourceCode')
             try:
-                os.makedirs(student_dirs)
+                os.makedirs(student_dir)
             except OSError:
                 pass
 
-            os.chdir(student_dirs)
             if dummy == SUBMITTED:
                 proc = "Submitted"
             elif dummy == TEST_RUN:
@@ -554,12 +506,11 @@ class RURApp(wx.Frame):
                 proc = "Exited"
             else:
                 proc = "Step"
-            file = open(self.filename, "a+")
-            file.write(code + "\n\n--------------" + proc + "----------\n")
-            file.write("--------------End of Run-----------\n\n")
-            file.close()
+            f = open(os.path.join(student_dir, self.filename), "a+")
+            f.write(code + "\n\n--------------" + proc + "----------\n")
+            f.write("--------------End of Run-----------\n\n")
+            f.close()
 
-            os.chdir(dirHome)
             #arg = self.status_bar.problem_field, \
             #      os.path.basename(self.filename)
 
@@ -1243,20 +1194,16 @@ class Notes(wx.Frame):
     def Submit(self, ins):
         global user_id
 
-        dirHome = os.getcwd()
-        dir = logDataDir
-        student_dirs = os.path.join(dir, 'StudentFiles', 'Notes')
+        student_dir = os.path.join(logDataDir, 'StudentFiles', 'Notes')
         try:
-            os.makedirs(student_dirs)
+            os.makedirs(student_dir)
         except OSError:
             pass
 
-        os.chdir(student_dirs)
-        fileName = str(user_id) + "_notes.txt"
-        file = open(fileName, "w")
-        file.write(self.box.GetValue())
-        file.close()
-        os.chdir(dirHome)
+        fileName = str(user_id) + "_notes_" + currTime + ".txt"
+        f = open(os.path.join(student_dir, fileName), "w")
+        f.write(self.box.GetValue())
+        f.close()
 
         dlg = wx.MessageDialog(self, "Complete.", 
                                "Thank you for using the P2P Sytem.", style = wx.OK)
@@ -1478,8 +1425,8 @@ class TestScreen(wx.Frame):
                 if self.exitOnClose and logData: # log post-test data
                     logdir = os.path.join(logDataDir, 'StudentFiles', 'Logs')
                     tstdir = os.path.join(logDataDir, 'StudentFiles', 'Tests')
-                    f1 = open(os.path.join(logdir, str(user_id) + '_posttest.txt'), 'w')
-                    f2 = open(os.path.join(tstdir, str(user_id) + '_posttest.txt'), 'w')
+                    f1 = open(os.path.join(logdir, str(user_id) + '_posttest_' + currTime + '.txt'), 'w')
+                    f2 = open(os.path.join(tstdir, str(user_id) + '_posttest_' + currTime + '.txt'), 'w')
                     for i, question in enumerate(self.source):
                         if 'answer' in question.__dict__:
                             correct = question.check()
@@ -1513,6 +1460,7 @@ if __name__ == "__main__":
                             
     settings = conf.getSettings()
     settings.SCREEN = wxutils.getscreen()
+    currTime = str(int(time.time()))
 
 
     LoginScreen(None, -1, 'Login Screen')
