@@ -72,6 +72,12 @@ class rur_program(Singleton):
         self.ProgramEditor.Refresh()
         self.wait_update_refresh(robot, name)
 
+    def update_slider_speed(self, event):
+        if 'robot' in self.robot_dict:
+            time_delay = [5, 1, 0.6, 0.3, 0.1, 0.06, 0.03, 0.01, 0.005]
+            selected = self.parent.slider_speed.GetValue()
+            self.set_delay(time_delay[selected])
+
     #--- Robot actions
 
     def turn_off(self, name='robot'):
@@ -243,10 +249,7 @@ class rur_program(Singleton):
                     _("No instruction to execute."))
             return
         self.parent.outputWindow.redirect()
-        if 'robot' in self.parent.world.robot_dict:
-            time_delay = [5, 1, 0.6, 0.3, 0.1, 0.06, 0.03, 0.01, 0.]
-            selected = self.parent.slider_speed.GetValue()
-            self.parent.world.robot_dict['robot'].delay = time_delay[selected]
+        self.update_slider_speed(None)
         self.isRunning = True
         MyGlobals = {'move': self.move,
                      'turn_left': self.turn_left,
