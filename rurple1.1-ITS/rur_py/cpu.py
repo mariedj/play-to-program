@@ -72,6 +72,12 @@ class rur_program(Singleton):
         self.ProgramEditor.Refresh()
         self.wait_update_refresh(robot, name)
 
+    def update_slider_speed(self, event):
+        if 'robot' in self.robot_dict:
+            time_delay = [5, 1, 0.6, 0.3, 0.1, 0.06, 0.03, 0.01, 0.005]
+            selected = self.parent.slider_speed.GetValue()
+            self.set_delay(time_delay[selected])
+
     #--- Robot actions
 
     def turn_off(self, name='robot'):
@@ -79,7 +85,7 @@ class rur_program(Singleton):
         robot.turn_off()  # will raise an exception to indicate normal end :-)
 
     def move(self, name='robot'):
-        if name == 'robot' and 'robot2' in self.parent.world.robot_dict:
+        if name == 'robot' and 'robot2' in self.robot_dict:
             txt, num = self.parent.outputWindow.GetCurLine()
             if txt.startswith('CORRECT:'):
                 try:
@@ -97,7 +103,7 @@ class rur_program(Singleton):
         self.update_refresh(robot, name)
 
     def turn_left(self, name='robot'):
-        if name == 'robot' and 'robot2' in self.parent.world.robot_dict:
+        if name == 'robot' and 'robot2' in self.robot_dict:
             txt, num = self.parent.outputWindow.GetCurLine()
             if txt.startswith('CORRECT:'):
                 self.turn_left('robot2')
@@ -111,7 +117,7 @@ class rur_program(Singleton):
         self.update_refresh(robot, name)
 
     def turn_right(self, name='robot'):
-        if name == 'robot' and 'robot2' in self.parent.world.robot_dict:
+        if name == 'robot' and 'robot2' in self.robot_dict:
             txt, num = self.parent.outputWindow.GetCurLine()
             if txt.startswith('CORRECT:'):
                 self.turn_right('robot2')
@@ -139,6 +145,8 @@ class rur_program(Singleton):
         robot.set_trace_style(style, colour)
 
     def set_delay(self, delay, name='robot'):
+        if name == 'robot' and 'robot2' in self.robot_dict:
+            self.set_delay(delay, 'robot2')
         robot = self.robot_dict[name]
         robot.delay = delay
 
@@ -247,8 +255,8 @@ class rur_program(Singleton):
     def my_trace(self, frame, event, arg):
         if event == "line":
             lineno = frame.f_lineno
-            if 'robot2' in self.parent.world.robot_dict:
-                robot = self.parent.world.robot_dict['robot2']
+            if 'robot2' in self.robot_dict:
+                robot = self.robot_dict['robot2']
                 txt, num = self.parent.outputWindow.GetCurLine()
                 while txt.startswith('IN'):
                     self.wait_update_refresh(robot, 'robot2')
@@ -271,15 +279,9 @@ class rur_program(Singleton):
                     _("No instruction to execute."))
             return
         self.parent.outputWindow.redirect()
-        if 'robot' in self.parent.world.robot_dict:
-            time_delay = [5, 1, 0.6, 0.3, 0.1, 0.06, 0.03, 0.01, 0.]
-            selected = self.parent.slider_speed.GetValue()
-            self.parent.world.robot_dict['robot'].delay = time_delay[selected]
-            self.parent.world.robot_dict['robot'].set_trace_style(5, "sea green")
-        if 'robot2' in self.parent.world.robot_dict:
-            time_delay = [5, 1, 0.6, 0.3, 0.1, 0.06, 0.03, 0.01, 0.]
-            selected = self.parent.slider_speed.GetValue()
-            self.parent.world.robot_dict['robot2'].delay = time_delay[selected]
+        self.update_slider_speed(None)
+        if 'robot' in self.robot_dict:
+            self.robot_dict['robot'].set_trace_style(5, "sea green")
         self.isRunning = True
         MyGlobals = {'move': self.move,
                      'turn_left': self.turn_left,

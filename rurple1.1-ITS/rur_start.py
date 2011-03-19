@@ -151,6 +151,7 @@ class RURApp(wx.Frame):
         self.world.DoDrawing()
         self.WorldDisplay.drawImage()
         self.WorldDisplay.Refresh()
+        self.Bind(wx.EVT_SLIDER, self.user_program.update_slider_speed)
         #
         if logData:
             self.wlddir = os.path.join(logDataDir, 'StudentFiles', 'Worlds')
