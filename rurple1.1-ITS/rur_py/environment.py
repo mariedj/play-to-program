@@ -38,14 +38,15 @@ def trash(height=1):
         env['walls'].append((i,height*2))
     env['walls'].append((1,(height+1) * 2))
     env['walls'].append((2,height*2 + 1))
-    for i in range(1,height+1):
-        for j in range(2,11):
-            if random.random() < 1.0/(height+2):
-                m = 10
-                b = random.randint(1,m)
-                if b > m/2 and random.random() < 1.0/2:
-                    b = m - b + 1
-                env['beepers'][(j,i)] = b
+    while not env['beepers']: # make sure there's some trash
+        for i in range(1,height+1):
+            for j in range(2,11):
+                if random.random() < 1.0/(height+2):
+                    m = 10
+                    b = random.randint(1,m)
+                    if b > m/2 and random.random() < 1.0/2:
+                        b = m - b + 1
+                    env['beepers'][(j,i)] = b
     return env
 
 # measurement default(0,0,0,0) vary dir?
@@ -60,12 +61,12 @@ def mover(beepers=0,first=0):
         env['beepers'][(i,1)] = 1
     return env
 
-def harvest(weeds=False):
-    env = default(width=7, height=7, beepers=0)
+def harvest(weeds=False,holes=True):
+    env = default(width=7, height=7)
     for i in range(2,8):
         for j in range(1,7):
             r = random.random()
-            if r > 1.0/6:
+            if not holes or r > 1.0/6:
                 env['beepers'][(i,j)] = 1
                 if weeds and r < 2.0/6:
                     env['beepers'][(i,j)] = 2

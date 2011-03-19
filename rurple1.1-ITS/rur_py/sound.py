@@ -1,4 +1,4 @@
-from  sys import platform, byteorder
+from  sys import platform, byteorder, stderr
 import thread
 from translation import _
 # sonar.wav: thanks to Partners In Rhyme (www.partnersinrhyme.com)
@@ -36,7 +36,7 @@ def _play(soundfile):
             s.close()
             dsp.write(data)
         except IOError:
-            print _("Audio device is busy.")
+            print >> stderr,  _("Audio device is busy.")
         finally:
             if dsp:
                 dsp.close()
