@@ -1175,7 +1175,7 @@ class Notes(wx.Frame):
 
         wx.EVT_CLOSE(self, self.OnClose)
 
-        self.Bind(wx.EVT_BUTTON, self.Submit, id=button.GetId())
+        self.Bind(wx.EVT_BUTTON, self.OnClose, id=button.GetId())
 
         self.box.SetFocus()
 
@@ -1183,10 +1183,6 @@ class Notes(wx.Frame):
 
 
     def OnClose(self, event):
-        self.Destroy()
-        event.Skip()
-
-    def Submit(self, ins):
         global user_id
 
         student_dir = os.path.join(logDataDir, 'StudentFiles', 'Notes')
@@ -1204,7 +1200,9 @@ class Notes(wx.Frame):
                                "Thank you for using the P2P Sytem.", style = wx.OK)
         dlg.ShowModal()
         dlg.Destroy()
-        self.Close(True)
+        self.Destroy()
+        event.Skip()
+
 
 class InstructionScreen(wx.Frame):
     def __init__(self, parent, id, title):
