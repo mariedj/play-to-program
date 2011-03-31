@@ -74,7 +74,7 @@ class rur_program(Singleton):
 
     def update_slider_speed(self, event):
         if 'robot' in self.robot_dict:
-            time_delay = [5, 1, 0.6, 0.3, 0.1, 0.06, 0.03, 0.01, 0.005]
+            time_delay = [6, 3, 1, 0.6, 0.3, 0.1, 0.06, 0.03, 0.01]
             selected = self.parent.slider_speed.GetValue()
             self.set_delay(time_delay[selected])
 
