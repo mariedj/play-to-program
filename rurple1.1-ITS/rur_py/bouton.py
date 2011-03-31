@@ -124,7 +124,7 @@ class rurChoiceWindow(wx.ScrolledWindow):
 
         min_speed = 0
         max_speed = 8
-        default_speed = 3
+        default_speed = 4
         self.ggp.slider_speed = wx.Slider(
             # id, value, min, max, (x, y), (length, height)
             self, -1, default_speed, min_speed, max_speed,
