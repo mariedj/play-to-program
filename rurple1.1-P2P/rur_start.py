@@ -927,7 +927,7 @@ class NewUserScreen(wx.Frame):
 
         if self.email.GetValue().strip() in names:
             dlg = wx.MessageDialog(self, "This username is already in use.", 
-                                       "Invalid username.")
+                                       "Invalid username.", style = wx.OK)
             dlg.ShowModal()
             dlg.Destroy()
             event.Skip()
@@ -1124,13 +1124,13 @@ class ReturnUserScreen(wx.Frame):
             f.close()
         except IOError:
             dlg = wx.MessageDialog(self, "You are not registered.", 
-                                   "Please create a new account first.")
+                        "Please create a new account first.", style = wx.OK)
             dlg.ShowModal()
             dlg.Destroy()
             event.Skip()
             return
         if studentFound:
-            dlg = wx.MessageDialog(self, "You will now begin a pre-test exercise.")
+            dlg = wx.MessageDialog(self, "You will now begin a pre-test exercise.", style = wx.OK)
             dlg.ShowModal()
             dlg.Destroy()
             TestScreen(None, -1, 'Pre-Test', questions.pre, 0, False)
@@ -1139,7 +1139,7 @@ class ReturnUserScreen(wx.Frame):
         else:
             #todo: Clean this up, create a pop-up asking for a different loging
             dlg = wx.MessageDialog(self, "This username is not registered.", 
-                                   "Username not found.")
+                                   "Username not found.", style = wx.OK)
             dlg.ShowModal()
             dlg.Destroy()
             event.Skip()
