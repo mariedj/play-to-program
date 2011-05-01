@@ -12,6 +12,8 @@ fps - rank the problems by the adaptive problem selection algorithm after comple
 
 The default instructions file is lessons/en/instr.htm
 
+The concept outline for the test questions and RUR-PLE problems is given on the first page of rurprogs.pdf, available in Downloads.
+
 The pretest and post-test questions are defined in rur_py/questions.py
 
 The lists defining which questions are in each test are defined at the bottom.  Each question is a Question object, with the following constructor arguments:<br>
