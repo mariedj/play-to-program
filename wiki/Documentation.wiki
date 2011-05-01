@@ -47,3 +47,18 @@ The only known bug affects the visualization when a user's prediction was incorr
 The blue robot (with the blue trace line) representing the user's prediction will execute the last correct command correctly.  The gray robot (with the green trace line) representing the correct behavior will not, however, execute the last correct action immediately thereafter as it should.  Once the blue robot has finished executing the incorrect actions, the gray robot will finally execute the last correct action that should have happened before the incorrect actions.  Basically once the prediction syncs up with the correct behavior, the gray robot will catch up to where it should have been.
 
 I believe this behavior is caused by the wx.Yield() statements sprinkled throughout the code (in rur_py/cpu.py) for executing the visualization, and is some sort of threading/locking-type problem.  I don't understand how this works well enough to fix it.
+
+===Logging data===
+
+By default, RUR-ITS will log data during the user's usage of the system.  This can be disabled by changing the logData variable defined near the beginning of rur_start.py to False (this should probably be incorporated into RUR-PLE's configuration file at some point).  By default, the data that is stored is stored under RUR-PLE's configuration directory ($HOME/.config/rurple).  This location is defined by the logDataDir variable also in rur_start.py, and can be changed.
+
+When RUR-ITS starts, the user is asked to create a user for the system.  The user chooses an alphanumeric user name, and the system creates a numeric user ID.  These are logged in key.txt.  The numeric user IDs begin the filenames of the rest of the data that is logged.  The filenames (except for the demographics) end with a unique number that is generated when the system is started (it's technically a timestamp).  This prevents data from being overwritten during subsequent uses of the system.  The data that is logged is described below, and is stored in subdirectories under the log data directory:<br>
+Demographics - The demographic information entered by the user when they created their user the first time they launched the system.<br>
+Tests - The actual answers entered by the user on the pretest and post-test.<br>
+Notes - The feedback entered by the user after the post-test.
+
+While doing RUR-PLE problems in the system, each problem is given a number (starting with 1 for the first problem and incrementing thereafter).  Each problem also has an index, which is an index into the list of problem templates defined in rur_py/problems.py.  Also logged:<br>
+Logs - Information about their pretest questions, post-test questions, and RUR-PLE problems solved, is stored here.  For the pretest and post-test questions, it logs whether they were correct or incorrect.  For the RUR-PLE problems, it logs the problem number, problem index, and whether their solution was correct.<br>
+Predictions - The list of robot commands predicted by the user for each RUR-PLE program prediction problem.  The problem number is included in the filename.
+SourceCode - The code for each RUR-PLE problem.  The problem number is included in the filename.<br>
+Worlds - The environment dictionaries (world files) for each RUR-PLE problem.  The problem number is included in the filename.
