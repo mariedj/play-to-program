@@ -83,7 +83,7 @@ SIGCSE'09, SIGCSE Bulletin 41(1), March 2009
 
  * Miscellaneous
 [Hanks09a CS1 students speak-advice for students by students]<br>
-Brian Hanks, Laurie Murphy, Beth Simon, Renée McCauley, Carol Zander
+Brian Hanks, Laurie Murphy, Beth Simon, Renée !McCauley, Carol Zander
 
  * Student Knowledge
 [Hanks09b Successful and Unsuccessful Problem Solving Approaches of Novice Programmers]<br>
@@ -164,7 +164,7 @@ Stephen H. Edwards, Manuel A. Perez-Quinones
 Orit Hazzan
 
  * Tools
-WebTasks: Online programming exercises made easy<br>
+!WebTasks: Online programming exercises made easy<br>
 Rossling and Hartte, Page 363<br>
 -- online tool for practicing easy programming problems, student solutions are assessed and collected
 
@@ -184,7 +184,7 @@ David Ginat
 
  * Debugging
 [Murphy08a Debugging-the good, the bad, and the quirky -- a qualitative analysis of novices' strategies]<br>
-Laurie Murphy, Gary Lewandowski, Renée McCauley, Beth Simon, Lynda Thomas, Carol Zander
+Laurie Murphy, Gary Lewandowski, Renée !McCauley, Beth Simon, Lynda Thomas, Carol Zander
 
  * Debugging
 [Nienaltowski08 Compiler Error Messages-What Can Help Novices?]<br>
@@ -200,7 +200,7 @@ Ken Goldman, Paul Gross, Cinda Heeren, Geoffrey Herman, Lisa Kaczmarczyk, Michae
 
  * Student Knowledge
 [Starr08 Bloom's taxonomy revisited: specifying assessable learning objectives in computer science]<br>
-Christopher W. Starr, Bill Manaris, RoxAnn H. Stalvey
+Christopher W. Starr, Bill Manaris, !RoxAnn H. Stalvey
 
  * Student Knowledge
 [Ma09 Using cognitive conflict and visualisation to improve mental models held by novice programmers]<br>
@@ -213,7 +213,7 @@ Subramanian and Casser
 ITiCSE'07, SIGCSE Bulletin 39(3), September 2007
 
  * ITS/AI
-ProofChecker: an accessible environment for automata theory correctness proofs<br>
+!ProofChecker: an accessible environment for automata theory correctness proofs<br>
 Matthias F. Stallmann, Suzanne P. Balik, Robert D. Rodman, Sina Bahram, Michael C. Grace, Susan D. High, Pages: 48 - 52<br>
 -- checks that a DFA is well-formed and matches the language(s) entered by the user
 
@@ -224,7 +224,7 @@ Michael T. Helmick, Pages: 63 - 67<br>
 
  * Debugging
 [McCartney07 Successful students' strategies for getting unstuck]<br>
-Robert McCartney, Anna Eckerdal, Jan Erik Mostrom, Kate Sanders, Carol Zander
+Robert !McCartney, Anna Eckerdal, Jan Erik Mostrom, Kate Sanders, Carol Zander
 
  * Student Knowledge
 [Ginat08 Hasty design, futile patching and the elaboration of rigor]<br>
@@ -357,7 +357,7 @@ H. Jeong, A. Gupta, R. Roscoe, J. Wagster, G. Biswas, D. Schwartz,  Page 614-625
 
  * ITS/AI
 Eliminating the Gap between the High and Low Students through Meta-Cognitive Strategy Instruction<br>
-Min Chi, Kurt VanLehn, Page 603-613<br>
+Min Chi, Kurt !VanLehn, Page 603-613<br>
 -- study suggest that an ITS that teaches a high-level general problem solving strategy would be most effective in deductive domains
 
 ---------------------------- added 1/28/10
@@ -385,7 +385,7 @@ Pears et al., ITiCSE-WGR'07.
 
  * Debugging
 [Simon07 Debugging assistance for novices-a video repository]<br>
-Beth Simon, Sue Fitzgerald, Renée McCauley, Susan Haller, John Hamer,  Brian Hanks, Michael T. Helmick, Jan Erik Moström, Judy Sheard, Lynda  Thomas, ITiCSE-WGR'07.
+Beth Simon, Sue Fitzgerald, Renée !McCauley, Susan Haller, John Hamer,  Brian Hanks, Michael T. Helmick, Jan Erik Moström, Judy Sheard, Lynda  Thomas, ITiCSE-WGR'07.
 
  * Student Knowledge
 [Chen07 Commonsense computing: what students know before we teach]<br>
@@ -467,7 +467,7 @@ Susan Wiedenbeck, Page 275-278, SIGCSE'88.
 Online Judge -- system for scoring (using test cases) sample "programming competition" type problems<br>
 [http://uva.onlinejudge.org/]
 
-AlgoViz -- [http://algoviz.org/] -- "The Algorithm Visualization Portal"
+!AlgoViz -- [http://algoviz.org/] -- "The Algorithm Visualization Portal"
 
 ---------------------------- added 2/27/10
 
