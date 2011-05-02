@@ -62,3 +62,7 @@ Logs - Information about the user's pretest questions, post-test questions, and 
 Predictions - The list of robot commands predicted by the user for each RUR-PLE program prediction problem.  The problem number is included in the filename.<br>
 !SourceCode - The code for each RUR-PLE problem.  The problem number is included in the filename.<br>
 Worlds - The environment dictionaries (world files) for each RUR-PLE problem.  The problem number is included in the filename.
+
+If the pretest and login screens are skipped (with the 'skip' command-line argument), a user ID of 0 is used.
+
+While in the system, some locked features can be unlocked by pressing F11.  This will un-hide hidden buttons, allow you to control the robot, and edit the code, environment, and console window.  Pressing F11 again will re-lock it.
