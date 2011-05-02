@@ -88,8 +88,9 @@ class Student:
     def next(self):
         if "num" not in self.__dict__ or self.num == len(self.templates):
             self.num = 0
+        else:
+            self.num += 1
         self.last = self.templates[self.num]
-        self.num += 1
         global count
         count += 1
         return self.last
