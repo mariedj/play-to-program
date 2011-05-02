@@ -4,7 +4,7 @@
 
 Relevant papers:
 
-[Mitrovoci01 Optimising ITS Behaviour with Bayesian Networks and Decision Theory] -- student model based on Bayesian Networks where structure and probabilities of the network are learned from data
+[Mitrovic01 Optimising ITS Behaviour with Bayesian Networks and Decision Theory] -- student model based on Bayesian Networks where structure and probabilities of the network are learned from data
 
 ===Domain model===
 
