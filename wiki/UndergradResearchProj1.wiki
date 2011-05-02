@@ -1,0 +1,23 @@
+#summary Notes about the undergraduate research project, creating a Bayesian student model
+
+===Student model===
+
+Relevant papers:
+
+[Mitrovoci01 Optimising ITS Behaviour with Bayesian Networks and Decision Theory] -- student model based on Bayesian Networks where structure and probabilities of the network are learned from data
+
+===Domain model===
+
+Relevant papers:
+
+[Ma09 Improving the mental models held by novice programmers using cognitive conflict and jeliot visualisations] -- Paper contains a concept map that is used by their tool
+
+[Butz06 A Web-based Bayesian Intelligent Tutoring System for Computer Programming] -- appendix includes a DAG of intro CS concepts with prerequisite dependencies
+
+[Guzman07 Adaptive testing for hierarchical student models] -- sophisticated system for building a model of student knowledge, advocates for using a tree for the concept map rather than a DAG
+
+[Kumar06 Using Enhanced Concept Map for Student Modeling in a Model-Based Programming Tutor] -- concept map-based student model with concepts and learning objectives
+
+[Goldman08 Identifying important and difficult concepts in introductory computing courses using a delphi process] -- list of difficult and important intro CS concepts
+
+[Yoo06 Intelligent Tutoring System for CS-I and II Laboratory] -- ITS shows a tree of concepts to the user
