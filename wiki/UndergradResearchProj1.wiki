@@ -6,6 +6,8 @@ Relevant papers:
 
 [Mitrovic01 Optimising ITS Behaviour with Bayesian Networks and Decision Theory] -- student model based on Bayesian Networks where structure and probabilities of the network are learned from data
 
+[Kasurinen09 Estimating programming knowledge with Bayesian knowledge tracing] -- defines Bayesian Knowledge Tracing method of measuring the probability that a student understands a concept
+
 ===Domain model===
 
 Relevant papers:
