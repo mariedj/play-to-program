@@ -1,7 +1,7 @@
 #summary Automatically identifying learners' problem solving strategies in-process solving algorithmic problems
 
 Ulrich Kiesmueller, Torsten Brinda<br>
-*Contains abstract only<br>
+(Contains abstract only)<br>
 Pages 354-354
 
 This group uses the Viterbi algorithm to develop tracking software that "records learner-system interactions differentiated by certain categories during the problem solving process." They use pattern recognition to obtain the patterns in the data. Using this they can identify a students individual problem solving strategy while using the software automatically. RD
