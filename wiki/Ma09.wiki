@@ -15,6 +15,7 @@ roadmap" that might be useful for us.
     * each concept is associated with some exercises (where students have to "mentally execute a program fragment and predict the result")
     * Jeliot visualization tool as visualization component - that's just the name of a particular tool for Java program visualization (no info is given in the paper, but the authors cite a tech report) http://cs.joensuu.fi/jeliot/index.php
           o Jeliot visualization shows everything, not just relevant concepts
+
           o the "home-made" visualization that simplified to just focus on the concepts being learned seemed to be more effective
     * Jeliot vis. of object reference was too complex for CS1 students
     * after study, students still had difficulty with "conditionals, loops, scope, parameter passing and object reference"
