@@ -1,7 +1,7 @@
 #summary Bloom's taxonomy revisited: specifying assessable learning objectives in computer science
 
 Bloom's taxonomy revisited: specifying assessable learning objectives in computer science<br>
-Christopher W. Starr, Bill Manaris, RoxAnn H. Stalvey<br>
+Christopher W. Starr, Bill Manaris, !RoxAnn H. Stalvey<br>
 SIGCSE'08, SIGCSE Bulletin 40(1), March 2008<br>
 Pages 261-265
 
