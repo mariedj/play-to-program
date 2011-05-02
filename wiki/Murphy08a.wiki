@@ -1,6 +1,6 @@
 #summary Debugging-the good, the bad, and the quirky -- a qualitative analysis of novices' strategies
 
-Laurie Murphy, Gary Lewandowski, Renée McCauley, Beth Simon, Lynda Thomas, Carol Zander<br>
+Laurie Murphy, Gary Lewandowski, Renée !McCauley, Beth Simon, Lynda Thomas, Carol Zander<br>
 39th SIGCSE<br>
 Pages 163-167<br>
 They did a study comparing debugging techniques used by experts versus those used by novices. Result: the techniques used were generally the same, however, experts used these techniques with greater efficiency.<br>
