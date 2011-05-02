@@ -2,7 +2,7 @@
 
 Nouf M. Al-Barakati and Arwa Y. Al-Aama. 2009. The effect of visualizing roles of variables on student performance in an introductory programming course. In _Proceedings of the 14th annual ACM SIGCSE conference on Innovation and technology in computer science education_ (ITiCSE '09). ACM, New York, NY, USA, 228-232.
 
-This paper finds that using the PlanAni (role of variables visualization) tool from the [Kuittinen04 Sajaniemi paper] has no significant effect on students' performance on a post-test. They suggest that visualizations should allow for rewinding and check for understanding throughout (not just after).
+This paper finds that using the !PlanAni (role of variables visualization) tool from the [Kuittinen04 Sajaniemi paper] has no significant effect on students' performance on a post-test. They suggest that visualizations should allow for rewinding and check for understanding throughout (not just after).
 
 ------------------------
 
