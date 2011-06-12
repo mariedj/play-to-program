@@ -4,15 +4,22 @@
 
 RUR-ITS can be started by executing rur_start.py
 
-By default, RUR-ITS will start by launching a pretest, which will need to be completed before entering the system, and using the system will be followed by a post-test.  Problem selection will be a fixed order as it is set in the problems file (usually in increasing order of difficulty).  RUR-ITS accepts a few command-line arguments to change the default behavior.  These arguments are not positional and are not flags, so they should be given as is, in any order.
+By default, RUR-ITS will start by launching a pretest, which will need to be completed before entering the system, and using the system will be followed by a post-test.  Problem selection will be a fixed order as it is set in the problems file (usually in increasing order of difficulty).
+
+Also by default, the RUR-PLE problems given by RUR-ITS are all program tracing and prediction problems where the user is given an environment and code, and is asked to predict the behavior of the program.  RUR-ITS also has support for program writing problems.
+
+RUR-ITS accepts a few command-line arguments to change the default behavior.  These arguments are not positional and are not flags, so they should be given as is, in any order.
 
 skip - skip the pretest and post-test and enter the system immediately<br>
 aps - use the adaptive problem selection algorithm to select the best problem every time<br>
 fps - rank the problems by the adaptive problem selection algorithm after completing the pretest, and thereafter go through the problems in a fixed order from most to least helpful as determined by the algorithm
+write - use program writing problems instead of prediction problems
 
 ===Adding and modifying content===
 
-The default instructions file is lessons/en/instr.htm
+The default instructions file for prediction problems is lessons/en/instr.htm
+
+The instructions file for program writing problems is lessons/en/wrtinstr.htm
 
 The concept outline for the test questions and RUR-PLE problems is given on the first page of rurprogs.pdf, available in Downloads.
 
@@ -31,14 +38,11 @@ The lists defining which problems are program tracing problems and which are pro
 concepts - A list of outline identifiers of the concepts for the question, ex: ["IA1","IB2a"].<br>
 difficulty - Difficulty level of the problem, on a scale from 1 to 10.
 
+For program writing problems, the problem definitions in rur_py/problems.py will work as follows.  The code returned by the function will not be loaded into RUR-ITS and should be the code for a correct implementation of the problem's solution.  The code may be used to check the user's solution.  There also needs to be an HTML file containing instructions for the problem, describing what the program the user is being asked to write should do.  This HTML file should be in lessons/en/probs and should have the same name as the problem's function, with a .html extension.  Any associated images should be stored in lessons/images/probs.
+
 ===Future work===
 
-Currently, the RUR-PLE problems given by RUR-ITS are all program tracing and prediction problems where the user is given an environment and code, and is asked to predict the behavior of the program.  The following enhancements are planned to add support for program writing problems.
-
-The system will accept "write" as a command-line argument to use program writing problems instead of prediction problems.
-
-The problem definitions in rur_py/problems.py will work as follows.  The code returned by the function will not be loaded into RUR-ITS and should be the code for a correct implementation of the problem's solution.  The code may be used to check the user's solution.  The function should have one more class attribute attached to it:<br>
-instructions - filename of a HTML file in lessons/en/intro giving the instructions for the problem, describing what the program the user is being asked to write should do.
+Currently, RUR-ITS does not have the ability to check solutions to program writing problems for correctness.  We plan to add support for this in the future.
 
 ===Known Bugs===
 
