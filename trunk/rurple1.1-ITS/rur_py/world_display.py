@@ -206,6 +206,8 @@ Editing world (only when in editing mode):
             else:
                 self.editMode = False
                 self.app.ch.showEditButtons(False)
+                if not self.app.traceMode:
+                    self.controlMode = False
         elif self.controlMode == False:
             pass
         elif code == wx.WXK_UP:           # up arrow

@@ -58,7 +58,7 @@ class RW_Concept(Concept): # recency weighted concept tree
 
 
 """For this type of student, the problems are selected in a fixed order
-that is set during initialization.  It will cycle through the problems."""
+that is set during initialization.  It will cycle through the problems once."""
 class Student:
     def __init__(self, templates):
         tree = {}
@@ -86,11 +86,14 @@ class Student:
                             break
         self.tree = tree
     def next(self):
-        if "num" not in self.__dict__ or self.num == len(self.templates):
+        if "num" not in self.__dict__:
             self.num = 0
         else:
             self.num += 1
-        self.last = self.templates[self.num]
+        if self.num != len(self.templates):
+            self.last = self.templates[self.num]
+        else:
+            self.last = None
         global count
         count += 1
         return self.last

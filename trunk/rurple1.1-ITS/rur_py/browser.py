@@ -22,6 +22,7 @@ import os.path
 # Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
 
 import os
+import sys
 import conf
 import wx
 import wx.html as  html
@@ -61,8 +62,11 @@ class TestHtmlPanel(wx.Panel):
         btn_size = (32, 32)
         spacer_large = (125, 36)
         spacer_small = (4, 4)
-        tip_list = [_("Go back in browser history"),
+        self.tip_list = [_("Go back in browser history"),
                      _("Home"), _("Go forward in browser history")]
+        tip_list = []
+        for tooltip in self.tip_list:
+            tip_list.append(_(tooltip))
         button_list = [
             [None,      False, None, None, spacer_small, None],
             [wx.NewId(), True, self.OnBack, getImage(images.BACK),
@@ -95,8 +99,11 @@ class TestHtmlPanel(wx.Panel):
         self.SetSizer(self.box)
         self.SetAutoLayout(True)
 
-        name = os.path.join(self.lessons_dir, 'instr.htm')
-        self.html.LoadPage(name)
+        if 'write' not in sys.argv:
+            self.name = os.path.join(self.lessons_dir, 'instr.htm')
+        else:
+            self.name = os.path.join(self.lessons_dir, 'wrtinstr.htm')
+        self.html.LoadPage(self.name)
 
     def ChooseLanguage(self, event):
         translation.select(event.GetString()) 
@@ -107,10 +114,8 @@ class TestHtmlPanel(wx.Panel):
         self.grand_parent.window.SetPageText(3, _("Python: simple editor"))
         self.grand_parent.SetTitle(_("RUR: a Python Learning Environment"))
         # tool tips; recreate the list in the new language and use it
-        tip_list = [_("Go back in browser history"),
-                     _("Home"), _("Go forward in browser history")]
-        for i in range(len(tip_list)):
-            self.btn_list[i].SetToolTipString(tip_list[i])
+        for i in range(len(self.tip_list)):
+            self.btn_list[i].SetToolTipString(_(self.tip_list[i]))
         self.parent.Refresh()
         # choice window in Robot page
         self.grand_parent.ch.SelectLanguage()
@@ -141,8 +146,7 @@ class TestHtmlPanel(wx.Panel):
         self.grand_parent.world.DoDrawing()
 
     def OnHome(self, event):
-        name = os.path.join(self.lessons_dir, 'instr.htm')
-        self.html.LoadPage(name)
+        self.html.LoadPage(self.name)
 
     def OnLoadFile(self, event):
         openedFileName = dialogs.openDialog(_("Choose a file"),
