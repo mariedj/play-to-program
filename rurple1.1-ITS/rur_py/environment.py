@@ -19,7 +19,7 @@ def default(width=10,height=10,xpos=1,ypos=1,dir='E',beepers=600):
 
 def stairs(height=0):
     if height == 0:
-        height = random.randint(1,8)
+        height = random.randint(2,8)
     env = default(beepers=0)
     for i in range(height*2):
         env['walls'].append((i+2,i+1))

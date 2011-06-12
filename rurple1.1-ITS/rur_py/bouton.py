@@ -6,6 +6,7 @@
     andre.roberge@gmail.com
 """
 
+import sys
 import wx
 import images
 from images import getImage
@@ -27,28 +28,35 @@ class rurChoiceWindow(wx.ScrolledWindow):
         self.ggp.BUTTON_HEIGHT = btn_size[0] + 8
         spacer_large = (settings.SCREEN[9], settings.SCREEN[9])
 
-        tip_list = [_("Submit & check answer or proceed to the next problem"),
-                          _("Reset world"), 
-                          _("Run robot program"),
-                          _("Step through robot program instructions"), 
-                          _("Pause program"), 
-                          _("Stop program"), 
-                          _("Adjust robot speed"),
-                          _("Undo robot action"),
-                          _("Drop beeper"),
-                          _("Grab beeper"),
-                          _("Print text to console"),
-                          _("Turn robot off"),
-                          _("Open robot program"),
-                          _("Save robot program"),
-                          _("Open world state"),
-                          _("Save world state"),
-                          _("Edit walls"),
-                          _("Resize world"),
-                          _("Give beepers to robot"),
-                          _("Remove/add robot from/to world"),
-                          _("Toggle world state view"),
-                          _("Load new images for robot")]
+        submitNext = "Submit & check answer or proceed to the next problem"
+        if 'write' in sys.argv:
+            submitNext = "Submit answer & proceed to the next problem"
+        self.tip_list = [submitNext,
+                         "Reset world", 
+                         "Run robot program",
+                         "Step through robot program",
+                         "Pause program", 
+                         "Stop program", 
+                         "Adjust robot speed",
+                         "Undo robot action",
+                         "Drop beeper",
+                         "Grab beeper",
+                         "Print text to console",
+                         "Turn robot off",
+                         "Open robot program",
+                         "Save robot program",
+                         "Open world state",
+                         "Save world state",
+                         "Edit walls",
+                         "Resize world",
+                         "Give beepers to robot",
+                         "Remove/add robot from/to world",
+                         "Show instruction screen",
+                         "Load new images for robot"]
+
+        tip_list = []
+        for tooltip in self.tip_list:
+            tip_list.append(_(tooltip))
 
         widget_list1 = [
             [wx.NewId(), BUTTON, self.ggp.SubmitNext,
@@ -99,8 +107,8 @@ class rurChoiceWindow(wx.ScrolledWindow):
             [wx.NewId(), BUTTON, self.ggp.AddRemoveRobot,
                 getImage(images.ADD_REMOVE_ROBOT), btn_size, tip_list[19]],
             [None,      SPACER, None, None, spacer_large, None],
-            [wx.NewId(), BUTTON, self.ggp.ToggleWorldWindow,
-                getImage(images.SHOW_WORLD_FILE), btn_size, tip_list[20]],
+            [wx.NewId(), BUTTON, self.ggp.ShowInstructionScreen,
+                getImage(images.HELP), btn_size, tip_list[20]],
             [None,      SPACER, None, None, spacer_large, None],
             [wx.NewId(), BUTTON, self.ggp.load_images,
                 getImage(images.NEW_ROBOT_IMAGES), btn_size, tip_list[21]],
@@ -154,47 +162,29 @@ class rurChoiceWindow(wx.ScrolledWindow):
 
     def SelectLanguage(self):
         # recreate the list, using the new language
-        tip_list = [_("Submit & check answer or proceed to the next problem"),
-                          _("Reset world"), 
-                          _("Run robot program"),
-                          _("Step through robot program instructions"), 
-                          _("Pause program"), 
-                          _("Stop program"), 
-                          _("Adjust robot speed"),
-                          _("Undo robot action"),
-                          _("Drop beeper"),
-                          _("Grab beeper"),
-                          _("Print text to console"),
-                          _("Turn robot off"),
-                          _("Open robot program"),
-                          _("Save robot program"),
-                          _("Open world state"),
-                          _("Save world state"),
-                          _("Edit walls"),
-                          _("Resize world"),
-                          _("Give beepers to robot"),
-                          _("Remove/add robot from/to world"),
-                          _("Toggle world state view"),
-                          _("Load new images for robot")]
+        tip_list = []
+        for tooltip in self.tip_list:
+            tip_list.append(_(tooltip))
 
         for i in range(len(tip_list)):
             self.btn_list[i].SetToolTipString(tip_list[i])
         self.ggp.slider_speed.SetToolTipString(tip_list[6])
 
-    def showRunButtons(self, show=True):
-        indices = [2, 3, 4, 5]
+    def showButtons(self, show, indices):
         for i in indices:
             self.btn_list[i].Show(show)
+
+    def showRunButtons(self, show=True):
+        self.showButtons(show, [2, 3, 4, 5])
 
     def showTraceButtons(self, show=True):
-        indices = [7, 8, 9, 10, 11]
-        for i in indices:
-            self.btn_list[i].Show(show)
+        self.showButtons(show, [7, 8, 9, 10, 11])
+
+    def showWriteButtons(self, show=True):
+        self.showButtons(show, [20])
 
     def showEditButtons(self, show=True):
-        indices = [12, 13, 14, 15, 16, 17, 18, 19, 20, 21]
-        for i in indices:
-            self.btn_list[i].Show(show)
+        self.showButtons(show, [12, 13, 14, 15, 16, 17, 18, 19, 21])
 
 class pythonChoiceWindow(wx.Panel):
     def __init__(self, parent, editor):
@@ -204,15 +194,19 @@ class pythonChoiceWindow(wx.Panel):
         spacer_small = (4, 4)
         spacer_large = (25, 25)
 
-        tip_list = [_("Open Python file"), 
-                         _("Save Python file"),
-                         _("Run Python program"),
-                        _("Run program with argument list"),
-                        _("Help"),
-                        _("Go to line number"),
-                        _("Hide or show output window"),
-                        _("Change layout"),
-                         _("Clear text")]
+        self.tip_list = ["Open Python file", 
+                         "Save Python file",
+                         "Run Python program",
+                         "Run program with argument list",
+                         "Help",
+                         "Go to line number",
+                         "Hide or show output window",
+                         "Change layout",
+                         "Clear text"]
+
+        tip_list = []
+        for tooltip in self.tip_list:
+            tip_list.append(_(tooltip))
 
         helpId = wx.NewId()
         openId = wx.NewId()
@@ -286,15 +280,10 @@ class pythonChoiceWindow(wx.Panel):
 
     def SelectLanguage(self):
         # recreate the list, using the new language
-        tip_list = [_("Open Python file"), 
-                         _("Save Python file"),
-                         _("Run Python program"),
-                        _("Run program with argument list"),
-                        _("Help"),
-                        _("Go to line number"),
-                        _("Hide or show output window"),
-                        _("Change layout"),
-                         _("Clear text")]
+        tip_list = []
+        for tooltip in self.tip_list:
+            tip_list.append(_(tooltip))
+
         for i in range(len(tip_list)):
             self.btn_list[i].SetToolTipString(tip_list[i])
 

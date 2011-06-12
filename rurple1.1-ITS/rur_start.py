@@ -167,12 +167,18 @@ class RURApp(wx.Frame):
             self.logfile = open(os.path.join(self.logdir, str(user_id) + '_problems_' + currTime + '.txt'), 'w')
         #
         self.traceMode = False
-        if 'aps' in sys.argv:
-            self.stud = student.APS_Student(problems.tracing)
-        elif 'fps' in sys.argv:
-            self.stud = student.FPS_Student(problems.tracing)
+        if 'write' not in sys.argv:
+            self.writeMode = False
+            problem_set = problems.tracing
         else:
-            self.stud = student.Student(problems.tracing)
+            self.writeMode = True
+            problem_set = problems.writing
+        if 'aps' in sys.argv:
+            self.stud = student.APS_Student(problem_set)
+        elif 'fps' in sys.argv:
+            self.stud = student.FPS_Student(problem_set)
+        else:
+            self.stud = student.Student(problem_set)
         self.prepost = False
         if not 'skip' in sys.argv:
             self.prepost = True
@@ -193,6 +199,8 @@ class RURApp(wx.Frame):
                 f1.close()
                 f2.close()
         self.problemNumber = 0
+        self.instr = None
+        self.instr_screen = None
         arg = self.status_bar.user_field, str(user_id)
         event_manager.SendCustomEvent(self, arg)
         #
@@ -213,20 +221,12 @@ class RURApp(wx.Frame):
 
     def OnClose(self, event):
         if self.ProgramEditor.GetModify():
-                ret = dialogs.messageDialog(_(u'Save changes to %s?')
-                    % unicode(self.filename), _("About to close"), wx.YES
+                ret = dialogs.messageDialog(_(u'Submit changes to problem %s?')
+                    % unicode(self.problemNumber), _("About to close"), wx.YES
                     | wx.NO | wx.CANCEL | wx.ICON_QUESTION | wx.STAY_ON_TOP)
                 if ret == wx.ID_YES:
-                    if len(self.filename) > 0:
-                        try:
-                            f = open(self.filename, 'w')
-                            f.write(content)
-                            f.close()
-                        except IOError, e:
-                            messageDialog(unicode(e[1]), (u'IO Error'),
-                                wx.OK | wx.STAY_ON_TOP)
-                    else:
-                        self.SaveProgramFile(event)
+                    self.SubmitNext(wx.EVT_CLOSE)
+                    self.OnExit(event)
                 elif ret == wx.ID_NO:
                     self.OnExit(event)
         else:
@@ -235,6 +235,8 @@ class RURApp(wx.Frame):
                 self.OnExit(event)
 
     def OnExit(self, event):
+        if self.instr_screen:
+            self.instr_screen.Close()
         if logData:
             self.logfile.close()
         if self.prepost:
@@ -311,25 +313,60 @@ class RURApp(wx.Frame):
             # TODO: visual diff: beepers? & visual glitch (correct->incorrect)
             return
 
+        if self.writeMode and self.problemNumber > 0:
+            self.ResetWorld(None)
+            if logData: # log problem and solution
+                storewld = str(user_id) + '_world_' + str(self.problemNumber) + '_' + currTime + '.txt'
+                self.SaveWorldFile(None, os.path.join(self.wlddir, storewld))
+                storerur = str(user_id) + '_code_' + str(self.problemNumber) + '_' + currTime + '.txt'
+                self.SaveProgramFile(None, os.path.join(self.rurdir, storerur))
+                # TODO: check solution
+                self.logfile.write(str(self.problemNumber) + ',' + str(self.stud.num) + '\n')
+            if dummy == wx.EVT_CLOSE:
+                return
+
         self.outputWindow.ClearAll()
 
         prob = self.stud.next()
-        env, prog = prob()
+        if not prob:
+            self.Close(True)
+        env, self.raw_code = prob()
         self.problemNumber += 1
         self.backup_dict = env
-        self.ProgramEditor.SetReadOnly(False)
-        self.ProgramEditor.SetText(prog)
-        self.ProgramEditor.SetSavePoint() 
-        self.ProgramEditor.SetReadOnly(True)
         arg = self.status_bar.problem_field, str(self.stud.num) + ": " + prob.__name__
         event_manager.SendCustomEvent(self, arg)
-        self.WorldDisplay.controlMode = True
-        self.setTraceMode()
         self.ch.showEditButtons(False)
+        if not self.writeMode:
+            self.setTraceMode()
+            self.ch.showWriteButtons(False)
+            self.ProgramEditor.SetReadOnly(False)
+            self.ProgramEditor.SetText(self.raw_code)
+            self.ProgramEditor.SetSavePoint() 
+            self.ProgramEditor.SetReadOnly(True)
+            self.WorldDisplay.controlMode = True
+            self.WorldDisplay.SetFocus()
+        else:
+            self.setTraceMode(False)
+            self.ch.showWriteButtons()
+            self.ProgramEditor.SetText("")
+            self.ProgramEditor.SetSavePoint()
+            self.instr = prob.__name__ + ".html"
+            self.ShowInstructionScreen(None)
+            self.WorldDisplay.controlMode = False
+            self.ProgramEditor.SetFocus()
         
         self.ResetWorld(None)
         self.outputWindow.setHighlightMode(False)
-        self.WorldDisplay.SetFocus()
+
+    def ShowInstructionScreen(self, dummy):
+        if self.user_program.isRunning:
+            return
+        if self.instr_screen:
+            self.instr_screen.Close()
+        if not self.instr:
+            return
+        self.instr_screen = InstructionScreen(None, -1, 'Instruction Screen')
+        self.instr_screen.setInstructions(self.instr)
 
 #---- Robot action methods
     def UndoRobotAction(self, dummy):
@@ -575,7 +612,7 @@ class RURApp(wx.Frame):
                 dialogs.messageDialog(mesg, _("Program will not be used."))
     
     def SaveProgramFile(self, dummy, savedFileName=""):
-        if self.user_program.isRunning or self.user_program.isStepped:
+        if self.user_program.isRunning:
             return
         global code
         code = self.ProgramEditor.GetText()
@@ -1285,11 +1322,11 @@ class InstructionScreen(wx.Frame):
         frameX = 500
         frameY = 500
         wx.Frame.__init__(self, parent, id, title, size=(frameX, frameY))
-        self.lessons_dir = conf.getLessonsNlDir()
 
+        self.lessons_dir = conf.getLessonsNlDir()
         self.html = html.HtmlWindow(self, id)
 
-        self.labelFont = wx.Font(20, wx.FONTFAMILY_DEFAULT, wx.FONTSTYLE_NORMAL,
+        labelFont = wx.Font(20, wx.FONTFAMILY_DEFAULT, wx.FONTSTYLE_NORMAL,
                             wx.FONTWEIGHT_BOLD)
 
         wx.EVT_CLOSE(self, self.OnClose)
@@ -1301,10 +1338,8 @@ class InstructionScreen(wx.Frame):
         event.Skip()
 
     def setInstructions(self, ins):
-        htmlFiles = os.path.join(settings.LESSONS_DIR, 'en', 'intro')
-        
+        htmlFiles = os.path.join(self.lessons_dir, 'probs')
         page = os.path.join(htmlFiles, ins)
-
         self.html.LoadPage(page)
 		
 

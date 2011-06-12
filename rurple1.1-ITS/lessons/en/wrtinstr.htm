@@ -1,0 +1,89 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en"><head>
+
+
+
+
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+<link rel="stylesheet" href="rurple.css" type="text/css" /><title>RUR-PLE Instructions</title></head><body>
+<h2 class="title">Playing to Program: Learning Python with RUR-PLE!</h2>
+
+<h6>André Roberge, © 2005-2010<br />
+David Walser, Robert Deloatch, Eliana Feasley, Amy Ciavolino, © 2010-2011<br />
+</h6>
+<p>Welcome to RUR-PLE!&nbsp; In RUR-PLE, you will find a robot named
+Reeborg who is controlled by Python programs.&nbsp; These Python
+programs contain instructions that tell Reeborg to perform actions and
+tests that help Reeborg decide what to do.&nbsp; Reeborg is placed in
+an environment that is surrounded by walls and can contain other walls
+as well as objects called beepers, which Reeborg can pick up, hold on
+to, and put down.&nbsp; To help test and develop your understanding of
+Python, you will be given an environment and your
+task will be to write Python code to control what Reeborg will do 
+when running your program so that it completes the given task.&nbsp; 
+The instructions for Reeborg's actions and tests are below.<br />
+</p>
+<h3 class="section">Summary of instructions</h3>
+
+<p>Reeborg's actions:</p>
+
+<pre>move()		- moves Reeborg forward one step<br />turn_left()	- turns Reeborg 90° to the left<br />turn_right()	- turns Reeborg 90° to the right<br />grab_beeper()	- pick up one of the beepers Reeborg is standing on<br />drop_beeper()	- puts down one of the beepers that Reeborg is holding<br />turn_off()	- turns Reeborg off when he has completed a task<br /></pre>
+
+<p>Tests:</p>
+
+<pre>front_is_clear()	- returns True if there is no wall directly in front of Reeborg<br />left_is_clear()		- returns True if there is no wall on Reeborg's left side<br />right_is_clear()	- returns True if there is no wall on Reeborg's right side<br />facing_north()		- returns True if Reeborg is facing upward<br />carries_beepers()	- returns True if Reeborg is holding any beepers<br />on_beeper()		- returns True if Reeborg is standing on any beepers<br /></pre>
+<h3><span class="section">Errors</span><br />
+</h3>
+<p>Certain actions can cause errors which make Reeborg complain and
+turn off.&nbsp; Avoid these actions to assure that Reeborg completes
+the assigned task.<br />
+</p>
+<p>Actions which cause errors:<br />
+</p>
+<ul>
+  <li>Move - when a wall is in front of Reeborg</li>
+  <li>Grab Beeper - when Reeborg is not standing on any beepers</li>
+  <li>Drop Beeper - when Reeborg is not holding any beepers<br />
+  </li>
+</ul>
+<h3><span class="section">Testing your solution</span>
+</h3>
+
+<p>To get started, click on the Robot: Code and Learn tab above, and then click on the Submit/Next button on the toolbar.&nbsp; <img style="width: 32px; height: 32px;" alt="Submit/Next" title="Submit/Next" src="../../rur_images/goto.png" /><br />
+</p>
+<p>An environment will be loaded and instructions for the problem will be shown in a pop-up window.&nbsp; Your task is to
+write a program that will make Reeborg perform the task described in the instructions when running your program.<br />
+<br />
+</p>
+<span class="important"><span class="warning important">*** Don't forget to turn Reeborg off at the end of your program!!!</span></span><span class="important"> ***</span><br />
+<p>To test your solution, click on the run button on the toolbar to run your program.&nbsp;<img style="width: 32px; height: 32px;" alt="Run" title="Run" src="../../rur_images/run1.png" /></p>
+<p>RUR-PLE will then run the robot program, and you can watch and see
+what it really does.&nbsp; You can control the speed with which the
+program runs by using the Adjust robot speed slider on the
+toolbar&nbsp; <img style="width: 22px; height: 22px;" alt="Adjust robot speed" title="Adjust robot speed" src="../../rur_images/speed.png" />.&nbsp; As the program runs, the line of code
+that is currently executing will be highlighted in the code window on
+the left.&nbsp; When the program is done running, Reeborg will stop moving
+and no code will be highlighted.<br />
+</p>
+<p>Once the program has run, you can make changes
+to your code to correct any errors or change the behavior. You can then run the program again to see how Reeborg's
+behaviors change.&nbsp; The controls for this are on the toolbar and 
+behave like a visual debugger, which will be familiar if you have ever 
+used one.&nbsp; These controls
+are:</p>
+<ul>
+  <li><img style="width: 32px; height: 32px;" alt="Run robot program" title="Run robot program" src="../../rur_images/run1.png" />- Run the program</li><li><img style="width: 32px; height: 32px;" alt="Step through robot program instructions" title="Step through robot program instructions" src="../../rur_images/step.png" />- Execute one statement and move to the next statement</li>
+  <li><img style="width: 32px; height: 32px;" alt="Pause program" title="Pause program" src="../../rur_images/pause.png" />- Pause/Unpause execution of the program</li>
+  <li><img style="width: 22px; height: 22px;" alt="Stop program" title="Stop program" src="../../rur_images/stop.png" />&nbsp;&nbsp; - Stop running the program</li>
+  <li><img style="width: 32px; height: 32px;" alt="Reset the world" title="Reset the world" src="../../rur_images/reset_world.png" /> - Reset the environment and robot</li>
+
+<li><img style="width: 22px; height: 22px;" alt="Instruction Sheet" title="Instruction Sheet" src="../../rur_images/help.png" />&nbsp;&nbsp; - Show the instruction window for the problem</li>
+</ul>
+<p><span class="suggested">Note:  If the program is paused, make sure you run it to completion or stop it before proceeding to the next problem.</span></p>
+<p>Once you are satisfied that your program performs the correct
+actions to solve the problem, you may submit your solution and proceed
+to the next problem by clicking on the Submit/Next button on the
+toolbar.&nbsp; <img style="width: 32px; height: 32px;" alt="Submit/Next" title="Submit/Next" src="../../rur_images/goto.png" />
+</p>
+<p>This submission is final and RUR-PLE will advance you to the next problem.</p><br />
+</body></html>

@@ -1,5 +1,11 @@
+import sys
 import random
 import environment
+
+if not 'write' in sys.argv:
+    writeMode = False
+else:
+    writeMode = True
 
 def newspaper_fixed():
     #environment(newspaper.wld)
@@ -285,8 +291,8 @@ trash.difficulty = 2
 def rectangle():
     #environment(default+beepers)
     # IB2a, IC, IIB1
-    length = random.randint(3,5)
-    width = random.randint(3,5)
+    length = random.randint(3,5) if not writeMode else 3
+    width = random.randint(3,5) if not writeMode else 4
     return (environment.default(), """def turn_around():
     for i in range(2):
         turn_left()
@@ -319,7 +325,7 @@ rectangle.difficulty = 2
 def triangle():
     #environment(default+beepers)
     # IB2a, IC, IIB1
-    size = random.randint(3,5)
+    size = random.randint(3,5) if not writeMode else 4
     return (environment.default(), """def turn_around():
     for i in range(2):
         turn_left()
@@ -358,7 +364,7 @@ triangle.difficulty = 1
 def filled_triangle():
     #environment(default+beepers)
     # IA1, IA2, IB2a, IB2c, IC, IIB1, IIIA1, IIIB1, IIIB2, IIIB3
-    size = random.randint(2,5)
+    size = random.randint(2,5) if not writeMode else 4
     return (environment.default(), """def turn_around():
     for i in range(2):
         turn_left()
@@ -628,7 +634,7 @@ spaced_beepers.difficulty = 1
 def planter():
     #environment(plus_sign_in_middle)
     # IA2, IB1a, IIIA2
-    corners = random.randint(0,2)
+    corners = random.randint(0,2) if not writeMode else 0
     return (environment.planter(), """def turn_around():
     for i in range(2):
         turn_left()
@@ -803,7 +809,7 @@ mover.difficulty = 3
 def bowling():
     #environment(default+beepers)
     # IA1, IA2, IB2a, IB2c, IC, IIB1, IIIB1
-    rows = random.randint(3,4)
+    rows = random.randint(3,4) if not writeMode else 4
     return (environment.default(), """def turn_around():
     for i in range(2):
         turn_left()
