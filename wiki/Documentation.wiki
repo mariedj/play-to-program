@@ -12,7 +12,7 @@ RUR-ITS accepts a few command-line arguments to change the default behavior.  Th
 
 skip - skip the pretest and post-test and enter the system immediately<br>
 aps - use the adaptive problem selection algorithm to select the best problem every time<br>
-fps - rank the problems by the adaptive problem selection algorithm after completing the pretest, and thereafter go through the problems in a fixed order from most to least helpful as determined by the algorithm
+fps - rank the problems by the adaptive problem selection algorithm after completing the pretest, and thereafter go through the problems in a fixed order from most to least helpful as determined by the algorithm<br>
 write - use program writing problems instead of prediction problems
 
 ===Adding and modifying content===
