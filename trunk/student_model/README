@@ -1,0 +1,37 @@
+README 
+
+-------------------------------
+Playing to Program Student Model Files
+-------------------------------
+
+This code infers the competence of students in different concepts based on their
+performance on problems involving known concepts.  
+
+There are three different executable python files in this code.  They are
+
+      interactive_driver
+      data_gen_driver
+      test_driver
+
+The interactive_driver lets the user answer questions with known difficulties 
+and see how that impacts the student model.    The data_gen_driver generates
+a large number of random problems and generative models, and uses them to
+test the accuracy of the inference device.  The test_driver reads in a file with
+information about an exam and the answers a student gave, and uses these to
+make inferences using various models about the student.  
+
+If you want to make an improvement - i.e. adding support for multiple problem
+solving strategies, reoorganizing code, adding more/better/prettier information
+to the file being written, make it in one of the river files.  If you are trying
+to test a new thing you are writing or experiment, copy the driver that most 
+closely approximates what you are trying to do to a new file (ie 
+my_interactive_driver.py and edit that).  If there is some significant added 
+functionality, feel free to make a new driver.
+
+All new code should try to follow the Google Python Coding standards located
+at 
+
+http://google-styleguide.googlecode.com/svn/trunk/pyguide.html#Python_Style_Rules
+
+Changing old code so it adheres is also not discouraged, but BE SURE to note
+any changes other than just adding comments when you check in your code
