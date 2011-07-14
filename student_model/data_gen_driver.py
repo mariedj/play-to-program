@@ -20,13 +20,15 @@ linear_diffs = []
 
 def main():
 
+    sys.setrecursionlimit(2000)
+
      
     # Problem set parameters
     num_problems = 500
     num_concepts = 3
     num_answers = 10
     avg_concepts_involved = 1.5
-    num_trials = 100
+    num_trials = 1000
     
     # Initialize student models
     logistic_student = students.LogisticStudent(num_concepts)    
