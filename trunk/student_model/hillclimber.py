@@ -1,11 +1,14 @@
-
+def mkdict(concepts, values):
+    ans = {}
+    for i, concept in enumerate(concepts):
+        ans[concept] = values[i]
 
 def most_likely_explanation(test_student, problem_set, student_answers):
     guess = []
-    num_concepts =  test_student.get_num_concepts()
+    num_concepts =  test_student.num_concepts
     for i in range(num_concepts):
         guess.append(.5)
-    test_student.set_competences(guess)
+    test_student.competences = mkdict(student.concepts, guess)
     guess = get_outcome(guess, test_student, problem_set, student_answers, .4, num_concepts)
     guess = get_outcome(guess, test_student, problem_set, student_answers, .3, num_concepts)
     guess = get_outcome(guess, test_student, problem_set, student_answers, .2, num_concepts)
@@ -24,7 +27,7 @@ def get_outcome(guess, test_student,  problem_set, student_answers, increment, n
     new_guess = guess
     for step in steps:
         temp_guess = generate_guess(step, guess, increment)
-        test_student.set_competences(temp_guess)
+        test_student.competences = mkdict(student.concepts, temp_guess)
         prob =  get_probability_of_outcome(problem_set, student_answers, test_student)
         #print prob
         if prob > max_prob:

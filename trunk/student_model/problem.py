@@ -2,34 +2,37 @@ import random
 
 class Problem:
     ''' Represents statistical information about a test problem.
-    
-    <Description goes here>
     '''
-    
-    def __init__(self, num_concepts, num_answers, avg_concepts_involved):
-        # Populate competences vector
-        self.difficulties = []
-        self.num_concepts = num_concepts
+    def __init__(self, concepts, num_answers):
+        self.difficulties = {}
+        self.concepts = concepts
         self.num_answers = num_answers
-        for i in xrange(num_concepts):
-            if random.random() < (float(avg_concepts_involved)/num_concepts):
-                self.difficulties.append(random.random())
-            else:
-                self.difficulties.append(0)
-
-    def set_attributes(self, difficulties):
-        self.difficulties = difficulties
-        
 
     def get_difficulty(self, concept):
         return self.difficulties[concept]
+        
+    def set_difficulty(self, concept, difficulty):
+	self.difficulties[concept] = difficulty
+	if difficulty == 0:
+	  del self.difficulties[concept]
+	  self.concepts.remove(concept)
     
     def accident(self):
-        #return 1.0/self.numAnswers
+        #return 1.0/self.num_answers
         return 0 #TODO change this to another value
         
     def __str__(self):
         r = "Problem difficulties:\n"
-        for dif in self.difficulties:
-            r += str(dif) + " "
+        for c, val in self.difficulties:
+            r += c + ":" + str(val) + " "
         return r
+        
+class RandomProblem(Problem):
+    ''' Randomly generate a problem from a list of possible concepts
+    '''
+    def __init__(self, concepts, num_answers, avg_concepts_involved):
+	Problem.__init__(self, [], num_answers)
+        for i in range len(concepts):
+            if random.random() < (float(avg_concepts_involved)/len(concepts)):
+		self.concepts.append(concepts[i])
+                self.difficulties[concepts[i]] = random.random()

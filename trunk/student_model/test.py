@@ -14,22 +14,28 @@ MEAN = 0
 PRODUCT = 1
 MIN = 2
 
+def mkdict(concepts, values):
+    ans = {}
+    for i, concept in enumerate(concepts):
+        ans[concept] = values[i]
+
 def main():
 
      
     # Problem set parameters
     num_problems = 500
-    num_concepts = 3
+    concepts = ["IA","IB","II"]
+    num_concepts = len(concepts)
     num_answers = 10
     avg_concepts_involved = 1.5
     
     # Initialize student models
-    logistic_student = students._logistic_student(num_concepts)    
-    binary_student   = students._binary_student(num_concepts)
-    linear_student   = students._linear_student(num_concepts)
+    logistic_student = students.LogisticStudent(concepts)    
+    binary_student   = students.BinaryStudent(concepts)
+    linear_student   = students.LinearStudent(concepts)
     
     my_students = {logistic_student: "_logistic _student", binary_student:  "_binary _student", linear_student:  "_linear _student"}
-    problem_set = exam._problem_set(num_problems, num_concepts, num_answers, avg_concepts_involved)
+    problem_set = exam.RandomProblemSet(concepts, num_problems, num_answers, avg_concepts_involved)
     
     # Answers array:
     answers = []
@@ -82,7 +88,7 @@ def main():
 
 
     # Now we want to get the model to update in real time.  Let's do this interactively!
-    p = problem._problem(num_concepts, num_answers, avg_concepts_involved)
+    p = problem.RandomProblem(concepts, num_answers, avg_concepts_involved)
     logistic_guess = [.5, .5, .5]
     binary_guess = [.5, .5, .5]
     linear_guess = [.5, .5, .5]
@@ -98,44 +104,44 @@ def main():
     while raw_input("_answer _question(y/n):   ")[0] == 'y':
         answer = (raw_input("_correctly (y/n)"  )[0] == 'y')
         # update logistic model
-        temp_stud = (students._logistic_student(num_concepts))
-        temp_stud.set_competences(logistic_guess)
+        temp_stud = students.LogisticStudent(concepts)
+        temp_stud.competences = mkdict(concepts, logistic_guess)
         logistic_guess = updater.update_model(temp_stud, p, answer, num_concepts)
         # update binary model
-        temp_stud = (students._binary_student(num_concepts))
-        temp_stud.set_competences(binary_guess)
+        temp_stud = students.BinaryStudent(concepts)
+        temp_stud.competences = mkdict(concepts, binary_guess)
         binary_guess = updater.update_model(temp_stud, p, answer, num_concepts)
         # update linear model
-        temp_stud = (students._linear_student(num_concepts))
-        temp_stud.set_competences(linear_guess)
+        temp_stud = students.LinearStudent(concepts)
+        temp_stud.competences = mkdict(concepts, linear_guess)
         linear_guess = updater.update_model(temp_stud, p, answer, num_concepts)
         print "_estimated _logistic _competence _level:\n" + str(logistic_guess)
         print "_estimated _binary _competence _level:\n" + str(binary_guess)
         print "_estimated _linear _competence _level:\n" + str(linear_guess)
-        p = problem._problem(num_concepts, num_answers, avg_concepts_involved)
+        p = problem.RandomProblem(concepts, num_answers, avg_concepts_involved)
         print p
     
 
 
 def run_tests(f, num_concepts, logistic_student, binary_student, linear_student, problem_set, answers):
-    test_student = students._logistic_student(num_concepts)
-    test_student.set_competences(logistic_student.competences)
+    test_student = students.LogisticStudent(concepts)
+    test_student.competences = logistic_student.competences
     logistic_guess = hillclimber.most_likely_explanation(test_student, problem_set, answers[LOGISTIC], num_concepts)
 
     f.write('\n' + '_logistic _student' + '\n')    
     f.write("_actual _competence _level:\n" + str(logistic_student.competences) + "\n")
     f.write("_estimated _competence _level:\n" + str(logistic_guess) + "\n")
 
-    test_student = students._binary_student(num_concepts)
-    test_student.set_competences(binary_student.competences)
+    test_student = students.BinaryStudent(concepts)
+    test_student.competences = binary_student.competences
     binary_guess = hillclimber.most_likely_explanation(test_student, problem_set, answers[BINARY], num_concepts)
     
     f.write('\n' + '_binary _student' + '\n')    
     f.write("_actual _competence _level:\n" + str(binary_student.competences) + "\n")
     f.write("_estimated _competence _level:\n" + str(binary_guess) + "\n")    
 
-    test_student = students._linear_student(num_concepts)
-    test_student.set_competences(linear_student.competences)
+    test_student = students.LinearStudent(concepts)
+    test_student.competences = linear_student.competences
     linear_guess = hillclimber.most_likely_explanation(test_student, problem_set, answers[LINEAR], num_concepts)
                 
     f.write('\n' + '_linear _student' + '\n')    
@@ -147,10 +153,10 @@ def run_tests(f, num_concepts, logistic_student, binary_student, linear_student,
     linear_diffs = []
 
     
-    for i in range(num_concepts):
-        logistic_diffs.append(math.fabs(logistic_student.competences[i] - logistic_guess[i]))
-        binary_diffs.append(math.fabs(binary_student.competences[i] - binary_guess[i]))
-        linear_diffs.append(math.fabs(linear_student.competences[i] - linear_guess[i]))
+    for i, concept in enumerate(concepts): # TODO convert hillclimber to named concepts
+        logistic_diffs.append(math.fabs(logistic_student.competences[concept] - logistic_guess[i]))
+        binary_diffs.append(math.fabs(binary_student.competences[concept] - binary_guess[i]))
+        linear_diffs.append(math.fabs(linear_student.competences[concept] - linear_guess[i]))
         
     return logistic_diffs, binary_diffs, linear_diffs
 
