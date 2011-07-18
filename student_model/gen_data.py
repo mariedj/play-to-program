@@ -18,18 +18,19 @@ def main():
 
      
     # Problem set parameters
-    numProblems = 500
-    numConcepts = 3
-    numAnswers = 10
-    avgConceptsInvolved = 1.5
+    num_problems = 500
+    concepts = ["IA,IB,II"]
+    num_concepts = len(concepts)
+    num_answers = 10
+    avg_concepts_involved = 1.5
     
     # Initialize student models
-    logisticStudent = students.LogisticStudent(numConcepts)    
-    binaryStudent   = students.BinaryStudent(numConcepts)
-    linearStudent   = students.LinearStudent(numConcepts)
+    logisticStudent = students.LogisticStudent(concepts)    
+    binaryStudent   = students.BinaryStudent(concepts)
+    linearStudent   = students.LinearStudent(concepts)
     
     myStudents = {logisticStudent: "Logistic Student", binaryStudent:  "Binary Student", linearStudent:  "Linear Student"}
-    problemSet = exam.ProblemSet(numProblems, numConcepts, numAnswers, avgConceptsInvolved)
+    problemSet = exam.RandomProblemSet(concepts, num_problems, num_answers, avg_concepts_involved)
     
     # Answers array:
     answers = []
@@ -41,9 +42,9 @@ def main():
     
     # Generate test results.
     f = open("examResults.txt", "w")
-    f.write("\nnumProblems = " + str(numProblems) +
-            "\nnumConcepts = " + str(numConcepts) +
-            "\nnumAnswers = "  + str(numAnswers) + "\n")
+    f.write("\nnum_problems = " + str(num_problems) +
+            "\nnum_concepts = " + str(num_concepts) +
+            "\nnum_answers = "  + str(num_answers) + "\n")
     
     for student in myStudents.keys():
         # initialize the competences or the student
@@ -71,7 +72,7 @@ def main():
     avg_lin = 0
     avg_bnr = 0
     
-    log, lin, bnr = run_tests(f, numConcepts, logisticStudent, binaryStudent, linearStudent, problemSet, answers)
+    log, lin, bnr = run_tests(f, num_concepts, logisticStudent, binaryStudent, linearStudent, problemSet, answers)
     avg_log += sum(log)
     avg_lin += sum(lin)
     avg_bnr += sum(bnr)
@@ -82,26 +83,26 @@ def main():
 
 
 
-def run_tests(f, numConcepts, logisticStudent, binaryStudent, linearStudent, problemSet, answers):
-    test_student = students.LogisticStudent(numConcepts)
-    test_student.set_competences(logisticStudent.competences)
-    logistic_guess = hillclimber.most_likely_explanation(test_student, problemSet, answers[LOGISTIC], numConcepts)
+def run_tests(f, num_concepts, logisticStudent, binaryStudent, linearStudent, problemSet, answers):
+    test_student = students.LogisticStudent(concepts)
+    test_student.competences = logisticStudent.competences
+    logistic_guess = hillclimber.most_likely_explanation(test_student, problemSet, answers[LOGISTIC], num_concepts)
 
     f.write('\n' + 'Logistic Student' + '\n')    
     f.write("Actual Competence Level:\n" + str(logisticStudent.competences) + "\n")
     f.write("Estimated Competence Level:\n" + str(logistic_guess) + "\n")
 
-    testStudent = students.BinaryStudent(numConcepts)
-    test_student.set_competences(binaryStudent.competences)
-    binary_guess = hillclimber.most_likely_explanation(test_student, problemSet, answers[BINARY], numConcepts)
+    testStudent = students.BinaryStudent(concepts)
+    test_student.competences = binaryStudent.competences
+    binary_guess = hillclimber.most_likely_explanation(test_student, problemSet, answers[BINARY], num_concepts)
     
     f.write('\n' + 'Binary Student' + '\n')    
     f.write("Actual Competence Level:\n" + str(binaryStudent.competences) + "\n")
     f.write("Estimated Competence Level:\n" + str(binary_guess) + "\n")    
 
-    testStudent = students.LinearStudent(numConcepts)
-    test_student.set_competences(linearStudent.competences)
-    linear_guess = hillclimber.most_likely_explanation(test_student, problemSet, answers[LINEAR], numConcepts)
+    testStudent = students.LinearStudent(concepts)
+    test_student.competences = linearStudent.competences
+    linear_guess = hillclimber.most_likely_explanation(test_student, problemSet, answers[LINEAR], num_concepts)
                 
     f.write('\n' + 'Linear Student' + '\n')    
     f.write("Actual Competence Level:\n" + str(linearStudent.competences) + "\n")
@@ -112,10 +113,10 @@ def run_tests(f, numConcepts, logisticStudent, binaryStudent, linearStudent, pro
     linear_diffs = []
 
     
-    for i in range(numConcepts):
-        logistic_diffs.append(math.fabs(logisticStudent.competences[i] - logistic_guess[i]))
-        binary_diffs.append(math.fabs(binaryStudent.competences[i] - binary_guess[i]))
-        linear_diffs.append(math.fabs(linearStudent.competences[i] - linear_guess[i]))
+    for i, concept in enumerate(concepts): # TODO convert hillclimber to named concepts
+        logistic_diffs.append(math.fabs(logisticStudent.competences[concept] - logistic_guess[i]))
+        binary_diffs.append(math.fabs(binaryStudent.competences[concept] - binary_guess[i]))
+        linear_diffs.append(math.fabs(linearStudent.competences[concept] - linear_guess[i]))
         
     return logistic_diffs, binary_diffs, linear_diffs
 
