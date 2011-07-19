@@ -9,7 +9,7 @@ class Problem:
         self.num_answers = num_answers
 
     def get_difficulty(self, concept):
-        return self.difficulties[concept]
+        return self.difficulties.get(concept, 0)
         
     def set_difficulty(self, concept, difficulty):
 	self.difficulties[concept] = difficulty
