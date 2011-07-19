@@ -71,7 +71,7 @@ class SoftLogisticStudent(LogisticStudent):
             if problem.get_difficulty(concept) != 0:
                 likelihood = self.logistic_fn(problem.get_difficulty(concept),
                     self.get_competence(concept))
-                correct.[concept] = likelihood
+                correct[concept] = likelihood
 
         return correct
 
