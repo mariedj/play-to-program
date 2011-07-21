@@ -20,16 +20,13 @@ linear_diffs = []
 
 def main():
 
-    sys.setrecursionlimit(2000)
-
-     
     # Problem set parameters
     num_problems = 500
-    concepts = ["IA,IB,II"]
+    concepts = ["IA","IB","II"]
     num_concepts = len(concepts)
     num_answers = 10
     avg_concepts_involved = 1.5
-    num_trials = 1000
+    num_trials = 5
     
     # Initialize student models
     logistic_student = students.LogisticStudent(concepts)    
@@ -61,7 +58,6 @@ def main():
             # initialize the competences or the student
             student.competences = competences
             f.write('\n' + my_students.get(student) + '\n')
-
             # Record student success on problem set
             for item in problem_set.problems:
                 result = random.random() < student.answer_problem_correctly(item)
@@ -96,9 +92,11 @@ def main():
 
 
 def run_tests(f, logistic_student, binary_student, linear_student, problem_set, answers):
+
     concepts = logistic_student.concepts
     test_student = students.LogisticStudent(concepts)
     test_student.competences = logistic_student.competences
+
     logistic_guess = hillclimber.most_likely_explanation(test_student, problem_set, answers[LOGISTIC])
 
     f.write('\n' + 'Logistic Student' + '\n')    

@@ -10,6 +10,7 @@ def mkdict(concepts, values):
     ans = {}
     for i, concept in enumerate(concepts):
         ans[concept] = values[i]
+    return ans
 
 def main():
     concepts = ["IA","IB","II"]

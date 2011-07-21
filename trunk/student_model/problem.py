@@ -23,16 +23,16 @@ class Problem:
         
     def __str__(self):
         r = "Problem difficulties:\n"
-        for c, val in self.difficulties:
-            r += c + ":" + str(val) + " "
+        for key in self.difficulties:
+            r += key + ":" + str(self.difficulties.get(key)) + " "
         return r
         
 class RandomProblem(Problem):
     ''' Randomly generate a problem from a list of possible concepts
     '''
     def __init__(self, concepts, num_answers, avg_concepts_involved):
-	Problem.__init__(self, [], num_answers)
-        for i in range len(concepts):
-            if random.random() < (float(avg_concepts_involved)/len(concepts)):
-		self.concepts.append(concepts[i])
-                self.difficulties[concepts[i]] = random.random()
+        Problem.__init__(self, [], num_answers)
+        for i in range(len(concepts)):
+               if random.random() < (float(avg_concepts_involved)/len(concepts)):
+                   self.concepts.append(concepts[i])
+                   self.difficulties[concepts[i]] = random.random()

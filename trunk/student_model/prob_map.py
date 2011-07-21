@@ -16,7 +16,7 @@ class MultMap(ProbMap):
     def process(self, li):
         result = 1.0
         for i in li:
-            result *= i
+            result *= li.get(i)
         return result
         
         
@@ -54,4 +54,5 @@ def main():
     print MinMap().process(li)
     print MeanMap().process(li)
     
-main()
+if __name__ == "__main__":
+    main()

@@ -13,9 +13,12 @@ class Student:
         
     def random_competences(self):
         for concept in self.concepts:
+            #print concept
+            #print self.competences
             self.competences[concept] = random.random()
             
     def get_competence(self, concept):
+        #print self.competences
         return self.competences[concept]
     
     def answer_problem_correctly(self, problem):
@@ -31,8 +34,9 @@ class Student:
 
     def __str__(self):
         r = "Competences\n"
-        for c, val in self.competences:
-            r += c + ":" + str(val) + " "
+        #print self.competences
+        for key in self.competences:
+            r += key + ":" + str(self.competences.get(key)) + " "
         return r
 
 
@@ -44,6 +48,7 @@ class LogisticStudent(Student):
     
     def get_prob_correct(self, problem):
         correct = {}
+        #print self.competences
         for concept in self.concepts:
             if problem.get_difficulty(concept) != 0:
                 likelihood = self.logistic_fn(problem.get_difficulty(concept),

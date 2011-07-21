@@ -15,6 +15,4 @@ class RandomProblemSet(ProblemSet):
 
     def addRandomProblems(self, num_problems, num_answers=-1, avg_concepts_involved=2):
         for i in range(num_problems):
-            self.problems.append(problem.RandomProblem(concepts, num_answers, avg_concepts_involved))
-
-
+            self.problems.append(problem.RandomProblem(self.concepts, num_answers, avg_concepts_involved))
