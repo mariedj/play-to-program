@@ -36,3 +36,8 @@ class RandomProblem(Problem):
                if random.random() < (float(avg_concepts_involved)/len(concepts)):
                    self.concepts.append(concepts[i])
                    self.difficulties[concepts[i]] = random.random()
+
+
+
+if __name__ == "main":
+    pass #%TODO implement unit tests before modifying this file
