@@ -140,9 +140,9 @@ class BinaryStudent(Student):
         correct = {}
         for concept in self.concepts:
             if self.get_competence(concept) < problem.get_difficulty(concept):
-                correct[concept] = 0.0
+                correct[concept] = 0.1
             elif problem.get_difficulty(concept) > 0:
-                correct[concept] = 1.0
+                correct[concept] = .9
         
         return correct
     
@@ -153,7 +153,7 @@ class SoftBinaryStudent(Student):
         correct = []
         for concept in range(self.num_concepts):
             if self.get_competence(concept) < problem.get_difficulty(concept):
-                correct[concept] = 0.1
+                correct[concept] = .1
             elif problem.get_difficulty(concept) > 0:
                 correct[concept] = 0.9
         
