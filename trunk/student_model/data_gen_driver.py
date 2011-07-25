@@ -18,16 +18,17 @@ logistic_diffs = []
 binary_diffs = []
 linear_diffs = []
 
+
 def main():
 
     # Problem set parameters
-    num_problems = 500
+    num_problems = 100
     concepts = ["IA","IB","II"]
     num_concepts = len(concepts)
     num_answers = 10
     avg_concepts_involved = 1.5
     num_trials = 5
-    
+    f = open("inferences.txt", "w")    
     # Initialize student models
     logistic_student = students.LogisticStudent(concepts)    
     binary_student   = students.BinaryStudent(concepts)
@@ -37,7 +38,7 @@ def main():
     problem_set = exam.RandomProblemSet(concepts, num_problems, num_answers, avg_concepts_involved)
 
     # Generate test results.
-    f = open("exam_results.txt", "w")
+    #f = open("exam_results.txt", "w")
     f.write("\nnum_problems = " + str(num_problems) +
             "\nnum_concepts = " + str(num_concepts) +
             "\nnumAnswers = "  + str(num_answers) + "\n")
@@ -57,15 +58,14 @@ def main():
         for student in my_students.keys():
             # initialize the competences or the student
             student.competences = competences
-            f.write('\n' + my_students.get(student) + '\n')
+            # f.write('\n' + my_students.get(student) + '\n')
             # Record student success on problem set
             for item in problem_set.problems:
                 result = random.random() < student.answer_problem_correctly(item)
-                f.write(str(result) + ", ")
+                # f.write(str(result) + ", ")
                 answers[answers_index].append(result)
             answers_index += 1
 
-        f.close()
 
 
 
@@ -74,7 +74,6 @@ def main():
         # account for the fact that some settings are more likely than others. Suppose we have
         # full information about the problem difficulties.
 
-        f = open("inferences.txt", "w")
         avg_log = 0
         avg_lin = 0
         avg_bnr = 0

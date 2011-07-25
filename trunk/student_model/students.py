@@ -140,7 +140,7 @@ class BinaryStudent(Student):
         correct = {}
         for concept in self.concepts:
             if self.get_competence(concept) < problem.get_difficulty(concept):
-                correct[concept] = 0.1
+                correct[concept] = 0.2
             elif problem.get_difficulty(concept) > 0:
                 correct[concept] = .9
         
@@ -158,3 +158,9 @@ class SoftBinaryStudent(Student):
                 correct[concept] = 0.9
         
         return correct
+
+
+
+
+if __name__ == "main":
+    pass #%TODO implement unit tests before modifying this file
