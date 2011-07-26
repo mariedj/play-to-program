@@ -5,6 +5,7 @@ import exam
 import hillclimber
 import updater
 import math
+import sys
 
 LOGISTIC = 0
 BINARY = 1
