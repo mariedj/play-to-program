@@ -23,12 +23,12 @@ linear_diffs = []
 def main():
 
     # Problem set parameters
-    num_problems = 100
+    num_problems = 1
     concepts = ["IA","IB","II"]
     num_concepts = len(concepts)
     num_answers = 10
     avg_concepts_involved = 1.5
-    num_trials = 5
+    num_trials = 1
     f = open("inferences.txt", "w")    
     # Initialize student models
     logistic_student = students.LogisticStudent(concepts)    
@@ -102,6 +102,11 @@ def run_tests(f, logistic_student, binary_student, linear_student, problem_set, 
     f.write('\n' + 'Logistic Student' + '\n')    
     f.write("Actual Competence Level:\n" + str(logistic_student.competences) + "\n")
     f.write("Estimated Competence Level:\n" + str(logistic_guess) + "\n")
+    
+    #prob_model = get_probability_of_outcome(problem_set,  student_answers, logistic_student)
+    #guess_student = student.LogisticStudent(logistic_guess)
+    #prob_guess = hillclimber.get_probability_of_outcome(problem_set, student_answers, guess_student)
+    #print prob_guess/prob_model
 
     test_student = students.BinaryStudent(concepts)
     test_student.competences = binary_student.competences

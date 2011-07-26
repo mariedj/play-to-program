@@ -14,13 +14,16 @@ def most_likely_explanation(test_student, problem_set, student_answers):
         
     test_student.competences = mkdict(test_student.concepts, guess)
     
-    guess = get_outcome(guess, test_student, problem_set, student_answers, .4, num_concepts)
+    #guess = get_outcome(guess, test_student, problem_set, student_answers, .4, num_concepts)
+    print
+    print "START"
+    print
     guess = get_outcome(guess, test_student, problem_set, student_answers, .3, num_concepts)
-    guess = get_outcome(guess, test_student, problem_set, student_answers, .2, num_concepts)
-    guess = get_outcome(guess, test_student, problem_set, student_answers, .1, num_concepts)
-    guess = get_outcome(guess, test_student, problem_set, student_answers, .05, num_concepts)
-    guess = get_outcome(guess, test_student, problem_set, student_answers, .01, num_concepts)
-    guess = get_outcome(guess, test_student, problem_set, student_answers, .005, num_concepts)
+    #guess = get_outcome(guess, test_student, problem_set, student_answers, .2, num_concepts)
+    #guess = get_outcome(guess, test_student, problem_set, student_answers, .1, num_concepts)
+    #guess = get_outcome(guess, test_student, problem_set, student_answers, .05, num_concepts)
+    #guess = get_outcome(guess, test_student, problem_set, student_answers, .01, num_concepts)
+    #guess = get_outcome(guess, test_student, problem_set, student_answers, .005, num_concepts)
     return guess
 
 def get_outcome(guess, test_student,  problem_set, student_answers, increment, num_concepts):
@@ -37,6 +40,10 @@ def get_outcome(guess, test_student,  problem_set, student_answers, increment, n
         prob =  get_probability_of_outcome(problem_set, student_answers, test_student)
         #print prob
         if prob > max_prob:
+            print prob, max_prob
+            print new_guess
+            print test_student.competences
+            print temp_guess
             #print '  ', prob, '    ', max_prob
             max_prob = prob
             new_guess = temp_guess
