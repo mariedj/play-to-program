@@ -98,7 +98,7 @@ class LinearStudent(Student):
                               (self.get_competence(concept) - 1)
                 if likelihood > 1:
                     # if d < c then p(corr) > 1 -- we cap at 1
-                    likelihood = 1
+                    likelihood = 1.0
                 correct[concept] = likelihood
         return correct
 
@@ -113,15 +113,17 @@ class SoftLinearStudent(Student):
     '''
     
     def get_prob_correct(self, problem):
-        correct = []
-        for concept in range(self.num_concepts):
+        correct = {}
+        for concept in self.concepts:
             if self.get_competence(concept) != 1:
                 likelihood = (problem.get_difficulty(concept) - 1) / \
                               (self.get_competence(concept) - 1)
-                if likelihood > 0.9:
-                    likelihood = 0.9 # cap high at 0.9
-                if likelihood < 0.1:
-                    likelihood = 0.1 # cap low at 0.1
+                if likelihood > .9:
+                    # if d < c then p(corr) > 1 -- we cap at 1
+                    likelihood = .9
+                if likelihood < .1:
+                    # if d < c then p(corr) > 1 -- we cap at 1
+                    likelihood = .1
                 correct[concept] = likelihood
         return correct
         
