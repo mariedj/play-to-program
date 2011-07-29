@@ -17,6 +17,7 @@ class MultMap(ProbMap):
         result = 1.0
         for i in li:
             result *= li.get(i)
+            #print result
         return result
         
         
@@ -27,10 +28,13 @@ class MinMap(ProbMap):
     '''
     
     def process(self, li):
+    
+        if len(li.keys())==0:
+            return 1.0
         result = 1.0
         for i in li:
-            if i < result:
-                result = i
+            if li.get(i) < result:
+                result = li.get(i)
         return result
 
 
@@ -41,15 +45,18 @@ class MeanMap(ProbMap):
     '''
     
     def process(self, li):
+        
+        if len(li.keys())==0:
+            return 1.0
         result = 0.0
         for i in li:
-            result += i
-        return result/len(li)
+            result += li.get(i)
+        return result/len(li.keys())
         
         
 #unit testing
 def main():
-    li = [0.5,0.25,0.3]
+    li = {'IA': .1, 'IB': .2, 'IC':.3}
     print MultMap().process(li)
     print MinMap().process(li)
     print MeanMap().process(li)
