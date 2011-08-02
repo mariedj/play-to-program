@@ -2,12 +2,6 @@ import random
 import math
 import students
 
-def mkdict(concepts, values):
-    ans = {}
-    for i, concept in enumerate(concepts):
-        ans[concept] = values[i]
-    return ans
-
 def most_likely_explanation(test_student, problem_set, student_answers, calculator):
     for concept in test_student.concepts:
         test_student.set_competence(concept, 0.5)
