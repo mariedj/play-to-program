@@ -1,3 +1,6 @@
+"""
+Here are my ideas for axes of experimentation
+=======
 import students
 import problem
 import random
@@ -38,14 +41,21 @@ def main():
     
     my_students = {logistic_student: "Logistic Student", binary_student:  "Binary Student", linear_student:  "Linear Student"}
     problem_set = exam.RandomProblemSet(concepts, num_problems, num_answers, avg_concepts_involved)
+>>>>>>> .r223
 
-    # Generate test results.
-    #f = open("exam_results.txt", "w")
-    f.write("\nnum_problems = " + str(num_problems) +
-            "\nnum_concepts = " + str(num_concepts) +
-            "\nnumAnswers = "  + str(num_answers) + "\n")
-    for i in range(num_trials):
+let the algorithms be
 
+<<<<<<< .mine
+LIN-MULT
+LIN-MEAN
+LIN-MIN
+BIN-MULT
+BIN-MULT
+BIN-MEAN
+LOG-MULT
+LOG-MULT
+LOG-MEAN
+=======
         problem_set = exam.RandomProblemSet(concepts, num_problems, num_answers, avg_concepts_involved)
     
         # Answers array:
@@ -68,72 +78,90 @@ def main():
                 # f.write(str(result) + ", ")
                 answers[answers_index].append(result)
             answers_index += 1
+>>>>>>> .r223
+
+Number of problems
+Number of concepts
+Number of concepts per problem
+
+We will:
+Generate a set of student results for each problem set
+
+...using each of the 9 models?
+
+Evaluate each set of results with each student model to generate a model
+
+...using each of the 9 models?
+
+That is, are you going to have 81 different combinations (generate
+data for each of the 9 models, and see how well that model's
+performance is predicted by each of the 9 models?)  Or are you
+thinking something different about how to set this up?
+
+see how the guesses are (percentagewise difference)
+see average difference between probability of
+
+...?
+
+Graph the performance of each model across increasing number of concepts 1 - 10
+
+   increasing number of problems 10, 50, 100, 500
+"""
+import prob_map
+import exam
+import random
+import sim_annealing
+import students
+
+mult = prob_map.MultMap()
+mean = prob_map.MeanMap()
+min = prob_map.MinMap()
+
+concepts = ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9']
+num_problems = [10, 25, 50, 100]
+num_iterations = 1
+avg_concepts_involved = 1.5
+num_answers = -1
+max_concepts = 10
+f = open('big_results.txt', 'w')
+
+strategies = {mult: ' mult,', mean: ' mean,', min:' min,'}
+
+for i in range(1, max_concepts + 1):
+ cons = concepts[0:i]
+ log = students.LogisticStudent(cons)
+ bin = students.BinaryStudent(cons)
+ lin = students.LinearStudent(cons)
+ all_students = {log: ' log,', lin: ' lin,', bin:' bin,'}
+ for stu in all_students:
+  for strat in strategies:
+   for num_p in num_problems:
+    for i in range(num_iterations):
+     stu.random_competences()
+     answers = []
+     exm = exam.RandomProblemSet(cons, num_p, num_answers, avg_concepts_involved)
+     for item in exm.problems:
+      result = random.random() < strat.process(stu.get_prob_correct(item))
+      answers.append(result)
+     true_comp = stu.get_competences()
+     guess = sim_annealing.most_likely_explanation(stu, exm, answers, strat)
+     f.write('\n')
+     f.write('\n')
+     f.write('\n')
+     f.write(all_students[stu] + strategies[strat] + str(len(cons)) + ', ' + str(num_p) + '\n')
+     f.write(str(exm))
+     f.write('\n')
+     f.write(str(answers))
+     f.write('\n')
+     f.write(str(true_comp))
+     f.write('\n')
+     stu.competences = true_comp
+     f.write(str(students.get_probability_of_outcome(exm, answers, stu, strat)))
+     f.write('\n')
+     f.write(str(guess))
+     f.write('\n')
+     stu.competences = guess
+     f.write(str(students.get_probability_of_outcome(exm, answers, stu, strat)))
 
 
-
-
-        # What we know: All priors are the same. So we just want to find the student parameters
-        # that have the highest possibilty of creating our evidence. Later we can adjust this to
-        # account for the fact that some settings are more likely than others. Suppose we have
-        # full information about the problem difficulties.
-
-        avg_log = 0
-        avg_lin = 0
-        avg_bnr = 0
-        for i in range(1):
-            log, lin, bnr = run_tests(f, logistic_student, binary_student, linear_student, problem_set, answers)
-            avg_log += sum(log)
-            avg_lin += sum(lin)
-            avg_bnr += sum(bnr)
-        
-    print 'log', avg_log / (num_trials * num_concepts)
-    print 'lin', avg_lin / (num_trials * num_concepts)
-    print 'bnr', avg_bnr / (num_trials * num_concepts)
-    f.close()
-
-
-
-def run_tests(f, logistic_student, binary_student, linear_student, problem_set, answers):
-
-    concepts = logistic_student.concepts
-    test_student = students.LogisticStudent(concepts)
-    test_student.competences = logistic_student.competences
-
-    logistic_guess = hillclimber.most_likely_explanation(test_student, problem_set, answers[LOGISTIC])
-
-    f.write('\n' + 'Logistic Student' + '\n')    
-    f.write("Actual Competence Level:\n" + str(logistic_student.competences) + "\n")
-    f.write("Estimated Competence Level:\n" + str(logistic_guess) + "\n")
-    
-    #prob_model = get_probability_of_outcome(problem_set,  student_answers, logistic_student)
-    #guess_student = student.LogisticStudent(logistic_guess)
-    #prob_guess = hillclimber.get_probability_of_outcome(problem_set, student_answers, guess_student)
-    #print prob_guess/prob_model
-
-    test_student = students.BinaryStudent(concepts)
-    test_student.competences = binary_student.competences
-    binary_guess = hillclimber.most_likely_explanation(test_student, problem_set, answers[BINARY])
-    
-    f.write('\n' + 'Binary Student' + '\n')    
-    f.write("Actual Competence Level:\n" + str(binary_student.competences) + "\n")
-    f.write("Estimated Competence Level:\n" + str(binary_guess) + "\n")    
-
-    test_student = students.LinearStudent(concepts)
-    test_student.competences = linear_student.competences
-    linear_guess = hillclimber.most_likely_explanation(test_student, problem_set, answers[LINEAR])
-                
-    f.write('\n' + 'Linear Student' + '\n')    
-    f.write("Actual Competence Level:\n" + str(linear_student.competences) + "\n")
-    f.write("Estimated Competence Level:\n" + str(linear_guess) + "\n")
-
-    
-    for concept in concepts:
-        logistic_diffs[concept] = math.fabs(logistic_student.competences[concept] - logistic_guess[concept])
-        binary_diffs[concept] = math.fabs(binary_student.competences[concept] - binary_guess[i])
-        linear_diffs[concept] = math.fabs(linear_student.competences[concept] - linear_guess[i])
-        
-    return logistic_diffs, binary_diffs, linear_diffs
-
-
-# Run the program
-main()
+f.close()
