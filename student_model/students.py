@@ -10,6 +10,8 @@ class Student:
         self.concepts = concepts
         self.num_concepts = len(concepts)
         self.competences = {}
+        for concept in concepts:
+            self.competences[concept] = 0.35 #TODO: is that the right value?
         
     def random_competences(self):
         for concept in self.concepts:
@@ -77,7 +79,7 @@ class SoftLogisticStudent(LogisticStudent):
     '''
 
     def get_prob_correct(self, problem):
-        correct = []
+        correct = {}
         for concept in self.concepts:
             if problem.get_difficulty(concept) != 0:
                 likelihood = self.logistic_fn(problem.get_difficulty(concept),
@@ -137,7 +139,7 @@ class SoftLinearStudent(Student):
 class BinaryStudent(Student):
     ''' Binary student model.
     
-    Gives 1.0 probability for a concept if the student's competence matches
+    Gives 1.0 probability for a concept if the student\'s competence matches
     or exceeds the difficulty rating, and .05 if it does not.
     
     Returns a list containing the success probability for each concept, in
@@ -158,8 +160,8 @@ class BinaryStudent(Student):
 class SoftBinaryStudent(Student):
 
     def get_prob_correct(self, problem):
-        correct = []
-        for concept in range(self.num_concepts):
+        correct = {}
+        for concept in self.concepts:
             if self.get_competence(concept) < problem.get_difficulty(concept):
                 correct[concept] = .1
             elif problem.get_difficulty(concept) > 0:
@@ -185,14 +187,16 @@ def get_probability_of_outcome(problem_set,  student_answers, student_model, cal
 
 
 
-if __name__ == "main":
+if __name__ == "__main__":
     import problem
-    student1 = SoftBinaryStudent()
-    student2 = SoftLinearStudent()
-    student3 = LinearStudent()
-    student4 = BinaryStudent()
-    student5 = LogisticStudent()
-    p = problem.RandomProblem(3, -1, 2)
+    concepts = ["IA","IB","IC"]
+    student1 = SoftBinaryStudent(concepts)
+    student2 = SoftLinearStudent(concepts)
+    student3 = SoftLogisticStudent(concepts)
+    student4 = LinearStudent(concepts)
+    student5 = BinaryStudent(concepts)
+    student6 = LogisticStudent(concepts)
+    p = problem.RandomProblem(concepts, -1, 2)
     print p
     print student1.get_prob_correct(p)
     print student2.get_prob_correct(p)

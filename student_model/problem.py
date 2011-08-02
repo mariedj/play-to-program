@@ -3,7 +3,7 @@ import random
 class Problem:
     ''' Represents statistical information about a test problem.
     '''
-    def __init__(self, concepts, num_answers):
+    def __init__(self, concepts, num_answers=-1):
         self.difficulties = {}
         self.concepts = concepts
         self.num_answers = num_answers
@@ -32,7 +32,7 @@ class Problem:
 class RandomProblem(Problem):
     ''' Randomly generate a problem from a list of possible concepts
     '''
-    def __init__(self, concepts, num_answers, avg_concepts_involved):
+    def __init__(self, concepts, num_answers=-1, avg_concepts_involved=2):
         Problem.__init__(self, [], num_answers)
         while not self.concepts:
             for i in range(len(concepts)):
