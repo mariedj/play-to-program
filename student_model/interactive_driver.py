@@ -2,7 +2,7 @@ import students
 import problem
 import random
 import exam
-import hillclimber
+import sim_annealing
 import updater # TODO what is updater?
 import math
 
@@ -38,15 +38,15 @@ def main():
         # update logistic model
         temp_stud = students.LogisticStudent(concepts)
         temp_stud.competences = mkdict(concepts, logistic_guess)
-        logistic_guess = updater.update_model(temp_stud, p, answer, num_concepts)
+        logistic_guess = sim_annealing.update_model(temp_stud, p, answer, num_concepts)
         # update binary model
         temp_stud = students.BinaryStudent(concepts)
         temp_stud.competences = mkdict(concepts, binary_guess)
-        binary_guess = updater.update_model(temp_stud, p, answer, num_concepts)
+        binary_guess = sim_annealing.update_model(temp_stud, p, answer, num_concepts)
         # update linear model
         temp_stud = students.LinearStudent(concepts)
         temp_stud.competences = mkdict(concepts, linear_guess)
-        linear_guess = updater.update_model(temp_stud, p, answer, num_concepts)
+        linear_guess = sim_annealing.update_model(temp_stud, p, answer, num_concepts)
         print "Estimated Logistic Competence Level:\n" + str(logistic_guess)
         print "Estimated Binary Competence Level:\n" + str(binary_guess)
         print "Estimated Linear Competence Level:\n" + str(linear_guess)
