@@ -34,10 +34,11 @@ class RandomProblem(Problem):
     '''
     def __init__(self, concepts, num_answers, avg_concepts_involved):
         Problem.__init__(self, [], num_answers)
-        for i in range(len(concepts)):
-            if random.random() < (float(avg_concepts_involved)/len(concepts)):
-                self.concepts.append(concepts[i])
-                self.difficulties[concepts[i]] = random.random()
+        while not self.concepts:
+            for i in range(len(concepts)):
+                if random.random() < (float(avg_concepts_involved)/len(concepts)):
+                    self.concepts.append(concepts[i])
+                    self.difficulties[concepts[i]] = random.random()
 
 
 # Unit Testing...
