@@ -24,7 +24,7 @@ class Problem:
         return 0 #TODO change this to another value
         
     def __str__(self):
-        r = "Problem difficulties:\n"
+        r = "Problem difficulties: "
         for key in self.difficulties:
             r += key + ":" + str(self.difficulties.get(key)) + " "
         return r

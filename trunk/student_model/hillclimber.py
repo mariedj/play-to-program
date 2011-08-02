@@ -28,7 +28,7 @@ def most_likely_explanation(test_student, problem_set, student_answers, calculat
     #guess = get_outcome(guess, test_student, problem_set, student_answers, .05, num_concepts, calculator)
     #guess = get_outcome(guess, test_student, problem_set, student_answers, .01, num_concepts, calculator)
     #guess = get_outcome(guess, test_student, problem_set, student_answers, .001, num_concepts, calculator)
-    return guess
+    return mkdict(test_student.concepts, guess)
 
 def get_outcome(guess, test_student,  problem_set, student_answers, increment, num_concepts, calculator):
     print guess
@@ -134,7 +134,7 @@ def get_probability_of_outcome(problem_set,  student_answers, student_model, cal
     for i in range(len(problem_set.problems)):
         
         prob_correct = calculator.process(student_model.get_prob_correct(problem_set.problems[i]))
-        print prob_correct
+        #print prob_correct
         if student_answers[i] == True:
             current_prob *= prob_correct
         else:
