@@ -244,3 +244,15 @@ if __name__ == "__main__":
         else:
             print "incorrect"
             stud.fail()
+# Future work:
+# - Implement a problem selection Student class here using the undergrads' new
+#   student model
+# - Have a virtual student which can learn by doing problems, and can give a
+#   probability of getting a problem correct, useful for simulations
+# - Run simulations on a virtual student using adaptive problem selection based
+#   on my old student model and the new (undergrads') one, to test which
+#   results in more learning for the virtual student
+# - Implement a similar method of calculating the probability of getting a
+#   problem correct based on a modeled student
+# - See which student model has better predictive accuracy on actual students'
+#   performance on problems from the user study
