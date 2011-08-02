@@ -43,11 +43,11 @@ class RandomProblemSet(ProblemSet):
 
 # Unit testing
 def main():
-    concepts = [0,1,2]
+    concepts = ["IA","IB","IC"]
     print '--- Problem Set'
-    s = ProblemSet(["IA","IB","IC"])
-    s.addProblem(problem.RandomProblem(["IA","IB","IC"], 4, 2))
-    s.addProblem(problem.RandomProblem(["IA","IB","IC"], 4, 3))
+    s = ProblemSet(concepts)
+    s.addProblem(problem.RandomProblem(concepts, 4, 2))
+    s.addProblem(problem.RandomProblem(concepts, 4, 3))
     print s
     
     print '--- addProblems'
@@ -56,7 +56,7 @@ def main():
     print s
     
     print '--- Random Problem Set'
-    s = RandomProblemSet(["IA","IB","IC"], 3, 4, 2)
+    s = RandomProblemSet(concepts, 3, 4, 2)
     print s
 
 
