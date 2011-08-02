@@ -52,7 +52,7 @@ min = prob_map.MinMap()
 
 concepts = ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9']
 num_problems = [10, 25, 50, 100]
-num_iterations = 10
+num_iterations = 1
 avg_concepts_involved = 1.5
 num_answers = -1
 max_concepts = 10

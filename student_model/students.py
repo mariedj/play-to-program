@@ -23,6 +23,7 @@ class Student:
         #print self.competences
         return self.competences[concept]
     
+    '''' 
     def answer_problem_correctly(self, problem):
         probs = self.get_prob_correct(problem)
         prob = 1.0
@@ -32,13 +33,17 @@ class Student:
         #TODO commented out the following for simplicity in bugtracking
         #probIncorrect = 1 - probC
         #probC = (1 - (probIncorrect * (1 - problem.accident())))
-        return prob
-    
+        return prob'''
+        
+        
     def get_competences(self):
         my_comps = {}
         for comp in self.competences:
             my_comps[comp] = self.competences.get(comp)
         return my_comps
+    
+    def set_competence(self, concept, competence):        
+           self.competences[concept] = competence           
 
     def __str__(self):
         r = "Competences\n"
