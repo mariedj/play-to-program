@@ -16,11 +16,17 @@ class Student:
             #print concept
             #print self.competences
             self.competences[concept] = random.random()
+    
+    def set_competence(self, concept, competence):
+        self.competences[concept] = competence
             
     def get_competence(self, concept):
         #print self.competences
         return self.competences[concept]
     
+    # NOTE: THIS METHOD SHOULD BE DEPRECATED. PLEASE CHANGE ALL REFERENCES IN
+    # UTILIZING CODE
+    '''
     def answer_problem_correctly(self, problem):
         probs = self.get_prob_correct(problem)
         prob = 1.0
@@ -31,7 +37,8 @@ class Student:
         #probIncorrect = 1 - probC
         #probC = (1 - (probIncorrect * (1 - problem.accident())))
         return prob
-
+    '''
+  
     def __str__(self):
         r = "Competences\n"
         #print self.competences
@@ -162,7 +169,22 @@ class SoftBinaryStudent(Student):
         return correct
 
 
+# Unit Testing
+def main():
+    # TODO this is a good start, but should be expanded for thoroughness
+    concepts = ['A', 'B', 'C']
+    prob = problem.Problem(concepts, 4)
+    prob.set_difficulty('A', 0.75)
+    prob.set_difficulty('B', 0.75)
+    prob.set_difficulty('C', 0.75)
+    stud = LinearStudent(concepts)
+    stud.set_competence('A', 0.25)
+    stud.set_competence('B', 0.50)
+    stud.set_competence('C', 0.75)
+    print stud
+    print prob
+    print ""
+    print stud.get_prob_correct(prob)
 
-
-if __name__ == "main":
-    pass #%TODO implement unit tests before modifying this file
+if __name__ == "__main__":
+    main()

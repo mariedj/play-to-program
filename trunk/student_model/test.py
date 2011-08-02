@@ -5,6 +5,7 @@ import exam
 import hillclimber
 import updater
 import math
+import prob_map
 
 LOGISTIC = 0
 BINARY = 1
@@ -58,7 +59,8 @@ def main():
         
         # Record student success on problem set
         for item in problem_set.problems:
-            result = random.random() < student.answer_problem_correctly(item)
+            #result = random.random() < student.answer_problem_correctly(item)
+            result = random.random() < prob_map.MultMap().process(student.get_prob_correct(item))
             f.write(str(result) + ", ")
             answers[answers_index].append(result)
         answers_index += 1

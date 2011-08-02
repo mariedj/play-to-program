@@ -153,7 +153,8 @@ def get_probability_of_outcome(problem_set,  student_answers, student_model, cal
 
 def get_probability_of_answer(problem,  answer, student_model):
 
-    prob_correct = student_model.answer_problem_correctly(problem)
+    #prob_correct = student_model.answer_problem_correctly(problem)
+    prob_correct = prob_map.MultMap().process(student_model.get_prob_correct(problem))
     if answer == True:
         return prob_correct
     else:
