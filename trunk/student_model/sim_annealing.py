@@ -12,7 +12,7 @@ def most_likely_explanation(test_student, problem_set, student_answers, calculat
 
 def simulated_annealing(test_student, problem_set, student_answers, calculator):
     s = test_student.competences
-    e = get_probability_of_outcome(problem_set, student_answers, test_student, calculator)
+    e = students.get_probability_of_outcome(problem_set, student_answers, test_student, calculator)
     sbest = {}
     for concept in s:
         sbest[concept] = s[concept]
@@ -51,7 +51,7 @@ def prob_move(e, enew, t):
     else:
         return (1 - math.fabs(e-enew)) * (1 - t) + (1 - t)
     
-    
+'''    
 def update_model(stud, prob, answer, calculator):
     s = guess
     test_student.competences= mkdict(test_student.concepts, s)
@@ -87,3 +87,4 @@ def gen_updating_neighbor(guess, problem, temperature):
         new_comp = min(1, max(0, competence + temperature * move))
         neighbor.append(new_comp)
     return neighbor
+    '''
