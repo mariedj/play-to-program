@@ -150,15 +150,15 @@ def run_tests(f, num_concepts, logistic_student, binary_student, linear_student,
     f.write("_actual _competence _level:\n" + str(linear_student.competences) + "\n")
     f.write("_estimated _competence _level:\n" + str(linear_guess) + "\n")
 
-    logistic_diffs = []
-    binary_diffs = []
-    linear_diffs = []
+    logistic_diffs = {}
+    binary_diffs = {}
+    linear_diffs = {}
 
     
-    for i, concept in enumerate(concepts): # TODO convert hillclimber to named concepts
-        logistic_diffs.append(math.fabs(logistic_student.competences[concept] - logistic_guess[i]))
-        binary_diffs.append(math.fabs(binary_student.competences[concept] - binary_guess[i]))
-        linear_diffs.append(math.fabs(linear_student.competences[concept] - linear_guess[i]))
+    for concept in concepts:
+        logistic_diffs[concept] = math.fabs(logistic_student.competences[concept] - logistic_guess[concept])
+        binary_diffs[concept] = math.fabs(binary_student.competences[concept] - binary_guess[concept])
+        linear_diffs[concept] = math.fabs(linear_student.competences[concept] - linear_guess[concept])
         
     return logistic_diffs, binary_diffs, linear_diffs
 
