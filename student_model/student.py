@@ -223,3 +223,24 @@ class FPS_Student(APS_Student): # adaptive problem selection sets a fixed order
         global count
         count += 1
         return self.last
+
+if __name__ == "__main__":
+    import random
+    import problem
+    probs = [] # TODO: use ProblemSet/exam?
+    for prob in problems.tracing:
+        new_prob = problem.Problem(prob.concepts)
+        for concept in prob.concepts:
+            new_prob.set_difficulty(concept, prob.difficulty)
+        probs.append(new_prob)
+    
+    stud = APS_Student(probs)
+    for i in range(20):
+        prob = stud.next()
+        print prob
+        if random.random() < 0.5: #TODO: API for probability of prob. correct
+            print "correct"
+            stud.succ()
+        else:
+            print "incorrect"
+            stud.fail()
