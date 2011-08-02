@@ -30,7 +30,7 @@ def get_exam(filename):
     for line in problems:
         num_answers = int(line[-1].strip())
         p = Problem.problem(concepts, num_answers)
-        for i, concept in enumerate(concepts)):
+        for i, concept in enumerate(concepts):
             p.set_difficulty[concept, float(line[i].strip())]
 
         e.addProblem(p)
