@@ -31,13 +31,13 @@ class RandomProblemSet(ProblemSet):
 def main():
     print '--- Problem Set'
     
-    s = ProblemSet([0,1,2])
-    s.addProblem(problem.RandomProblem([0,1,2], 4, 2))
-    s.addProblem(problem.RandomProblem([0,1,2], 4, 3))
+    s = ProblemSet(["IA","IB","IC"])
+    s.addProblem(problem.RandomProblem(["IA","IB","IC"], 4, 2))
+    s.addProblem(problem.RandomProblem(["IA","IB","IC"], 4, 3))
     print s
     
     print '--- Random Problem Set'
-    s = RandomProblemSet([0,1,2], 3, 4, 2)
+    s = RandomProblemSet(["IA","IB","IC"], 3, 4, 2)
     print s
 
 if __name__ == '__main__':

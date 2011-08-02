@@ -26,37 +26,33 @@ class Problem:
     def __str__(self):
         r = "Problem difficulties:\n"
         for key in self.difficulties:
-            r += str(key) + ":" + str(self.difficulties.get(key)) + " "
+            r += key + ":" + str(self.difficulties.get(key)) + " "
         return r
         
 class RandomProblem(Problem):
     ''' Randomly generate a problem from a list of possible concepts
     '''
     def __init__(self, concepts, num_answers, avg_concepts_involved):
-        Problem.__init__(self, concepts, num_answers)
+        Problem.__init__(self, [], num_answers)
         for i in range(len(concepts)):
             if random.random() < (float(avg_concepts_involved)/len(concepts)):
+                self.concepts.append(concepts[i])
                 self.difficulties[concepts[i]] = random.random()
-            else:
-                self.difficulties[concepts[i]] = 0
-            #if random.random() < (float(avg_concepts_involved)/len(concepts)):
-            #    self.concepts.append(concepts[i])
-            #    self.difficulties[concepts[i]] = random.random()
 
 
 # Unit Testing...
 def main():
     print '--- Testing Problem'
-    prob = Problem(3, 4)
-    prob.set_difficulty(0, 0.25)
-    prob.set_difficulty(1, 0.33)
-    prob.set_difficulty(2, 0.5)
+    prob = Problem(["IA","IB","IC"], 4)
+    prob.set_difficulty("IA", 0.25)
+    prob.set_difficulty("IB", 0.33)
+    prob.set_difficulty("IC", 0.5)
     print prob
-    print prob.get_difficulty(2)
+    print prob.get_difficulty("IC")
     
     print '--- Testing RandomProblem'
     
-    prob = RandomProblem([0,1,2], 4, 2)
+    prob = RandomProblem(["IA","IB","IC"], 4, 2)
     print prob
     
 
