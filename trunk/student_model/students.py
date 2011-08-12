@@ -4,26 +4,30 @@ import problem
 
 
 class Student:
-    ''' Defines a model for a virtual student
+    ''' Defines a model for a virtual student.
+    
+    A student model contains a dictionary of concept-competence values ranging
+    from 0-1, where each value represents the student's aptitude on the concept
+    it corresponds to.
     '''
     def __init__(self, concepts):
         self.concepts = concepts
         self.num_concepts = len(concepts)
         self.competences = {}
+        
         for concept in concepts:
             self.competences[concept] = 0.35 #TODO: is that the right value?
         
     def random_competences(self):
         for concept in self.concepts:
-            #print concept
-            #print self.competences
             self.competences[concept] = random.random()
             
     def get_competence(self, concept):
-        #print self.competences
         return self.competences[concept]
     
-    '''' 
+    '''
+    This function has been DEPRECATED but is retained for now, just in case
+    
     def answer_problem_correctly(self, problem):
         probs = self.get_prob_correct(problem)
         prob = 1.0
@@ -33,9 +37,9 @@ class Student:
         #TODO commented out the following for simplicity in bugtracking
         #probIncorrect = 1 - probC
         #probC = (1 - (probIncorrect * (1 - problem.accident())))
-        return prob'''
-        
-        
+        return prob
+    ''' 
+    
     def get_competences(self):
         my_comps = {}
         for comp in self.competences:
@@ -44,7 +48,7 @@ class Student:
     
     def set_competence(self, concept, competence):        
            self.competences[concept] = competence           
-
+    
     def __str__(self):
         r = "Competences\n"
         #print self.competences
@@ -163,7 +167,10 @@ class BinaryStudent(Student):
     
     
 class SoftBinaryStudent(Student):
-
+    ''' "Soft" binary student model.
+    
+    Same as the BinaryStudent model, but returns 0.9/0.1 instead of 1/0
+    '''
     def get_prob_correct(self, problem):
         correct = {}
         for concept in self.concepts:
@@ -173,16 +180,19 @@ class SoftBinaryStudent(Student):
                 correct[concept] = 0.9
         
         return correct
-            
-def get_probability_of_outcome(problem_set,  student_answers, student_model, calculator):
-
+        
+        
+#TODO Move this function to sim_annealing.py
+def get_probability_of_outcome(problem_set, student_answers, student_model, mapper):
+    '''
+    
+    '''
+    
     current_prob = 1.0
     # this factor is just here to keep the numbers from getting so  small that I
-    # start to worry a lot about floaring point precision
+    # start to worry a lot about floating point precision
     for i in range(len(problem_set.problems)):
-        
-        prob_correct = calculator.process(student_model.get_prob_correct(problem_set.problems[i]))
-        #print prob_correct
+        prob_correct = mapper.process(student_model.get_prob_correct(problem_set.problems[i]))
         if student_answers[i] == True:
             current_prob *= prob_correct
         else:

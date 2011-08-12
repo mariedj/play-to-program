@@ -1,3 +1,5 @@
+# NOTICE: This algorithm has been DEPRECATED in favor of simulated annealing.
+
 from prob_map import MultMap
 import random
 import math
