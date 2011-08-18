@@ -1,30 +1,46 @@
-import students
-import problem
-import random
-import exam
-import hillclimber
-import updater
-import math
-import config_exam
-import sys
+'''
+ File-based exam driver
+ 
+ The first command-line argument should be the name of the file containing
+ exam information, formatted as described in config_exam. All other arguments
+ should be files containing individual students' results. An example command
+ line is:
+ 
+    python test_driver.py exam.txt student1.txt student2.txt
+    
+ The program would create files results_student1.txt and results_student2.txt,
+ containing performance data for the respective students.
+'''
 
-# The first argument is the name of the file containing the exam information.
-# Every other argument should be a config file for an individual student's
-# results.  So run this as
-# python test_driver.py exam.txt student1.txt student2.txt ...
-# That call would create the files
-# results_student1.txt and results_student2.txt
-# for information on how these files should look, please view
-# config_exam.py
+# system imports
+import math
+import random
+import sys
+# project imports
+import config_exam
+import exam
+import problem
+import sim_annealing
+import students
+
+
 def main():
-    e = config_exam(sys.argv[1])
+    
+    if len(sys.argv) < 1:
+        # TODO error condition
+        pass
+    
+    exam = config_exam(sys.argv[1])
+    
     student_idx = 2
     while student_idx < len(sys.argv):
+        # TODO generate student models from files
         pass
+        
     # TODO integrating this code with support for performance on
     # multiple concepts will be a bit of work
 
 
 
-
-main()
+if __name__ == '__main__':
+    main()

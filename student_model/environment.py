@@ -1,3 +1,7 @@
+'''
+ Code for RUR-PLE
+'''
+
 import random
 
 def default(width=10,height=10,xpos=1,ypos=1,dir='E',beepers=600):

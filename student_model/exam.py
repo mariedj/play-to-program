@@ -22,8 +22,8 @@ class ProblemSet:
     def __str__(self):
         st = 'Problem Set\n\n'
         for i, prob in enumerate(self.problems):
-            st += 'Problem ' + str(i) + ':'
-            st += str(prob) + ', '
+            st += 'Problem ' + str(i) + ': '
+            st += str(prob) + '\n'
         return st
         
 

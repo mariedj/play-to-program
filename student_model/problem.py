@@ -1,3 +1,11 @@
+'''
+ Represents an exam problem.
+ 
+ Each Problem object represents a single exam problem, and contains information
+ about the exam concepts the problem covers, and the difficulty with which it
+ covers each.
+'''
+
 import random
 
 class Problem:
@@ -13,49 +21,58 @@ class Problem:
         
     def set_difficulty(self, concept, difficulty):
         self.difficulties[concept] = difficulty
-        if difficulty == 0:
-            del self.difficulties[concept]
-            self.concepts.remove(concept)
+        #if difficulty == 0:
+        #    del self.difficulties[concept]
+        #    self.concepts.remove(concept)
     
-    # This function should be deprecated. Accident probabilities should be
-    # handled in another class
+    '''
+    This function has been DEPRECATED but is retained for now, just in case
+    Accident probabilities should be handled in another class.
+    
     def accident(self):
         #return 1.0/self.num_answers
-        return 0 #TODO change this to another value
+        return 0 #TOGiven a list of concepts and average concepts involvedDO change this to another value
+    '''
         
     def __str__(self):
         r = "Problem difficulties: "
-        for key in self.difficulties:
+        for key in self.difficulties: # TODO change to enumerate?
             r += key + ":" + str(self.difficulties.get(key)) + " "
         return r
         
 class RandomProblem(Problem):
-    ''' Randomly generate a problem from a list of possible concepts
+    ''' Randomly generate a problem from a list of possible concepts.
+    
+    
     '''
     def __init__(self, concepts, num_answers=-1, avg_concepts_involved=2):
         Problem.__init__(self, [], num_answers)
         while not self.concepts:
-            for i in range(len(concepts)):
-                if random.random() < (float(avg_concepts_involved)/len(concepts)):
-                    self.concepts.append(concepts[i])
-                    self.difficulties[concepts[i]] = random.random()
+            for conc in concepts:
+                # assign random difficulty in random categories
+                level = float(avg_concepts_involved)/len(concepts)
+                if random.random() < level:
+                    self.concepts.append(conc)
+                    self.difficulties[conc] = random.random()
 
 
-# Unit Testing...
+#
+# Unit Testing
+#
 def main():
+    concepts = ['IA', 'IB', 'IC']
     print '--- Testing Problem'
-    prob = Problem(["IA","IB","IC"], 4)
-    prob.set_difficulty("IA", 0.25)
-    prob.set_difficulty("IB", 0.33)
-    prob.set_difficulty("IC", 0.5)
+    prob = Problem(concepts, 4)
+    prob.set_difficulty('IA', 0.25)
+    prob.set_difficulty('IB', 0.33)
+    prob.set_difficulty('IC', 0.5)
     print prob
     print prob.get_difficulty("IC")
     
     print '--- Testing RandomProblem'
     
-    prob = RandomProblem(["IA","IB","IC"], 4, 2)
+    prob = RandomProblem(concepts, 4, 2)
     print prob
     
-
 if __name__ == '__main__':
     main()

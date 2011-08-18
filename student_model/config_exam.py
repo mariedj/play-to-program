@@ -15,10 +15,10 @@
  
  A data file might look like:
   ---------------
- | # Midterm 2   |   - commented line
- | IA1,IA2,IB,II |   - list of concept names
- | .5,0,0,.9,5   |   - 5 answer choice MC question, 2/4 concepts covered
- | 0,0,.3,.3,10  |   - 10 answer MC, 2/4 concepts covered
+ | # Midterm 2   |  - commented line
+ | IA1,IA2,IB,II |  - list of concept names
+ | .5,0,0,.9,5   |  - 5 answer choice MC question, 2/4 concepts covered
+ | 0,0,.3,.3,10  |  - 10 answer MC, 2/4 concepts covered
   ---------------
 '''
 
@@ -26,26 +26,51 @@ import problem
 import exam
 
 def get_exam(filename):
+    ''' Reads an exam info file and returns the exam object it describes.
+    
+    Returns a ProblemSet object containing the contents of the given CSV file.
+    '''
+    
+    # 'lines' is a list of lists, each list containing the CSV contents of one
+    # line of the exam info file
     lines = []
     
-    # Build data structure lines containing contents of specified file
+    # Build data structure 'lines' containing contents of specified file
     f = open(filename, 'r')
     for line in f:
         if line[0] != '#':
-            # If not a comment, parse line as CSV and add to lines as list
+            # If not a comment, parse conceptline as CSV and add to 'lines'
             lines.append(line.split(','))
     f.close()
     
+    # Build exam object
     concepts = lines[0]
+    concepts[-1] = concepts[-1].strip()
     problems = lines[1:]
-    e = exam.ProblemSet(concepts)
+    
+    ex = exam.ProblemSet(concepts)
     
     for line in problems:
-        num_answers = int(line[-1].strip())
-        p = Problem.problem(concepts, num_answers)
+        num_answers = int(line[-1].strip()) # answer count is at line end
+        del(line[-1])
+        p = problem.Problem(concepts, num_answers)
+        print concepts
+        print line
         for i, concept in enumerate(concepts):
-            p.set_difficulty[concept, float(line[i].strip())]
+            rating = line[i].strip()
+            print concept + ' ' + rating
+            p.set_difficulty(concept, float(rating))
+        ex.addProblem(p)
 
-        e.addProblem(p)
+    return ex
 
-    return e
+
+#
+# Unit Testing
+#
+def main():
+    exm = get_exam('sample_ex.txt')
+    print exm
+
+if __name__ == '__main__':
+    main()

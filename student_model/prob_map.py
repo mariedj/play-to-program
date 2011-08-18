@@ -1,14 +1,22 @@
+'''
+ Represents a generic list combinator.
+ 
+ Contains an abstract class and several child classes which use various
+ methods to determine a single value representing all elements in a given
+ list. Refer to individual child classes for more detailed explanations.
+'''
+
 class ProbMap:
-    ''' Represents a probability calculator.
+    ''' Abstract parent class.
     
-    Calculates probability of success using various methods
+    NOTE: DO NOT IMPLEMENT THIS CLASS! ONLY USE ONE OF ITS CHILD CLASSES.
     '''
-    def process(li):
-        pass
+    def process(self, li):
+        return 0
 
 
 class MultMap(ProbMap):
-    ''' Multiplier probability mapper.
+    ''' Multiplier probability mapper (Bayesian).
     
     Combines probabilities by computing a product across all probabilities.
     '''
