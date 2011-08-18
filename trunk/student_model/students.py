@@ -1,6 +1,5 @@
 import math
 import random
-import problem
 
 
 class Student:
@@ -47,7 +46,7 @@ class Student:
         return my_comps
     
     def set_competence(self, concept, competence):        
-           self.competences[concept] = competence           
+        self.competences[concept] = competence           
     
     def __str__(self):
         r = "Competences\n"
@@ -201,8 +200,10 @@ def get_probability_of_outcome(problem_set, student_answers, student_model, mapp
     return current_prob
 
 
-
-if __name__ == "__main__":
+#
+# Unit Testing
+#
+def main():
     import problem
     concepts = ["IA","IB","IC"]
     student1 = SoftBinaryStudent(concepts)
@@ -212,6 +213,7 @@ if __name__ == "__main__":
     student5 = BinaryStudent(concepts)
     student6 = LogisticStudent(concepts)
     p = problem.RandomProblem(concepts, -1, 2)
+    
     print p
     print student1.get_prob_correct(p)
     print student2.get_prob_correct(p)
@@ -220,4 +222,5 @@ if __name__ == "__main__":
     print student5.get_prob_correct(p)
     print student6.get_prob_correct(p)
     
-    
+if __name__ == "__main__":
+    main()

@@ -128,4 +128,5 @@ def std_deviation(nums):
 def graph(datapointsets):
     pass
 
-main()
+if __name__ == '__main__':
+    main()

@@ -1,3 +1,7 @@
+'''
+ Code for RUR-PLE
+'''
+
 from operator import itemgetter
 
 import problems
