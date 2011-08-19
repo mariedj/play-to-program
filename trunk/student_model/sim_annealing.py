@@ -29,7 +29,7 @@ def simulated_annealing(test_student, problem_set, student_answers, calculator):
     '''
     # Initial state and entropy
     s = test_student.competences
-    e = students.get_probability_of_outcome(problem_set, student_answers, test_student, calculator)
+    e = get_probability_of_outcome(problem_set, student_answers, test_student, calculator)
     
     s_best = {}
     for concept in s:
@@ -42,7 +42,7 @@ def simulated_annealing(test_student, problem_set, student_answers, calculator):
         temp = k / kmax
         s_new = gen_neighbor(s, temp)
         test_student.competences = s_new
-        e_new = students.get_probability_of_outcome(problem_set, student_answers, test_student, calculator)
+        e_new = get_probability_of_outcome(problem_set, student_answers, test_student, calculator)
         if prob_move(e, e_new, temp) > random.random():
             s = s_new
             e = e_new
@@ -85,3 +85,19 @@ def prob_move(e, e_new, t):
         return (1 - distance) * (1 - t) + (1 - t)
     
     
+def get_probability_of_outcome(problem_set, student_answers, student_model, mapper):
+    '''
+    
+    '''
+    
+    current_prob = 1.0
+    # this factor is just here to keep the numbers from getting so  small that I
+    # start to worry a lot about floating point precision
+    for i in range(len(problem_set.problems)):
+        prob_correct = mapper.process(student_model.get_prob_correct(problem_set.problems[i]))
+        if student_answers[i] == True:
+            current_prob *= prob_correct
+        else:
+            current_prob *= (1 - prob_correct)
+            
+    return current_prob

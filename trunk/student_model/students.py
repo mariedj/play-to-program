@@ -179,25 +179,6 @@ class SoftBinaryStudent(Student):
                 correct[concept] = 0.9
         
         return correct
-        
-        
-#TODO Move this function to sim_annealing.py
-def get_probability_of_outcome(problem_set, student_answers, student_model, mapper):
-    '''
-    
-    '''
-    
-    current_prob = 1.0
-    # this factor is just here to keep the numbers from getting so  small that I
-    # start to worry a lot about floating point precision
-    for i in range(len(problem_set.problems)):
-        prob_correct = mapper.process(student_model.get_prob_correct(problem_set.problems[i]))
-        if student_answers[i] == True:
-            current_prob *= prob_correct
-        else:
-            current_prob *= (1 - prob_correct)
-            
-    return current_prob
 
 
 #
