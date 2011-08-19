@@ -21,6 +21,7 @@ class Problem:
         
     def set_difficulty(self, concept, difficulty):
         self.difficulties[concept] = difficulty
+        # This code was nice but broke functionality in config_exam:
         #if difficulty == 0:
         #    del self.difficulties[concept]
         #    self.concepts.remove(concept)
@@ -31,7 +32,7 @@ class Problem:
     
     def accident(self):
         #return 1.0/self.num_answers
-        return 0 #TOGiven a list of concepts and average concepts involvedDO change this to another value
+        return 0 #TODO change this to another value
     '''
         
     def __str__(self):

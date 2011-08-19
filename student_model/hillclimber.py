@@ -1,5 +1,5 @@
 # NOTICE: This algorithm has been DEPRECATED in favor of simulated annealing.
-
+'''
 from prob_map import MultMap
 import random
 import math
@@ -176,3 +176,4 @@ def get_hillclimbing_steps(num_concepts, the_list):
                 temp.append(i)
                 newlist.append(temp)
     return get_hillclimbing_steps(num_concepts - 1, newlist)
+'''

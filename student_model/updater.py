@@ -1,5 +1,5 @@
 # NOTICE: This algorithm has been DEPRECATED in favor of simulated annealing.
-
+'''
 from hillclimber import *
 
 import math
@@ -42,3 +42,4 @@ def update(guess, test_student, problem, answer, increment, num_concepts, orig_s
         return guess
     else:
         return update(new_guess, test_student, problem, answer, increment, num_concepts, orig_state)
+'''
