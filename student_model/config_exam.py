@@ -39,7 +39,7 @@ def get_exam(filename):
     f = open(filename, 'r')
     for line in f:
         if line[0] != '#':
-            # If not a comment, parse conceptline as CSV and add to 'lines'
+            # If not a comment, parse line as CSV and add to 'lines'
             lines.append(line.split(','))
     f.close()
     
@@ -54,11 +54,11 @@ def get_exam(filename):
         num_answers = int(line[-1].strip()) # answer count is at line end
         del(line[-1])
         p = problem.Problem(concepts, num_answers)
-        print concepts
-        print line
+        #print concepts
+        #print line
         for i, concept in enumerate(concepts):
             rating = line[i].strip()
-            print concept + ' ' + rating
+            #print concept + ' ' + rating
             p.set_difficulty(concept, float(rating))
         ex.addProblem(p)
 
