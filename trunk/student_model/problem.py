@@ -20,20 +20,8 @@ class Problem:
         return self.difficulties.get(concept, 0)
         
     def set_difficulty(self, concept, difficulty):
-        self.difficulties[concept] = difficulty
-        # This code was nice but broke functionality in config_exam:
-        #if difficulty == 0:
-        #    del self.difficulties[concept]
-        #    self.concepts.remove(concept)
-    
-    '''
-    This function has been DEPRECATED but is retained for now, just in case
-    Accident probabilities should be handled in another class.
-    
-    def accident(self):
-        #return 1.0/self.num_answers
-        return 0 #TODO change this to another value
-    '''
+        if difficulty != 0:
+            self.difficulties[concept] = difficulty
         
     def __str__(self):
         r = "Problem difficulties: "
