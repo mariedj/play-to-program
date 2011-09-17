@@ -38,8 +38,8 @@ def get_exam(filename):
     # Build data structure 'lines' containing contents of specified file
     f = open(filename, 'r')
     for line in f:
-        if line[0] != '#':
-            # If not a comment, parse line as CSV and add to 'lines'
+        if len(line) > 1 and line[0] != '#': # len > 1 because '\n' included
+            # If not a comment or blank, parse line as CSV and add to 'lines'
             lines.append(line.split(','))
     f.close()
     

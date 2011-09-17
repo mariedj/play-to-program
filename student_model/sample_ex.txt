@@ -1,4 +1,7 @@
-# Midterm 2 
+# Sample exam provided to test config_exam code
+# A detailed explanation of the exam file format is given in config_exam.py
+
+# Midterm 2
 IA1,IA2,IB,II 
 .5,0,0,0.9,5 
 0,0,.3,.3,10
