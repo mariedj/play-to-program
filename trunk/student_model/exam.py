@@ -1,10 +1,10 @@
-import problem
-
 '''
 Contains code defining a set of Problems
 
 A ProblemSet is a container class for a group of problems.
 '''
+
+import problem
 
 class ProblemSet:
     
@@ -20,10 +20,9 @@ class ProblemSet:
             self.problems.append(prob)
         
     def __str__(self):
-        st = 'Problem Set\n\n'
+        st = 'Problem Set\n'
         for i, prob in enumerate(self.problems):
-            st += 'Problem ' + str(i) + ': '
-            st += str(prob) + '\n'
+            st += ' ' + str(i) + ': ' + str(prob) + '\n'
         return st
         
 
