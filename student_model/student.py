@@ -10,7 +10,7 @@ count = 0
 
 class Concept:
     def __init__(self, name=""):
-	self.name = name
+        self.name = name
         self.att = 0 # attempted
         self.suc = 0 # successful
         self.templates = [] # problem templates
